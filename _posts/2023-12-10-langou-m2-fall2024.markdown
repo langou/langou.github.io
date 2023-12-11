@@ -5,5 +5,29 @@ date:   2023-12-10 23:03:00 -0700
 categories: 
 ---
 
-instructor: Julien Langou
-course title: Numerical Linear Algebra
+**instructor:** Julien Langou
+
+**course title:** Numerical Linear Algebra
+
+**description:** Linear algebra is one of the fundamental techniques underlying
+multiple mathematical disciplines. Correspondingly, numerical linear algebra is
+the foundation of scientific computation. This course introduces the basic
+techniques, analysis methods, and implementation details of numerical linear
+algebra. The course emphasizes the strong link between theoretical concepts,
+algorithm formulation, and practical implementation that leads to the ubiquity
+of numerical linear algebra in applications. Recent progress in machine
+learning is based to a large degree on extending concepts from numerical linear
+algebra and will be discussed in the course.
+
+**course goals** Upon course completion students:
+- will be proficient in the basic operations of numerical linear algebra;
+- will understand the significance of the main matrix factorizations;
+- will be proficient in construction of linear subspaces;
+- will be able to determine the computational complexity of numerical linear
+  algebra algorithms;
+- understand the links between numerical linear algebra operations and other
+  fields of numerical analysis, in particular, approximation theory;
+- will be able to implement numerical linear algebra algorithms.
+
+
+
