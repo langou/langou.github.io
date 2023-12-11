@@ -5,4 +5,3 @@
 layout: home
 ---
 
-<a href=5718/exam1.pdf>exam1.pdf</a>
