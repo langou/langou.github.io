@@ -9,25 +9,34 @@ categories:
 
 **course title:** Numerical Linear Algebra
 
-**description:** Linear algebra is one of the fundamental techniques underlying
-multiple mathematical disciplines. Correspondingly, numerical linear algebra is
-the foundation of scientific computation. This course introduces the basic
-techniques, analysis methods, and implementation details of numerical linear
-algebra. The course emphasizes the strong link between theoretical concepts,
-algorithm formulation, and practical implementation that leads to the ubiquity
-of numerical linear algebra in applications. Recent progress in machine
-learning is based to a large degree on extending concepts from numerical linear
-algebra and will be discussed in the course.
+**description:** Numerical Linear Algebra is at the foundation of many
+scientific computation. This course introduces the techniques, analysis
+methods, and implementation details of numerical linear algebra. The course
+emphasizes the link between theoretical concepts, algorithm formulation, and
+practical implementation. The class will cover the main matrix algorithms for
+LU, QR, Cholesky, LDLT, linear least squares, Schur form, diagonalization,
+symmetric and nonsymmetric eigenvalue problems, and singular value
+decomposition. During this journey, we will study (1) the theory of error
+analysis, condition number, forward and backward error, (2) how to write
+implementations in term of matrix-matrix multiplication so as to get
+efficiency, (3) the amount of memory transfer between different level of memory
+during a computation, (4) parallel implementations of these algorithms using
+MPI or task-based programming, (5) an introduction to randomized linear algebra
+techniques.
 
-**course goals** Upon course completion students:
-- will be proficient in the basic operations of numerical linear algebra;
-- will understand the significance of the main matrix factorizations;
-- will be proficient in construction of linear subspaces;
-- will be able to determine the computational complexity of numerical linear
-  algebra algorithms;
-- understand the links between numerical linear algebra operations and other
-  fields of numerical analysis, in particular, approximation theory;
-- will be able to implement numerical linear algebra algorithms.
+**evaluation** The class will have (1) quizes to assess students learning of
+the theory, and (2) programming assignments to assess students learning of the
+practice.
+
+**bibliography** The course will rely on research articles in the area. For
+some relevant textbook that will give some background, see:
+- *Numerical Linear Algebra*, by Lloyd N. Trefethen and David Bau, III, SIAM,
+  1997
+- *Numerical Linear Algebra with Julia*, by Eric Darve and Mary Wootters, SIAM,
+  2021 
+- *Matrix Computations*, fourth edition, by Gene H. Golub and Charles F. Van
+  Loan, Johns Hopkins University Press, 2013
+- *Applied Numerical Linear Algebra*, by James W. Demmel, SIAM, 1997
 
 
 
