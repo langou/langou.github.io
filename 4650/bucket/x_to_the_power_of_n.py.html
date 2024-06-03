@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/x_to_the_power_of_n.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment">### This work is licensed under a Creative Commons Attribution 4.0 International License</span>
+<span class="Comment">### <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></span>
+<span class="Comment">### Copyright (c) 2021, Julien Langou. All rights reserved.</span>
+
+<span class="Comment">### def x_to_the_power_of_n( x, n ):</span>
+<span class="Comment">###   return y</span>
+
+<span class="Comment">### purpose</span>
+<span class="Comment"># `x_to_the_power_of_n` computes `y = x**n` (`x` to the power of `n`)</span>
+<span class="Comment"># `n` must be an integer</span>
+
+<span class="Comment">### Uses binary expansion of `n` and the powers of the powers of 2 of `x` (x^1, x^2, x^4, etc.) </span>
+<span class="Comment">### Computational complexity is in between `log2(n)` and `2*log2(n)` (depending on how many 1's are in the base 2 of `n`)</span>
+
+<span class="Statement">def</span> <span class="Identifier">x_to_the_power_of_n</span>( x, n ):
+
+  m = n
+  y = <span class="Constant">1</span>
+  z = x
+
+  <span class="Statement">if</span> ( m%<span class="Constant">2</span> ):
+    y = y * z
+  m = m//<span class="Constant">2</span>
+
+  <span class="Statement">while</span>( m &gt;= <span class="Constant">1</span>):
+    z = z * z
+    <span class="Statement">if</span> ( m%<span class="Constant">2</span> ):
+      y = y * z
+    m = m//<span class="Constant">2</span>
+
+  <span class="Statement">return</span> y
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->
