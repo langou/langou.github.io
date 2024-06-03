@@ -1,0 +1,123 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb}
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.2.5 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.2.5, Sauer}\\\\
+
+Find the first 15 bits in binary representation of $\pi$.\\
+(Hint: taking $\pi$ as 3.1415 or 3.1416 produces the correct 15 first bits.)\\
+
+\end{minipage}}
+
+\vspace*{1cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.2.5, Sauer, solution, Langou}\\
+
+
+
+\vspace*{1cm}
+
+
+First, 
+\[ (3)_{10} = (11)_2 ;\]
+second, 
+\[ (.1416)_{10} = (.0010010000111....)_2 .\]
+
+The latter because:
+
+\begin{tabular}{r}
+ .1416 \\
+\hline
+0.2832\\
+0.5664\\
+1.1328\\
+0.2656\\
+0.5312\\
+1.0624\\
+0.1248\\
+0.2496\\
+0.4992\\
+0.9984\\
+1.9968\\
+1.9936\\
+1.9872
+\end{tabular}
+
+and we read the bits on the leftmost column from top to bottom.
+
+        \[ \pi = (11.0010010000111...)_2 \]
+
+Note: these are the 15 first bits of $\pi$ however the 15 bits number the closest from $\pi$ would be
+        \[ (11.0010010001000...)_2 \]
+
+
+
+
+
+\end{document}

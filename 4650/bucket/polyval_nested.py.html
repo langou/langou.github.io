@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/polyval_nested.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment">### This work is licensed under a Creative Commons Attribution 4.0 International License</span>
+<span class="Comment">### <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></span>
+<span class="Comment">### Copyright (c) 2021, Julien Langou. All rights reserved.</span>
+
+<span class="Comment">### def polyval_basic( c, x ):</span>
+<span class="Comment">###   return px</span>
+
+<span class="Comment">### purpose</span>
+<span class="Comment"># `polyval_basic` evaluates the polynomial `p` (as represented in `c`) at the</span>
+<span class="Comment"># data points `x`</span>
+
+<span class="Comment">### interface</span>
+<span class="Comment"># input:  `c`   a numpy array of size n+1 containing the coefficients </span>
+<span class="Comment">#               of polynomial `p` ordered from degree 0 to degree n</span>
+<span class="Comment"># input:  `x`   a numpy array of m data points at which we want to evaluate `p`</span>
+<span class="Comment"># output: `px`  a numpy array of the m values of `p` at `x`</span>
+
+<span class="Comment">### useage</span>
+<span class="Comment"># to evaluate `p(x) = 3x^2 - 2x + 5` at x = -7 and x = 2, do</span>
+<span class="Comment">#     p = np.array( [ 5., -2., 3. ]);</span>
+<span class="Comment">#     x = np.array( [ -7., 2. ]);</span>
+<span class="Comment">#     px = polyval( p, x);</span>
+<span class="Comment"># you should get px = [ 166., 13. ]</span>
+<span class="Comment"># indeed p(-7) = 166 and p(2) = 13</span>
+
+<span class="Comment">### notes</span>
+<span class="Comment"># (1) &quot;same&quot; interface as numpy `np.polyval( np.flip(p), x )`</span>
+<span class="Comment">#     see: <a href="https://numpy.org/doc/stable/reference/generated/numpy.polyval.html">https://numpy.org/doc/stable/reference/generated/numpy.polyval.html</a></span>
+<span class="Comment">#     see: <a href="https://numpy.org/doc/stable/reference/generated/numpy.flip.html">https://numpy.org/doc/stable/reference/generated/numpy.flip.html</a></span>
+<span class="Comment"># (2) using a Horner's method (nested multiplication)</span>
+
+<span class="Statement">def</span> <span class="Identifier">polyval_nested</span>( c, x ):
+  d = np.size(c)
+  px = c[ d-<span class="Constant">1</span> ]
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>( d-<span class="Constant">2</span>, -<span class="Constant">1</span>, -<span class="Constant">1</span> ):
+    px = px * x + c[i]
+  <span class="Statement">return</span> px
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

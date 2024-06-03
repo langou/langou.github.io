@@ -1,0 +1,353 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+
+
+
+\usepackage[utf8]{inputenc}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage{listings}
+
+\newcommand\digitstyle{\color{deepgreen}}
+\makeatletter
+\newcommand{\ProcessDigit}[1]
+{%
+  \ifnum\lst@mode=\lst@Pmode\relax%
+   {\digitstyle #1}%
+  \else
+    #1%
+  \fi
+}
+\makeatother
+\lstset{
+}
+
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{MyLightGray}{rgb}{0.93,0.93,0.93}
+\definecolor{MyPurple}{rgb}{.8,0,.8}
+\definecolor{MyOrange}{rgb}{.8,0.4,0}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+literate=
+    {0}{{{\ProcessDigit{0}}}}1
+    {1}{{{\ProcessDigit{1}}}}1
+    {2}{{{\ProcessDigit{2}}}}1
+    {3}{{{\ProcessDigit{3}}}}1
+    {4}{{{\ProcessDigit{4}}}}1
+    {5}{{{\ProcessDigit{5}}}}1
+    {6}{{{\ProcessDigit{6}}}}1
+    {7}{{{\ProcessDigit{7}}}}1
+    {8}{{{\ProcessDigit{8}}}}1
+    {9}{{{\ProcessDigit{9}}}}1
+    {<=}{{\(\leq\)}}1,
+    morestring=[b]",
+    morestring=[b]',
+    morecomment=[l]//,
+backgroundcolor=\color{MyLightGray},
+columns=fullflexible
+upquote=true,
+language=Python,
+basicstyle=\ttm,
+morekeywords={self},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+keywordstyle=\color{MyOrange},
+emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+emphstyle=\color{MyPurple},
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+% Python style for highlighting
+\newcommand\outputstyle{\lstset{
+%backgroundcolor=\color{MyLightGray},
+language=Python,
+basicstyle=\ttm,
+%morekeywords={self, {1}},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+%keywordstyle=\color{MyOrange},
+%emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+%emphstyle=\color{MyPurple},
+%stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+
+% Output environment
+\lstnewenvironment{pythonoutput}[1][]
+{
+\outputstyle
+\lstset{#1}
+}
+{}
+
+
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+
+
+
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.3.5 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.3.5, Sauer}\\\\
+Do the following sums by hand in IEEE double precision computer arithmetic, using the Rounding to Nearest Rule. (Check your answers, using Matlab.)
+\begin{enumerate}
+\item $(1 + (2^{-51} + 2^{-53})) - 1$
+\item $(1+(2^{-51} + 2^{-52} + 2^{-53}))-1$
+\end{enumerate}
+\end{minipage}}
+
+
+\vspace*{.7cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.3.5, Sauer, solution, Langou}\\
+
+
+\begin{itemize}
+
+\item Only turning the Python code is not a good answer. 
+
+\item The copy-paste from this PDF to python code does not work great. It is better to copy-paste from colab.
+
+\item The Colab Jupyter Notebook is available at: 
+\url{https://colab.research.google.com/drive/1Rp45zp-DmKzMdh9JO9_Mn_X7KBiH34Bc}.
+
+\end{itemize}
+
+To check that we get the exact same floating-point number we will print the 64-bit representation of our floating-point numbers
+using the following Python function.
+\begin{python}
+import struct
+def double_to_hex(f):
+  return hex(struct.unpack('<Q', struct.pack('<d', f))[0])
+\end{python}
+Do not forget to execute the piece of code above first.
+
+
+
+
+
+
+
+\begin{enumerate}
+\item $x_1 = (2^{-51} + 2^{-53})$ is a machine number and can be stored exactly so it is stored exactly.
+Then $x_2 = 1 + 2^{-51} + 2^{-53}$ is not a machine number so it cannot be stored exactly. We have to round either up or down. 
+$x_2$ is in between the two machine numbers: $x_-=1 + 2^{-51}$ and $x_+=1 + 2^{-51} + 2^{-52}$.
+We round to the nearest. Well it turns out that $x_2$ is right in the middle. 
+So we need to take whichever number between $x_-$ and $x_+$ that has for last mantissa bit a $0$. 
+(Note: $x_-$ and $x_+$ are consecutive machine numbers, we are guaranteed that one of the two has a $0$ for last mantissa and that the other has a $1$.
+IEEE standard (arbritrarily) dictates to take the one with a $0$.) So the question is which number has ``no $2^{-52}$''. This is $x_-$.
+So $x_2$ is rounded to $x_-$. In other words $\textmd{fl}(x_2)=x_-$. The next step is to subtract $1$, so we expect to see $2^{-51}$ as an answer.
+\begin{center}
+\framebox{
+$\textmd{fl}\left( (1 + (2^{-51} + 2^{-53})) - 1 \right) = 2^{-51}$
+}
+\end{center}
+
+It might be better to see these numbers with bits. 
+We have
+\begin{eqnarray}
+ \nonumber x_- = 1 + 2^{-51}            & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000010\phantom{|1}~~~)_2\\
+ \nonumber x_2 = 1 + 2^{-51} + 2^{-53}  & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000010|1~~~)_2\\ 
+ \nonumber x_+ = 1 + 2^{-51} + 2^{-52}  & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000011\phantom{|1}~~~)_2
+\end{eqnarray}
+
+
+\underline{Python Check}: We check that
+
+\begin{python}
+x = ( 1. + ( (2. ** (-51)) + (2. ** (-53)) ) ) - 1.
+y = ( 2. ** (-51) )
+print(x)
+print(y)
+print( double_to_hex(x) )
+print( double_to_hex(y) )
+\end{python}
+\begin{pythonoutput}
+4.440892098500626e-16
+4.440892098500626e-16
+0x3cc0000000000000
+0x3cc0000000000000
+\end{pythonoutput}
+
+
+
+
+
+\begin{comment}
+\underline{Matlab Check}: We check that
+\begin{verbatim}
+( (1 + (2^(-51) + 2^(-53))) - 1 ) - 2^(-51)
+\end{verbatim}
+is exactly
+\begin{verbatim}
+0
+\end{verbatim}
+\end{comment}
+
+\item $x_1 = 2^{-51} + 2^{-52} + 2^{-53}$ is a machine number and can be stored exactly so it is stored exactly.
+Then $x_2 = 1 + 2^{-51} + 2^{-52} + 2^{-53}$ is not a machine number so it cannot be stored exactly. We have to round either up or down. 
+$x_2$ is in between the two machine numbers: $x_-=1 + 2^{-51} + 2^{-52}$ and $x_+=1 + 2^{-50} $.
+We round to the nearest. Well it turns out that $x_2$ is right in the middle. 
+So we need to take whichever number between $x_-$ and $x_+$ that has for last mantissa bit a $0$. 
+So the question is which number has ``no $2^{-52}$''. This is $x_+$.
+So $x_2$ is rounded to $x_+$. In other words $\textmd{fl}(x_2)=x_+$. 
+The next step is to subtract $1$, so we expect to see $2^{-50}$ as an answer.
+\begin{center}
+\framebox{
+$\textmd{fl}\left( (1 + (2^{-51} + 2^{-52} + 2^{-53})) - 1 \right) = 2^{-50}$
+}
+\end{center}
+
+
+It might be better to see these numbers with bits. 
+We have
+\begin{eqnarray}
+ \nonumber x_- = 1 + 2^{-51} + 2^{-52}            & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000011\phantom{|1}~~~)_2\\
+ \nonumber x_2 = 1 + 2^{-51} + 2^{-52} + 2^{-53}  & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000011|1~~~)_2\\ 
+ \nonumber x_+ = 1 + 2^{-50}                      & = &  + 2^{0} ( 1.0000000000000000000000000000000000000000000000000100\phantom{|1}~~~)_2
+\end{eqnarray}
+
+
+
+
+\underline{Python Check}: We check that
+
+\begin{python}
+x = ( 1. + ( (2. ** (-51)) + (2. ** (-52)) +  + (2. ** (-53)) ) ) - 1.
+y = ( 2. ** (-50) )
+print(x)
+print(y)
+print( double_to_hex(x) )
+print( double_to_hex(y) )
+\end{python}
+\begin{pythonoutput}
+4.440892098500626e-16
+4.440892098500626e-16
+0x3cc0000000000000
+0x3cc0000000000000
+\end{pythonoutput}
+
+\begin{comment}
+\underline{Matlab Check}: We check that
+\begin{verbatim}
+( (1 + (2^(-51) + 2^(-52) + 2^(-53))) - 1 ) - 2^(-50)
+\end{verbatim}
+is exactly
+\begin{verbatim}
+0
+\end{verbatim}
+\end{comment}
+
+
+
+
+
+\end{enumerate}
+
+
+
+\end{document}

@@ -1,0 +1,564 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\usepackage{upquote}
+\input{../../vrac/rgb.tex}
+
+
+\usepackage[utf8]{inputenc}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage{listings}
+
+\newcommand\digitstyle{\color{deepgreen}}
+\makeatletter
+\newcommand{\ProcessDigit}[1]
+{%
+  \ifnum\lst@mode=\lst@Pmode\relax%
+   {\digitstyle #1}%
+  \else
+    #1%
+  \fi
+}
+\makeatother
+\lstset{
+}
+
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{MyLightGray}{rgb}{0.93,0.93,0.93}
+\definecolor{MyPurple}{rgb}{.8,0,.8}
+\definecolor{MyOrange}{rgb}{.8,0.4,0}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+literate=
+    {0}{{{\ProcessDigit{0}}}}1
+    {1}{{{\ProcessDigit{1}}}}1
+    {2}{{{\ProcessDigit{2}}}}1
+    {3}{{{\ProcessDigit{3}}}}1
+    {4}{{{\ProcessDigit{4}}}}1
+    {5}{{{\ProcessDigit{5}}}}1
+    {6}{{{\ProcessDigit{6}}}}1
+    {7}{{{\ProcessDigit{7}}}}1
+    {8}{{{\ProcessDigit{8}}}}1
+    {9}{{{\ProcessDigit{9}}}}1
+    {<=}{{\(\leq\)}}1,
+    morestring=[b]",
+    morestring=[b]',
+    morecomment=[l]//,
+backgroundcolor=\color{MyLightGray},
+columns=fullflexible
+upquote=true,
+language=Python,
+basicstyle=\ttm,
+morekeywords={self},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+keywordstyle=\color{MyOrange},
+emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+emphstyle=\color{MyPurple},
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+% Python style for highlighting
+\newcommand\outputstyle{\lstset{
+%backgroundcolor=\color{MyLightGray},
+language=Python,
+basicstyle=\ttm,
+%morekeywords={self, {1}},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+%keywordstyle=\color{MyOrange},
+%emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+%emphstyle=\color{MyPurple},
+%stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+
+% Output environment
+\lstnewenvironment{pythonoutput}[1][]
+{
+\outputstyle
+\lstset{#1}
+}
+{}
+
+
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+
+
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.2.7 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.2.7, Sauer}\\\\
+Convert the following binary numbers to base 10.
+(a) $1010101$  
+(b) $1011.101$ 
+(c) $10111.\overline{01}$
+(d) $110.\overline{10}$
+(e) $10.\overline{110}$ 
+(f) $110.1\overline{101}$
+(g) $10.010\overline{1101}$
+(h) $111.\overline{1}$. %8
+\end{minipage}}
+
+
+\vspace*{1cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.2.7, Sauer, solution, Langou}\\
+
+
+\begin{itemize}
+
+\item Only turning the Python code is not a good answer. 
+
+\item The copy-paste from this PDF to python code does not work great. It is better to copy-paste from colab.
+
+\item The Colab Jupyter Notebook is available at: 
+\url{https://colab.research.google.com/drive/1prkH1Saji2f2Th8Lom5_JcOhuuBJQSoY}.
+\end{itemize}
+
+\begin{enumerate}
+\item
+$$ (1010101)_2 = 64+16+4+1 = (85)_{10}$$
+$$\color{red} (1010101)_2 =  (85)_{10}$$
+
+\begin{python}
+print( 0b1010101 )
+print( int( '1010101', 2 ) )
+\end{python}
+\begin{pythonoutput}
+85
+85
+\end{pythonoutput}
+
+
+\item
+$$(1011.101)_2 = 8+2+1+0.5+0.125 = (11.625)_{10} .$$
+$$\color{red}(1011.101)_2 = (11.625)_{10} .$$
+
+
+\begin{python}
+print( ( 0b1011101 ) * ( 2 ** -3 ) )
+\end{python}
+\begin{pythonoutput}
+11.625
+\end{pythonoutput}
+
+
+
+
+
+
+\item 
+$(10111)_2 = 16+4+2+1 = 23$
+\begin{eqnarray}
+(0.\overline{01})_{2} 
+\nonumber & = & \frac{1}{4}+ \frac{1}{16}+ \frac{1}{64}+ \frac{1}{256}+\ldots\\
+\nonumber & = & \frac{1}{4}\left(1 + \frac{1}{4}+ \left(\frac{1}{4}\right)^2+ \left(\frac{1}{4}\right)^3+\ldots \right)\\
+\nonumber & = & \frac{1}{4}\sum_{n=0}^\infty\left(\frac{1}{4}\right)^n
+ = \frac{1}{4}\left(\frac{1}{1-\frac{1}{4}}\right)
+ = \frac{1}{4}\frac{4}{3}
+ = \frac{1}{3}
+\end{eqnarray}
+
+
+
+$$\color{red}(10111.\overline{01})_2 = (23\frac{1}{3})_{10} .$$
+
+\begin{python}
+# appending 6 times the repetend 01
+x = ( 0b10111010101010101 ) * ( 2 ** (-12) )
+print( x )
+print( 23. + 1./3. )
+\end{python}
+\begin{pythonoutput}
+23.333251953125
+23.333333333333332
+\end{pythonoutput}
+
+\begin{python}
+# appending 30 times the repetend 01
+x = 0b10111
+y = 0b01
+for i in range(0,30):
+  y = y * ( 2 ** (-2) )
+  x = x + y
+print( x )
+print( 23. + 1./3. )
+\end{python}
+\begin{pythonoutput}
+23.333333333333332
+23.333333333333332
+\end{pythonoutput}
+
+
+
+
+
+
+
+\item 
+$(110)_2 = 4+2 = 6$
+\begin{eqnarray}
+(0.\overline{10})_{2} 
+\nonumber & = & \frac{1}{2}+ \frac{1}{8}+ \frac{1}{32}+ \frac{1}{128}+\ldots\\
+\nonumber & = & \frac{1}{2}\left(1 + \frac{1}{4}+ \left(\frac{1}{4}\right)^2+ \left(\frac{1}{4}\right)^3+\ldots \right)\\
+\nonumber & = & \frac{1}{2}\sum_{n=0}^\infty\left(\frac{1}{4}\right)^n
+ = \frac{1}{2}\left(\frac{1}{1-\frac{1}{4}}\right)
+ = \frac{1}{2}\frac{4}{3}
+ = \frac{2}{3}
+\end{eqnarray}
+
+$$\color{red}(110.\overline{10})_2 = (6\frac{2}{3})_{10} .$$
+
+
+\begin{python}
+# appending 6 times the repetend 10
+x = ( 0b110101010101010 ) * ( 2 ** (-12) )
+print( x )
+print( 6. + 2./3. )
+\end{python}
+\begin{pythonoutput}
+6.66650390625
+6.666666666666667
+\end{pythonoutput}
+
+\begin{python}
+# appending 30 times the repetend 10
+x = 0b110
+y = 0b10
+for i in range(0,30):
+  y = y * ( 2 ** (-2) )
+  x = x + y
+print( x )
+print( 6. + 2./3. )
+\end{python}
+\begin{pythonoutput}
+6.666666666666666
+6.666666666666667
+\end{pythonoutput}
+
+
+
+
+
+
+
+\item 
+$(10)_2 = 2 $
+\begin{eqnarray}
+(0.\overline{110})_{2} 
+\nonumber & = & \left(\frac{1}{2}+ \frac{1}{4}\right)+ \frac{1}{8}\left(\frac{1}{2}+ \frac{1}{4}\right)
++ \left(\frac{1}{8}\right)^2\left(\frac{1}{2}+ \frac{1}{4}\right)
++ \left(\frac{1}{8}\right)^3\left(\frac{1}{2}+ \frac{1}{4}\right)
++ \ldots\\
+\nonumber & = & \frac{3}{4}\left(1 + \frac{1}{8}+ \left(\frac{1}{8}\right)^2+ \left(\frac{1}{8}\right)^3+\ldots \right)\\
+\nonumber & = & \frac{3}{4}\sum_{n=0}^\infty\left(\frac{1}{8}\right)^n
+ = \frac{3}{4}\left(\frac{1}{1-\frac{1}{8}}\right)
+ = \frac{3}{4}\frac{8}{7}
+ = \frac{6}{7}
+\end{eqnarray}
+
+$$\color{red}(10.\overline{110})_2 = (2\frac{6}{7})_{10} .$$
+
+
+
+\begin{python}
+# appending 5 times the repetend 110
+x = ( 0b10110110110110110 ) * ( 2 ** (-15) )
+print( x )
+print( 2. + 6./7. )
+\end{python}
+\begin{pythonoutput}
+2.85711669921875
+2.857142857142857
+\end{pythonoutput}
+
+\begin{python}
+# appending 20 times the repetend 110
+x = 0b10
+y = 0b110
+for i in range(0,20):
+  y = y * ( 2 ** (-3) )
+  x = x + y
+print( x )
+print( 2. + 6./7. )
+\end{python}
+\begin{pythonoutput}
+2.857142857142857
+2.857142857142857
+\end{pythonoutput}
+
+
+
+
+\item 
+$(110)_2 = 6 $
+\begin{eqnarray}
+(0.1\overline{101})_{2} 
+\nonumber & = & 
+\frac{1}{2}+
+\frac{1}{2}\left(\frac{1}{2}+ \frac{1}{8}\right)
++ \frac{1}{2}\frac{1}{8}\left(\frac{1}{2}+ \frac{1}{8}\right)
++ \frac{1}{2}\left(\frac{1}{8}\right)^2\left(\frac{1}{2}+ \frac{1}{8}\right)
++ \frac{1}{2}\left(\frac{1}{8}\right)^3\left(\frac{1}{2}+ \frac{1}{8}\right)
++ \ldots\\
+\nonumber & = & 
+\frac{1}{2}+ \frac{5}{16}\left(1 + \frac{1}{8}+ \left(\frac{1}{8}\right)^2+ \left(\frac{1}{8}\right)^3+\ldots \right)\\
+\nonumber & = &
+\frac{1}{2}+  \frac{5}{16}\sum_{n=0}^\infty\left(\frac{1}{8}\right)^n
+ = \frac{1}{2}+  \frac{5}{16}\left(\frac{1}{1-\frac{1}{8}}\right)
+ = \frac{1}{2}+  \frac{5}{16}\frac{8}{7}
+ = \frac{1}{2}+  \frac{5}{14}
+ = \frac{6}{7}
+\end{eqnarray}
+
+$$\color{red}(110.1\overline{101})_2 = (6\frac{6}{7})_{10} .$$
+
+
+
+\begin{python}
+# appending 4 times the repetend 101
+x = ( 0b1101101101101101 ) * ( 2 ** (-13) )
+print( x )
+print( 6. + 6./7. )
+\end{python}
+\begin{pythonoutput}
+6.8570556640625
+6.857142857142857
+\end{pythonoutput}
+
+\begin{python}
+# appending 20 times the repetend 101
+x = 0b1101 * ( 2 ** (-1) )
+y = 0b101 * ( 2 ** (-1) )
+for i in range(0,20):
+  y = y * ( 2 ** (-3) )
+  x = x + y
+print( x )
+print( 6. + 6./7. )
+\end{python}
+\begin{pythonoutput}
+2.857142857142857
+2.857142857142857
+\end{pythonoutput}
+
+
+\item 
+$(10)_2 = 2 $
+\begin{eqnarray}
+(0.010\overline{1101})_{2} 
+\nonumber & = & 
+\frac{1}{4}+
+\frac{1}{8}\left(\frac{1}{2}+ \frac{1}{4}+\frac{1}{16}\right)
++ \frac{1}{8}\frac{1}{16}\left(\frac{1}{2}+ \frac{1}{4}+\frac{1}{16}\right)
++ \frac{1}{8}\left(\frac{1}{16}\right)^2\left(\frac{1}{2}+ \frac{1}{4}+\frac{1}{16}\right)
++ \ldots\\
+\nonumber & = & 
+\frac{1}{4}+ \frac{13}{128}\left(1 + \frac{1}{16}+ \left(\frac{1}{16}\right)^2+ \ldots \right)\\
+\nonumber & = &
+\frac{1}{4}+  \frac{13}{128}\sum_{n=0}^\infty\left(\frac{1}{16}\right)^n
+ = \frac{1}{4}+  \frac{13}{128}\left(\frac{1}{1-\frac{1}{16}}\right)
+ = \frac{1}{4}+  \frac{13}{128}\frac{16}{15}
+ = \frac{1}{4}+  \frac{13}{120}
+ = \frac{43}{120}
+\end{eqnarray}
+
+$$\color{red}(10.010\overline{1101})_2 = (2\frac{43}{120})_{10} .$$
+
+
+
+\begin{python}
+# appending 4 times the repetend 1101
+x = ( 0b1001011011101 ) * ( 2 ** (-11) )
+print( x )
+print( 2. + 43./120. )
+\end{python}
+\begin{pythonoutput}
+2.35791015625
+2.3583333333333334
+\end{pythonoutput}
+
+\begin{python}
+# appending 20 times the repetend 1101
+x = 0b10010 * ( 2 ** (-3) )
+y = 0b1101 * ( 2 ** (-3) )
+for i in range(0,20):
+  y = y * ( 2 ** (-4) )
+  x = x + y
+print( x )
+print( 2. + 43./120. )
+\end{python}
+\begin{pythonoutput}
+2.3583333333333334
+2.3583333333333334
+\end{pythonoutput}
+
+
+
+
+
+\item 
+$(111.\overline{1})_2$ is same as $(1000)_2$ so it is $(8)_{10}$.
+This is like saying that in base 10 the number $3.9999999\ldots$ is same a $4$.\\
+
+A more rigorous explanation
+$(111)_2 = 4+2+1 = 7$
+\begin{eqnarray}
+(0.\overline{1})_{2} 
+\nonumber & = & \frac{1}{2}+ \frac{1}{4}+ \frac{1}{8}+ \frac{1}{16}+\ldots\\
+\nonumber & = & \frac{1}{2}\sum_{n=0}^\infty\left(\frac{1}{2}\right)^n
+ = \frac{1}{2}\left(\frac{1}{1-\frac{1}{2}}\right)
+ = \frac{1}{2}( 2 )
+ = 1
+\end{eqnarray}
+So $\color{red}(111.\overline{1})_2 = 7 + 1 = 8 .$
+
+$$\color{red}(111.\overline{1})_2 = (8)_{10} .$$
+
+
+\begin{python}
+# appending 17 times the repetend 1
+x = ( 0b11111111111111111111 ) * ( 2 ** (-17) )
+print( x )
+\end{python}
+\begin{pythonoutput}
+7.999992370605469
+\end{pythonoutput}
+
+\begin{python}
+# appending 60 times the repetend 1
+x = 0b111
+y = 0b1
+for i in range(0,60):
+  y = y * ( 2 ** (-1) )
+  x = x + y
+print( x )
+\end{python}
+\begin{pythonoutput}
+8.0
+\end{pythonoutput}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{enumerate}
+
+
+
+\end{document}

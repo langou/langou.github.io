@@ -1,0 +1,303 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+
+
+
+
+\usepackage[utf8]{inputenc}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage{listings}
+
+\newcommand\digitstyle{\color{deepgreen}}
+\makeatletter
+\newcommand{\ProcessDigit}[1]
+{%
+  \ifnum\lst@mode=\lst@Pmode\relax%
+   {\digitstyle #1}%
+  \else
+    #1%
+  \fi
+}
+\makeatother
+\lstset{
+}
+
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{MyLightGray}{rgb}{0.93,0.93,0.93}
+\definecolor{MyPurple}{rgb}{.8,0,.8}
+\definecolor{MyOrange}{rgb}{.8,0.4,0}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+literate=
+    {0}{{{\ProcessDigit{0}}}}1
+    {1}{{{\ProcessDigit{1}}}}1
+    {2}{{{\ProcessDigit{2}}}}1
+    {3}{{{\ProcessDigit{3}}}}1
+    {4}{{{\ProcessDigit{4}}}}1
+    {5}{{{\ProcessDigit{5}}}}1
+    {6}{{{\ProcessDigit{6}}}}1
+    {7}{{{\ProcessDigit{7}}}}1
+    {8}{{{\ProcessDigit{8}}}}1
+    {9}{{{\ProcessDigit{9}}}}1
+    {<=}{{\(\leq\)}}1,
+    morestring=[b]",
+    morestring=[b]',
+    morecomment=[l]//,
+backgroundcolor=\color{MyLightGray},
+columns=fullflexible
+upquote=true,
+language=Python,
+basicstyle=\ttm,
+morekeywords={self},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+keywordstyle=\color{MyOrange},
+emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+emphstyle=\color{MyPurple},
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+% Python style for highlighting
+\newcommand\outputstyle{\lstset{
+%backgroundcolor=\color{MyLightGray},
+language=Python,
+basicstyle=\ttm,
+%morekeywords={self, {1}},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+%keywordstyle=\color{MyOrange},
+%emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+%emphstyle=\color{MyPurple},
+%stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+
+% Output environment
+\lstnewenvironment{pythonoutput}[1][]
+{
+\outputstyle
+\lstset{#1}
+}
+{}
+
+
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+
+
+
+
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.4.3 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.4.3, Sauer}\\\\
+Explain how to most accurately compute the two roots of the equation $x^2 + bx
+- 10^{-12} = 0$, where $b$ is a number greater than $100$.\\
+\end{minipage}}
+
+
+\vspace*{.7cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.4.3, Sauer, solution, Langou}\\
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+
+\begin{itemize}
+
+\item Only turning the Python code is not a good answer. 
+
+\item The copy-paste from this PDF to python code does not work great. It is better to copy-paste from colab.
+
+\item The Colab Jupyter Notebook is available at: 
+\url{https://colab.research.google.com/drive/19c-eoifrUWtfhXvYtjqMIsPeFEXW32CP}.
+
+\item The Python code and its ouput is at the end of this document.
+
+\end{itemize}
+\end{minipage}}
+\vspace*{.2cm}
+
+
+
+
+
+
+We can use the standard formulae for the roots for a polynomial of degree 2:
+        \begin{eqnarray*}
+            x_{1} = \frac{1}{2}(-b + \sqrt{b^2 + 4 \cdot 10^{-12}}) \\
+            x_{2} = \frac{1}{2}(-b - \sqrt{b^2 + 4 \cdot 10^{-12}}).
+        \end{eqnarray*}
+However, for large $b$, say $b$ larger than $100$, we see that the formula for the first root, $x_1$,
+we lead to something like this:
+
+When computed $ \Delta = b^2 + 4 \cdot 10^{-12}$ will be approximately $b^2$, then $\sqrt{\Delta}$
+will be approximately $b$, and so $x_1$ will be be approximately $b-b$ so $0$.
+
+The issue is that there is no room in the 52-bit mantissa of $\Delta$ to store $4 \cdot 10^{-12}$.
+$b$ is about $10^2$, so $b^2$ is about $10^4$, so larger than $2^{13}$. 
+Then $4 \cdot 10^{-12}$ is smaller than $2^{-37}$. 
+Because the gap between $2^{13}$ and $2^{-37}$ is $2^{50}$, this means that there are at least 50 bits
+in the 52-bit representation of $ \Delta = b^2 + 4 \cdot 10^{-12}$ that are zeros, and then you can start
+representing $4 \cdot 10^{-12}$, so you have a very poor accuracy.
+Even worse, for $b=10^3$, then $4 \cdot 10^{-12}$ is washed away and we actually have 
+$$ fl( b^2 + 4 \cdot 10^{-12} ) = b .$$
+
+A better formula when $b$ is larger than $100$, (and $a$ is 1, and $c$ is $-10^{-12}$), for the first root, $x_1$ is
+           $$ x_{1} = - \frac{2 \cdot 10^{-12}}{b + \sqrt{b^2 + 4 \cdot 10^{-12}} } $$
+
+Here is a python code to show this.  Here we set $b=10^3$.
+We first compute a ``trusted'' answer using
+\pythoninline{numpy.root}, and we find that $x_1$ should be around $10^{-15}$.
+Then we use the ``bad'' formula, and we find that $x_1 = 0$. Given
+that $x_1$ should be around $10^{-15}$, the relative error by returning $x_1 = 0$
+infinitely
+large. Then we use the ``good'' formula, and we find $x_1 = 10^{-15}$, which is much more in accordance with \pythoninline{numpy.root}.
+
+\begin{python}
+from math import sqrt
+import numpy as np
+\end{python}
+\begin{python}
+a = 1.
+b = 1e3
+c = -1e-12
+\end{python}
+\begin{python}
+r = np.roots( np.array( [ a, b, c ]) )
+print( r[0], r[1] )
+\end{python}
+\begin{pythonoutput}
+-1000.0 1e-15
+\end{pythonoutput}
+\begin{python}
+x0 = ( - b - sqrt( b**2 - 4 * a * c ) ) / ( 2 * a )
+x1 = ( - b + sqrt( b**2 - 4 * a * c ) ) / ( 2 * a )
+print( x0, x1 )
+\end{python}
+\begin{pythonoutput}
+-1000.0 0.0
+\end{pythonoutput}
+\begin{python}
+x0 = ( - b - sqrt( b**2 - 4 * a * c ) ) / ( 2 * a )
+x1 = - ( 2 * c ) / ( b + sqrt( b**2 + 4 * a * c ) )
+print( x0, x1 )
+\end{python}
+\begin{pythonoutput}
+-1000.0 1e-15
+\end{pythonoutput}
+
+
+
+
+
+
+
+\end{document}

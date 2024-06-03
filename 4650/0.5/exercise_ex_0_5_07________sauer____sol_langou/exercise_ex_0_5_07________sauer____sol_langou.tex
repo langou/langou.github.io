@@ -1,0 +1,367 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+
+
+\usepackage[utf8]{inputenc}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage{listings}
+
+\newcommand\digitstyle{\color{deepgreen}}
+\makeatletter
+\newcommand{\ProcessDigit}[1]
+{%
+  \ifnum\lst@mode=\lst@Pmode\relax%
+   {\digitstyle #1}%
+  \else
+    #1%
+  \fi
+}
+\makeatother
+\lstset{
+}
+
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{MyLightGray}{rgb}{0.93,0.93,0.93}
+\definecolor{MyPurple}{rgb}{.8,0,.8}
+\definecolor{MyOrange}{rgb}{.8,0.4,0}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+literate=
+    {0}{{{\ProcessDigit{0}}}}1
+    {1}{{{\ProcessDigit{1}}}}1
+    {2}{{{\ProcessDigit{2}}}}1
+    {3}{{{\ProcessDigit{3}}}}1
+    {4}{{{\ProcessDigit{4}}}}1
+    {5}{{{\ProcessDigit{5}}}}1
+    {6}{{{\ProcessDigit{6}}}}1
+    {7}{{{\ProcessDigit{7}}}}1
+    {8}{{{\ProcessDigit{8}}}}1
+    {9}{{{\ProcessDigit{9}}}}1
+    {<=}{{\(\leq\)}}1,
+    morestring=[b]",
+    morestring=[b]',
+    morecomment=[l]//,
+backgroundcolor=\color{MyLightGray},
+columns=fullflexible
+upquote=true,
+language=Python,
+basicstyle=\ttm,
+morekeywords={self},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+keywordstyle=\color{MyOrange},
+emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+emphstyle=\color{MyPurple},
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+% Python style for highlighting
+\newcommand\outputstyle{\lstset{
+%backgroundcolor=\color{MyLightGray},
+language=Python,
+basicstyle=\ttm,
+%morekeywords={self, {1}},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+%keywordstyle=\color{MyOrange},
+%emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+%emphstyle=\color{MyPurple},
+%stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+
+% Output environment
+\lstnewenvironment{pythonoutput}[1][]
+{
+\outputstyle
+\lstset{#1}
+}
+{}
+
+
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+
+
+
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.5.7 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.5.7, Sauer}\\\\
+
+        \begin{enumerate}
+            \item \label{itm:a} Find the Taylor polynomial of degree 4 for $f(x) = \ln{(x)}$ about the point $x=1$.
+            \item \label{itm:b} Use the result of (\ref{itm:a}) to approximate $f(0.9)$ and $f(1.1)$.
+            \item \label{itm:c} Use the Taylor remainder to find an error formula for the
+                Taylor polynomial.  Give error bounds for each of the two
+                approximations made in part (\ref{itm:b}).  Which of the two
+                approximations in part (\ref{itm:b}) do you expect to be closer to the
+                correct value?
+\item \label{itm:d}
+Use a calculator to compare the actual error in each case with your error bound from part (c).
+
+        \end{enumerate}
+
+\end{minipage}}
+
+
+
+\vspace*{.7cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.5.7, Sauer, solution, Langou}\\
+
+\framebox{
+\begin{minipage}{\textwidth}
+
+\begin{itemize}
+
+\item Only turning the Python code is not a good answer. 
+
+\item The copy-paste from this PDF to python code does not work great. It is better to copy-paste from colab.
+
+\item The Colab Jupyter Notebook is available at: 
+\url{https://colab.research.google.com/drive/11-RqoQ1hYF1tFyqU_vIXGVTQsVm57Lt1}.
+
+\item The Python code and its ouput is at the end of this document.
+
+\end{itemize}
+\end{minipage}}
+\vspace*{.2cm}
+
+
+
+
+
+
+
+            \begin{enumerate}
+                \item 
+                    We recall the formula for the Taylor polynomial of degree 4 of a function $f$ at $x_0$:
+                    \[ p_4(x) = f(x_0) + f'(x_0) (x-x_0) + \frac{1}{2!} f''(x_0) (x-x_0)^2 + \frac{1}{3!} f^{(3)}(x_0) (x-x_0)^3 + \frac{1}{4!} f^{(4)}(x_0) (x-x_0)^4.  \]
+
+                    We want to use this formula for $f(x)=\ln{x}$ and $x_0=1$.  First, we compute the first four derivatives of $f(x)=\ln{x}$:
+                    \[ f(x) = \ln{x},\quad f'(x) = (-1)^0\frac{0!}{x},\quad f''(x) = (-1)^1\frac{1!}{x^2},\quad f^{(3)}(x) = (-1)^2\frac{2!}{x^3},\quad f^{(4)}(x) = (-1)^3\frac{3!}{x^4}.  \]
+
+                    Then, we evaluate these derivatives at $x_0=1$:
+                    \[ f(1) = 0,\quad f'(1) = 0!,\quad f''(1) = -1!,\quad f^{(3)}(1) = 2!,\quad f^{(4)}(1) = -3!.  \]
+
+                    Finally, we substitute $f(1)$, $f'(1)$, $f''(1)$, $f^{(3)}(1)$, $f^{(4)}(1)$ in the formula for $p_4(x)$ and obtain:
+                    \[ p_4(x) = (x-1) -\frac{1}{2} (x-1)^2 + \frac{1}{3} (x-1)^3 - \frac{1}{4} (x-1)^4.  \]
+
+                \item $p_4(0.9) = -0.105358333333\dots$ and $p_4(1.1) = 0.095308333333\dots$
+
+                \item We have $x_0=1$. If $x$ is any real number in $(0,\infty)$, then the function 
+                    $f(x)=\ln{x}$ is $k+1$ times continuously differentiable in either the interval 
+                    $[x,x_0]$ or $[x_0,x]$, whichever makes sense. The assumptions of the
+                    Taylor's Theorem with Remainder (Theorem 0.8 page 21) are therefore satisfied.
+
+                    Therefore the theorem tells us that there exists $c$ in between $x$ and $x_0$ such that
+                    \begin{equation*}
+                        \begin{split}
+                            f(x) = f(x_0) + f'(x_0) (x-x_0) + \frac{1}{2!} f''(x_0)
+                            (x-x_0)^2 + \frac{1}{3!} f^{(3)}(x_0) (x-x_0)^3\\ 
+                            + \frac{1}{4!} f^{(4)}(x_0) (x-x_0)^4 + \frac{1}{5!}
+                            f^{(5)}(c) (x-x_0)^5.
+                        \end{split}
+                    \end{equation*}
+
+                    In other words, using $x_0=1$, $p_4(x) = (x-1)
+                    -\frac{1}{2} (x-1)^2 + \frac{1}{3} (x-1)^3 - \frac{1}{4}
+                    (x-1)^4$ and the fact that $f^{(5)}(x) = (-1)^4
+                    \left( \frac{4!}{x^5} \right)$, we obtain that
+                    there exists $c$ in between $x$ and 1 such that:
+                    \[ f(x) = p_4(x) + \frac{1}{5c^5} (x-1)^5.\]
+
+                    This enables to control the error made by approximating $f(x)$ with $p_4(x)$ with the formula:
+                    \[ | f(x) -  p_4(x) | \leq  \frac{1}{5c^5} |x-1|^5, \quad \textmd{where }c\textmd{ is in between }x\textmd{ and 1}.\]
+
+                    Assume that $x>1$, (so we use the formula $p_4(x)$ to approximate $f(x)$ when $x$ is on the right of 1,) then
+                    since $c$ is in the interval $(1,x)$, we have $1<c<x$  and so $x^{-5}<c^{-5}<1$, the left part is of interest:
+                    \[\frac{1}{c^5} < 1 \]
+                    and so we obtain a new error bound (without $c$) as:
+                    \[ | f(x) -  p_4(x) | \leq  \frac{1}{5} (x-1)^5.\]
+
+                    Assume that $0<x<1$, (so we use the formula $p_4(x)$ to approximate $f(x)$ when $x$ is on the left of 1,) then
+                    since $c$ is in the interval $(x,1)$, we have $x<c<1$  and so $1<c^{-5}<x^{-5}$,  the left part is of interest:
+                    \[\frac{1}{c^5} < \frac{1}{x^5} \]
+                    and so we obtain a new error bound (without $c$) as:
+                    \[ | f(x) -  p_4(x) | \leq  \frac{1}{5x^5}(1-x)^5.\]
+
+                    We conclude by looking at the relative error bound:
+                    \[ \frac{| f(x) -  p_4(x) |}{|f(x)|} \leq  \left\{ \begin{array}{l}  \frac{1}{5x^5|\ln{x}|}(1-x)^5, \textmd{ if }0<x < 1\\  ~\\ \frac{1}{5\ln{x}} (x-1)^5, \textmd{ if }1 <  x \end{array}\right..\]
+
+                    For $x=0.9$, the bound tells us that
+                    \[ \textmd{rel\_err}(0.9) = | f(0.9) -  p_4(0.9) |/|f(0.9)|  \leq 3.2e-5.\]
+
+                    For $x=1.1$, the bound tells us that
+                    \[ \textmd{rel\_err}(1.1) = | f(1.1) -  p_4(1.1) |/|f(1.1)|  \leq 2.1e-5.\]
+
+                    We expect $p_4(1.1)$ to be relatively closer to $f(1.1)$ than $p_4(0.9)$ is to $f(0.9)$
+			(However this does not have to be true.)
+
+
+\item
+
+
+
+                    \[ \textmd{rel\_err}(0.9) = | f(0.9) -  p_4(0.9) |/|f(0.9)| \approx 2.1e-5 \]
+                    \[ \textmd{rel\_err}(1.1) = | f(1.1) -  p_4(1.1) |/|f(1.1)| \approx 1.9e-5 \]
+
+We check that our upper bounds ``works''. For $x=0.9$, the true error, 2.1e-5, is less than the error bound 3.2e-5.
+For $x=1.1$, the true error, 1.9e-5, is less than the error bound 2.1e-5.
+
+
+
+
+
+            \end{enumerate}
+
+
+
+\begin{python}
+from math import log
+\end{python}
+\begin{python}
+p4 = lambda x : (x-1) \
+              - (1./2.) * (x-1)**2 \
+              + (1./3.) * (x-1)**3 \
+              - (1./4.) * (x-1)**4
+\end{python}
+\begin{python}
+print( p4(0.9) )
+print( p4(1.1) )
+\end{python}
+\begin{pythonoutput}
+-0.10535833333333332
+0.09530833333333343
+\end{pythonoutput}
+\begin{python}
+def our_bound_on_the_error(x):
+  if(  0 < x < 1 ): y = 1. / 5. / (x**5) / ( - log(x) ) * ( 1. - x )**5
+  if(  1 < x ): y = 1. / 5. / ( log(x) )* ( x - 1. )**5
+  return y
+
+print( f"{our_bound_on_the_error( 0.9 ):.2e}" )
+print( f"{our_bound_on_the_error( 1.1 ):.2e}" )
+\end{python}
+\begin{pythonoutput}
+3.21e-05
+2.10e-05
+\end{pythonoutput}
+\begin{python}
+print( f"{abs( log(0.9) - p4(0.9) ) / abs( log(0.9) ):.2e}" )
+print( f"{abs( log(1.1) - p4(1.1) ) / abs( log(1.1) ):.2e}" )
+\end{python}
+\begin{pythonoutput}
+2.07e-05
+1.94e-05
+\end{pythonoutput}
+
+\end{document}

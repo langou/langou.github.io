@@ -1,0 +1,364 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.5.5 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+
+
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.5.5, Sauer}\\\\
+Find the Taylor polynomial of degree $5$ about the point $x = 0$ for the following functions: 
+$$ (a)~~f(x)=e^{x^2}\quad  (b)~~f(x)=\cos(2x)\quad (c)~~f(x)=\ln(1+x)\quad (d)~~f(x)=\sin2x$$
+\end{minipage}}
+
+
+\vspace*{.7cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.5.5, Sauer, solution, Langou}\\
+
+
+
+
+
+\begin{enumerate}
+
+\item
+\framebox{Method 1}\\
+
+We know the Taylor series of $e^x$ at $0$ by heart:
+$$ e^x = 1 + x + \frac{1}{2}x^2 + \mathcal{O}(x^3)$$
+We plug $x^2$ and get
+$$ e^{x^2} = 1 + x^2 + \frac{1}{2}x^4 + \mathcal{O}(x^6)$$
+So we find 
+\begin{center}
+\framebox{$p_5(x) =  1 + x^2 + \frac{1}{2}x^4 $}
+\end{center}
+
+\framebox{Method 2}\\
+
+We compute the successive derivatives of $e^{x^2}$:
+$$ 
+f(x) = e^{x^2},
+\quad
+f'(x) = 2xe^{x^2},
+\quad
+f''(x) = (4x^2+2)e^{x^2},
+\quad
+f^{(3)}(x) = (8x^3+12x)e^{x^2},
+$$
+$$
+f^{(4)}(x) = (16x^4+48x^2+12)e^{x^2},
+\quad
+f^{(5)}(x) = (32x^5+160x^3+120x)e^{x^2}.
+$$
+
+We evaluate them at $0$:
+$$ 
+f(0) = 1,
+\quad
+f'(0) = 0,
+\quad
+f''(0) = 2,
+\quad
+f^{(3)}(0) = 0,
+\quad
+f^{(4)}(0) = 12,
+\quad
+f^{(5)}(0) = 0.
+$$
+
+We write the general formula for the Taylor polynomial of degree 5 of $f$ at $0$:
+$$ 
+p_5(x) = f(0) + f'(0) x + \frac{1}{2} f''(0) x^2 + \frac{1}{3!} f^{(3)}(0) x^3 + \frac{1}{4!} f^{(4)}(0) x^4 + \frac{1}{5!} f^{(5)}(0) x^5
+$$
+And we plug our previous found values for $f(0)$, $f'(0)$,
+$f''(0)$,
+$f^{(3)}(0)$,
+$f^{(4)}(0)$,
+$f^{(5)}(0)$
+and we find
+\begin{center}
+\framebox{$p_5(x) =  1 + x^2 + \frac{1}{2}x^4 $}
+\end{center}
+
+
+\item
+\framebox{Method 1}\\
+
+We know the Taylor series of $\cos(x)$ at $0$ by heart:
+$$ \cos(x) = 1 - \frac{1}{2}x^2 + \frac{1}{4!}x^4 + \mathcal{O}(x^6)$$
+We plug $2x$ and get
+$$ \cos(x) = 1 - \frac{2^2}{2}x^2 + \frac{2^4}{4!}x^4 + \mathcal{O}(x^6)$$
+So we find 
+\begin{center}
+\framebox{$p_5(x) =  1 - 2 x^2 + \frac{2}{3}x^4 $}
+\end{center}
+
+
+\framebox{Method 2}\\
+
+
+We compute the successive derivatives of $\cos(2x)$:
+$$ 
+f(x) = \cos(2x),
+\quad
+f'(x) = -2\sin(2x),
+\quad
+f''(x) = -4\cos(2x),
+\quad
+f^{(3)}(x) =  8\sin(2x),
+$$$$
+f^{(4)}(x) = 16\cos(2x),
+\quad
+f^{(5)}(x) = -32\sin(2x).
+$$
+
+We evaluate them at $0$:
+$$ 
+f(0) = 1,
+\quad
+f'(0) = 0,
+\quad
+f''(0) = -4,
+\quad
+f^{(3)}(0) = 0,
+\quad
+f^{(4)}(0) = 16,
+\quad
+f^{(5)}(0) = 0.
+$$
+
+We write the general formula for the Taylor polynomial of degree 5 of $f$ at $0$:
+$$ 
+p_5(x) = f(0) + f'(0) x + \frac{1}{2} f''(0) x^2 + \frac{1}{3!} f^{(3)}(0) x^3 + \frac{1}{4!} f^{(4)}(0) x^4 + \frac{1}{5!} f^{(5)}(0) x^5
+$$
+And we plug our previous found values for $f(0)$, $f'(0)$,
+$f''(0)$,
+$f^{(3)}(0)$,
+$f^{(4)}(0)$,
+$f^{(5)}(0)$
+and we find
+\begin{center}
+\framebox{$p_5(x) =  1 -2 x^2 + \frac{2}{3}x^4 $}
+\end{center}
+
+
+\item
+\framebox{Method 1}\\
+
+We know the Taylor series of $\ln(1+x)$ at $0$ by heart, so we are done.
+We get
+\begin{center}
+\framebox{$p_5(x) =  x - \frac{1}{2} x^2 + \frac{1}{3}x^3  - \frac{1}{4} x^4 + \frac{1}{5}x^5 $}
+\end{center}
+
+
+\framebox{Method 2}\\
+
+We compute the successive derivatives of $\ln(1+x)$:
+$$ 
+f(x) = \ln(1+x),
+\quad
+f'(x) = \frac{1}{1+x},
+\quad
+f''(x) = \frac{-1}{(1+x)^2},
+\quad
+f^{(3)}(x) = \frac{2}{(1+x)^3},
+$$$$
+f^{(4)}(x) = \frac{-3!}{(1+x)^4},
+\quad
+f^{(5)}(x) = \frac{4!}{(1+x)^5}.
+$$
+
+We evaluate them at $0$:
+$$ 
+f(0) = 0,
+\quad
+f'(0) = 1,
+\quad
+f''(0) = -1,
+\quad
+f^{(3)}(0) = 2,
+\quad
+f^{(4)}(0) = -3!,
+\quad
+f^{(5)}(0) = 4!.
+$$
+
+We write the general formula for the Taylor polynomial of degree 5 of $f$ at $0$:
+$$ 
+p_5(x) = f(0) + f'(0) x + \frac{1}{2} f''(0) x^2 + \frac{1}{3!} f^{(3)}(0) x^3 + \frac{1}{4!} f^{(4)}(0) x^4 + \frac{1}{5!} f^{(5)}(0) x^5
+$$
+And we plug our previous found values for $f(0)$, $f'(0)$,
+$f''(0)$,
+$f^{(3)}(0)$,
+$f^{(4)}(0)$,
+$f^{(5)}(0)$
+and we find
+\begin{center}
+\framebox{$p_5(x) =  x - \frac{1}{2} x^2 + \frac{1}{3}x^3  - \frac{1}{4} x^4 + \frac{1}{5}x^5 $}
+\end{center}
+
+
+\item
+Since $f(x) = \sin^2(x)$ is an even function, only even power will show up in
+the Taylor expansion. And since $f(0)=0$, we only expect to see at most $x^2$,
+$x^4$, etc.\\
+
+\framebox{Method 1}\\
+
+We compute $f^{(n)} (0)  $ for $n=0$ to $5$:
+
+\begin{tabular}{|l|l|l|ll|}
+\hline
+$n$ & $ f^{(n)} (x)                             $ & $f^{(n)} (0)        $ & \multicolumn{2}{l|}{$f^{(n)} (0) / n! $} \\
+\hline
+0 & $ f^{(0)} (x) = \sin^2(x)                 $ & $f^{(0)} (0) =  0   $ & $0$    &$=0$\\
+1 & $ f^{(1)} (x) = 2\cos(x)\sin(x)           $ & $f^{(1)} (0) =  0   $ & $0$    &$=0$\\
+2 & $ f^{(2)} (x) = 2(\cos^2(x) - \sin^2(x))  $ & $f^{(2)} (0) =  2   $ & $2/2!$ &$=1$\\
+3 & $ f^{(3)} (x) = -8\cos(x)\sin(x)          $ & $f^{(3)} (0) =  0   $ & $0$    &$=0$\\
+4 & $ f^{(4)} (x) = -8\cos^2(x)+ 8\sin^2(x)   $ & $f^{(4)} (0) = -8   $ & $-8/4!$&$=-1/3$\\
+5 & $ f^{(5)} (x) = 32\cos(x)\sin(x)          $ & $f^{(5)} (0) =  0   $ & $0$    &$=0$\\
+\hline
+\end{tabular}\\
+
+So we get:
+\begin{center}
+\framebox{
+$  p_5(x) = x^2 - \frac13  x^4 $
+}
+\end{center}
+
+
+\underline{Note:}
+Another way to get the derivatives of $f$ is to remember that $2\cos(x)\sin(x) = \sin(2x)$, so that $f'(x) = \sin(2x) $
+and so we would get
+ $ f^{(2)} (x) = 2\cos(2x) $,
+ $ f^{(3)} (x) = -4\sin(2x) $,
+ $ f^{(4)} (x) = -8\cos(2x) $, and
+ $ f^{(5)} (x) = 16\sin(2x) $.\\
+
+\framebox{Method 2}\\
+
+We know that 
+$$  \sin(x) = x - \frac1{3!} x^3 + \mathcal{O}(x^5).$$
+We can square the Taylor series of $\sin(x)$ to get the Taylor series of $\sin^2(x)$ and we get
+\begin{eqnarray}
+\nonumber  \sin^2(x) &=& \left( x - \frac1{3!} x^3 +\mathcal{O}(x^5) \right)\left( x - \frac1{3!} x^3  +\mathcal{O}(x^5) \right),\\
+\nonumber            &=& x^2 - ( 2\frac1{3!} ) x^4 + \mathcal{O}(x^6),\\
+\nonumber            &=& x^2 - \frac13  x^4 +  \mathcal{O}(x^6).
+\end{eqnarray}
+
+So we get:
+\begin{center}
+\framebox{
+$  p_5(x) = x^2 - \frac13  x^4 $
+}
+\end{center}
+
+\framebox{Method 3}\\
+
+We know that 
+$$  2\sin^2(x) = 1 - \cos(2x).$$
+Since 
+$$\cos(x) = 1 - \frac1{2!} x^2 + \frac1{4!}  x^4 - \frac1{6!} x^6 \ldots,$$
+we have
+$$\cos(2x) = 1 - \frac1{2!} 2^2 x^2 + \frac1{4!} 2^4 x^4 - \frac1{6!} 2^6x^6 \ldots,$$
+$$\cos(2x) = 1 - 2 x^2 + \frac2{3} x^4 - \frac4{45} x^6 \ldots,$$
+so that
+$$1-\cos(2x) = 2 x^2 - \frac2{3} x^4 + \frac4{45} x^6 \ldots,$$
+so that
+$$  \sin^2(x) =\frac{1}{2}( 1 - \cos(2x)) = x^2 - \frac1{3} x^4 + \frac2{45} x^6 \ldots.$$
+
+
+So we get:
+\begin{center}
+\framebox{
+$  p_5(x) = x^2 - \frac13  x^4$
+}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{enumerate}
+
+\end{document}

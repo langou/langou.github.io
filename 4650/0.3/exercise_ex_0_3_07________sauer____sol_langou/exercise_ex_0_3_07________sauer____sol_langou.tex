@@ -1,0 +1,820 @@
+
+\documentclass[pdftex,11pt]{article}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{latexsym,amssymb}
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+
+
+
+
+\usepackage[utf8]{inputenc}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\input{../../vrac/rgb.tex}
+
+\usepackage{listings}
+
+\newcommand\digitstyle{\color{deepgreen}}
+\makeatletter
+\newcommand{\ProcessDigit}[1]
+{%
+  \ifnum\lst@mode=\lst@Pmode\relax%
+   {\digitstyle #1}%
+  \else
+    #1%
+  \fi
+}
+\makeatother
+\lstset{
+}
+
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{MyLightGray}{rgb}{0.93,0.93,0.93}
+\definecolor{MyPurple}{rgb}{.8,0,.8}
+\definecolor{MyOrange}{rgb}{.8,0.4,0}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+literate=
+    {0}{{{\ProcessDigit{0}}}}1
+    {1}{{{\ProcessDigit{1}}}}1
+    {2}{{{\ProcessDigit{2}}}}1
+    {3}{{{\ProcessDigit{3}}}}1
+    {4}{{{\ProcessDigit{4}}}}1
+    {5}{{{\ProcessDigit{5}}}}1
+    {6}{{{\ProcessDigit{6}}}}1
+    {7}{{{\ProcessDigit{7}}}}1
+    {8}{{{\ProcessDigit{8}}}}1
+    {9}{{{\ProcessDigit{9}}}}1
+    {<=}{{\(\leq\)}}1,
+    morestring=[b]",
+    morestring=[b]',
+    morecomment=[l]//,
+backgroundcolor=\color{MyLightGray},
+columns=fullflexible
+upquote=true,
+language=Python,
+basicstyle=\ttm,
+morekeywords={self},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+keywordstyle=\color{MyOrange},
+emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+emphstyle=\color{MyPurple},
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+% Python style for highlighting
+\newcommand\outputstyle{\lstset{
+%backgroundcolor=\color{MyLightGray},
+language=Python,
+basicstyle=\ttm,
+%morekeywords={self, {1}},              % Add keywords here
+%keywordstyle=\ttb\color{deepblue},
+%keywordstyle=\ttb\color{MyOrange},
+%keywordstyle=\color{MyOrange},
+%emph={as, import},          % Custom highlighting
+%emphstyle=\ttb\color{deepred},    % Custom highlighting style
+%emphstyle=\ttb\color{MyPurple},
+%emphstyle=\color{MyPurple},
+%stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+
+% Output environment
+\lstnewenvironment{pythonoutput}[1][]
+{
+\outputstyle
+\lstset{#1}
+}
+{}
+
+
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+
+
+
+
+\usepackage[english]{babel}
+\usepackage{array}
+\usepackage{multirow} 
+
+\hypersetup{
+pdftitle={Langou :: Sauer EX.0.3.7 (answer)},
+pdfauthor={Julien Langou}, 
+} 
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+
+\setlength{\textwidth}{7.4in}
+\setlength{\textheight}{10.0in}
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+\renewcommand{\theenumi}{\alph{enumi}}
+
+
+%
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved,}
+please visit \url{www.pearsoned.com/permissions/}.}
+%{\bf Copyright (C) 2018, 2012, 2016 by Pearson Education Inc. All Rights Reserved.}
+%Printed in the United States of America.
+%This publication is protected by copyright, and permission should be obatined from the 
+%publisher prior to any prohibted reproduction, storage in retrieval system, or 
+%transmission in any form of by any means, electronic, mechanical, photocopying, recording, 
+%or otherwise. For information regarding permissions, request forms and the appropriate 
+%contacts within the Pearson Education Global Rights \& Permissions department, 
+%please visit \url{www.pearsoned.com/permissions/}.}
+%
+\end{minipage}}
+
+
+
+
+
+
+
+\framebox{
+\begin{minipage}{\textwidth}
+\textbf{EX.0.3.7, Sauer}\\\\
+Write each of the given numbers in Matlab's {\em format hex}.
+Show your work. Then check your answers with Matlab. 
+(a) 8 (b) 21 (c) 1/8 (d) $\textmd{fl}(1/3)$ (e) $\textmd{fl}(2/3)$ (f) $\textmd{fl}(0.1)$ (g) $\textmd{fl}(-0.1)$ (h) $\textmd{fl}(-0.2)$
+\end{minipage}}
+
+
+\vspace*{.7cm}
+
+\framebox{
+\begin{minipage}{\textwidth}
+{\tiny
+{\bf Copyright (c) 2021, Julien Langou. All rights reserved,}
+please visit \url{https://creativecommons.org/licenses/by/4.0/}.}
+\end{minipage}}
+\vspace*{.2cm}
+
+\textbf{EX.0.3.7, Sauer, solution, Langou}\\
+
+\framebox{
+\begin{minipage}{\textwidth}
+
+\begin{itemize}
+
+\item Only turning the Python code is not a good answer. 
+
+\item The copy-paste from this PDF to python code does not work great. It is better to copy-paste from colab.
+
+\item The Colab Jupyter Notebook is available at: 
+\url{https://colab.research.google.com/drive/1Pv58EsXEaVojnQqBEMLjxlWPP-tFwLzL}.
+
+\item Do not forget to execute the piece of code below first.
+
+
+\end{itemize}
+\end{minipage}}
+
+
+\begin{python}
+import struct
+def double_to_hex(f):
+  return hex(struct.unpack('<Q', struct.pack('<d', f))[0])
+\end{python}
+
+
+
+
+
+
+\begin{enumerate}
+\item 
+$$ 8 = (1000)_2 = + 2^3 (1.000000000000000000000000000000000000000000000000000)_2 $$
+
+The sign is positive, so the bit sign is $0$.
+The exponent is 3. Adding 1023 to the exponent gives $1026 = 1024 + 2$, or $(10000000010)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 10000000010 & 0000000000000000000000000000000000000000000000000000 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0100&0000&0010&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000 \\
+\hline
+4&0&2&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+\hline
+\end{tabular}\\
+
+The 64 bits  (given as 16 hexadecimal numbers) representing $8$ on the computer are
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+4020000000000000
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{python}
+print( double_to_hex( 8.) )
+\end{python}
+\begin{pythonoutput}
+0x4020000000000000
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 8, format
+
+ans =
+
+   4020000000000000
+
+\end{verbatim}
+\end{comment}
+
+
+\item 
+$$ 21 = 16+4+1 = (10101)_2 = + 2^4 (1.010100000000000000000000000000000000000000000000000)_2 $$
+
+The sign is positive, so the bit sign is $0$.
+The exponent is 4. Adding 1023 to the exponent gives $1027 = 2^{10} + 2 + 1$, or $(10000000011)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 10000000011 & 0101000000000000000000000000000000000000000000000000 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0100&0000&0011&0101&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000 \\
+\hline
+4&0&3&5&0&0&0&0&0&0&0&0&0&0&0&0\\
+\hline
+\end{tabular}\\
+
+The 64 bits  (given as 16 hexadecimal numbers) representing $21$ on the computer are
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+4035000000000000
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{python}
+print( double_to_hex( 21.) )
+\end{python}
+\begin{pythonoutput}
+0x4035000000000000
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 21, format
+
+ans =
+
+   4035000000000000
+
+\end{verbatim}
+
+\end{comment}
+
+\item 
+$$ 1/8 = 2^{-3} = + 2^{-3} (1.000000000000000000000000000000000000000000000000000)_2 $$
+
+The sign is positive, so the bit sign is $0$.
+The exponent is -3. Adding 1023 to the exponent gives $1020 =
+512+256+128+64+32+16+8+4 = (01111111100)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 01111111100 & 0000000000000000000000000000000000000000000000000000 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0011&1111&1100&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000&0000 \\
+\hline
+3&f&c&0&0&0&0&0&0&0&0&0&0&0&0&0\\
+\hline
+\end{tabular}\\
+
+The 64 bits (given as 16 hexadecimal numbers) representing $1/8$ on the computer are
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+3fc0000000000000
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{python}
+print( double_to_hex( 1./8. ) )
+\end{python}
+\begin{pythonoutput}
+0x3fc0000000000000
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 1/8, format
+
+ans =
+
+   3fc0000000000000
+
+\end{verbatim}
+\end{comment}
+
+\item 
+We first need to convert 1/3 in base 2:
+$$
+\begin{array}{rcrccc}
+\frac{1}{3}& *& 2   & = & 0\frac{2}{3}&    \rightarrow     0  \\\\
+\frac{2}{3}& *& 2   & = & 1\frac{1}{3}&    \rightarrow     1  \\\\
+\hline
+\frac{1}{3}& *& 2   & = & 0\frac{2}{3}&    \rightarrow     0  \\\\
+\end{array}
+$$
+
+We find:
+$$x = (\frac{1}{3})_{10} = (0.\overline{01})_2 $$
+
+In scientific notation:
+$$x = + 2^{-2} (1.\overline{01})_2 $$
+
+$x$ is not a machine number. It cannot be stored exactly on the computer. We
+need to find the two machine numbers, $x_-$ and $x_+$, around it.
+
+We have
+\begin{eqnarray}
+ \nonumber x_-       & = &  + 2^{-2} ( 1.0101010101010101010101010101010101010101010101010101\phantom{|0101}~~~)_2\\
+ \nonumber x = 1/3   & = &  + 2^{-2} ( 1.0101010101010101010101010101010101010101010101010101|0101~~~)_2\\ 
+ \nonumber x_+       & = &  + 2^{-2} ( 1.0101010101010101010101010101010101010101010101010110\phantom{|0101}~~~)_2
+\end{eqnarray}
+
+We see that $x_-$ is the closest. So we have $\textmd{fl}(1/3) = x_-$. So now we need to find the 
+64 bits representing $x_-$ on the computer.
+
+The sign is positive, so the bit sign is $0$.
+The exponent is -2. Adding 1023 to the exponent gives $1021 =
+512+256+128+64+32+16+8+4+1 = (01111111101)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 01111111101 & 0101010101010101010101010101010101010101010101010101 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0011&1111&1101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101\\
+\hline
+3&f&d&5&5&5&5&5&5&5&5&5&5&5&5&5\\
+\hline
+\end{tabular}\\
+
+The 64 bits (given as 16 hexadecimal numbers) representing $1/3$ on the computer are
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+3fd5555555555555
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+
+\begin{python}
+print( double_to_hex( 1./3. ) )
+\end{python}
+\begin{pythonoutput}
+0x3fd5555555555555
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 1/3, format
+
+ans =
+
+   3fd5555555555555
+
+\end{verbatim}
+
+\end{comment}
+
+\item We observe that $ 2/3  = 2 \times 1/3 $.
+(What an observation!!!) 
+So $2/3$ is simply $1/3$ with an exponent of +1.
+So by looking at question (d), we infer:
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+3fe5555555555555
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+Let us go slower and redo everything. But please note that we essentially copy-paste question (d).
+
+We first need to convert 2/3 in base 2:
+$$
+\begin{array}{rcrccc}
+\frac{2}{3}& *& 2   & = & 1\frac{1}{3}&    \rightarrow     1  \\\\
+\frac{1}{3}& *& 2   & = & 0\frac{2}{3}&    \rightarrow     0  \\\\
+\hline
+\frac{2}{3}& *& 2   & = & 1\frac{1}{3}&    \rightarrow     1  \\\\
+\end{array}
+$$
+
+We find:
+$$x = (\frac{2}{3})_{10} = (0.\overline{10})_2 $$
+
+In scientific notation:
+$$x = + 2^{-1} (1.\overline{01})_2 $$
+
+$x$ is not a machine number. It cannot be stored exactly on the computer. We
+need to find the two machine numbers, $x_-$ and $x_+$, around it.
+
+We have
+\begin{eqnarray}
+ \nonumber x_-       & = &  + 2^{-1} ( 1.0101010101010101010101010101010101010101010101010101\phantom{|0101}~~~)_2\\
+ \nonumber x = 2/3   & = &  + 2^{-1} ( 1.0101010101010101010101010101010101010101010101010101|0101~~~)_2\\ 
+ \nonumber x_+       & = &  + 2^{-1} ( 1.0101010101010101010101010101010101010101010101010110\phantom{|0101}~~~)_2
+\end{eqnarray}
+
+We see that $x_-$ is the closest. So we have $\textmd{fl}(2/3) = x_-$. So now we need to find the 
+64 bits representing $x_-$ on the computer.
+
+The sign is positive, so the bit sign is $0$.
+The exponent is -1. Adding 1023 to the exponent gives $1022 =
+512+256+128+64+32+16+8+4+1 = (01111111110)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 01111111110 & 0101010101010101010101010101010101010101010101010101 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0011&1111&1110&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101&0101\\
+\hline
+3&f&e&5&5&5&5&5&5&5&5&5&5&5&5&5\\
+\hline
+\end{tabular}\\
+
+The 64 bits (given as 16 hexadecimal numbers) representing $2/3$ on the computer are
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+3fe5555555555555
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{python}
+print( double_to_hex( 2./3. ) )
+\end{python}
+\begin{pythonoutput}
+0x3fe5555555555555
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 2/3, format
+
+ans =
+
+   3fe5555555555555
+
+\end{verbatim}
+\end{comment}
+
+\item
+
+We first need to convert $0.1$ in base 2:
+$$
+\begin{array}{rcrccc}
+0.1& *& 2   & = & 0.2&    \rightarrow     0  \\\\
+0.2& *& 2   & = & 0.4&    \rightarrow     0  \\\\
+0.4& *& 2   & = & 0.8&    \rightarrow     0  \\\\
+0.8& *& 2   & = & 1.6&    \rightarrow     1  \\\\
+0.6& *& 2   & = & 1.2&    \rightarrow     1  \\\\
+\hline
+0.2& *& 2   & = & 0.4&    \rightarrow     0  \\\\
+\end{array}
+$$
+
+We find:
+$$x = (0.1)_{10} = (0.0\overline{0011})_2 $$
+
+In scientific notation:
+$$x = + 2^{-4} (1.\overline{1001})_2 $$
+
+$x$ is not a machine number. It cannot be stored exactly on the computer. We
+need to find the two machine numbers, $x_-$ and $x_+$, around it.
+
+We have
+\begin{eqnarray}
+ \nonumber x_-       & = &  + 2^{-4} ( 1.1001100110011001100110011001100110011001100110011001\phantom{|1001}~~~)_2\\
+ \nonumber x = 0.1   & = &  + 2^{-4} ( 1.1001100110011001100110011001100110011001100110011001|1001~~~)_2\\
+ \nonumber x_+       & = &  + 2^{-4} ( 1.1001100110011001100110011001100110011001100110011010\phantom{|1001}~~~)_2
+\end{eqnarray}
+
+We see that $x_+$ is the closest. So we have $\textmd{fl}(0.1) = x_+$. So now we need to find the 
+64 bits representing $x_+$ on the computer.
+
+The sign is positive, so the bit sign is $0$.
+The exponent is -4. Adding 1023 to the exponent gives $1019 =
+512+256+128+64+32+16+8+2+1 = (01111111011)_2.$
+We get\\
+
+\begin{tabular}{|c|c|c|}
+\hline
+0 & 01111111011 & 1001100110011001100110011001100110011001100110011010 \\
+\hline
+\end{tabular}\\
+
+Grouping by four:\\
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+0011&1111&1011&1001&1001&1001&1001&1001&1001&1001&1001&1001&1001&1001&1001&1010\\
+\hline
+3&f&b&9&9&9&9&9&9&9&9&9&9&9&9&a\\
+\hline
+\end{tabular}\\
+
+The 64 bits (given as 16 hexadecimal numbers) representing $0.1$ on the computer are
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+3fb999999999999a
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{python}
+print( double_to_hex( 0.1 ) )
+\end{python}
+\begin{pythonoutput}
+0x3fb999999999999a
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; 0.1, format
+
+ans =
+
+   3fb999999999999a
+
+\end{verbatim}
+\end{comment}
+
+\item  
+So $-0.1$ is simply $0.1$ with a minus sign.
+So looking at question (f), we change the first bit from a 0 to 1. 
+So the first four bits are $1011$ (instead of $0011$), and so the first hexadecimal letter is b.
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+bfb999999999999a
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{python}
+print( double_to_hex( -0.1 ) )
+\end{python}
+\begin{pythonoutput}
+0xbfb999999999999a
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; -0.1, format
+
+ans =
+
+   bfb999999999999a
+
+\end{verbatim}
+
+\end{comment}
+
+
+\item We observe that $ -0.2  = 2 \times (-0.1) $.
+(What an observation!!!) 
+So $-0.2$ is simply $(-0.1)$ with an exponent of +1.
+So by looking at question (g), we infer:
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\begin{minipage}{0.17\textwidth}
+\begin{verbatim}
+bfc999999999999a
+\end{verbatim}
+\end{minipage}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+
+\begin{python}
+print( double_to_hex( -0.2 ) )
+\end{python}
+\begin{pythonoutput}
+0xbfc999999999999a
+\end{pythonoutput}
+
+
+
+
+\begin{comment}
+
+\underline{Matlab Check}:
+\begin{verbatim}
+
+>> format hex; -0.2, format
+
+ans =
+
+   bfc999999999999a
+
+\end{verbatim}
+
+
+
+\end{comment}
+\end{enumerate}
+
+\end{document}
