@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/bisect.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.String { color: #4a708b; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment"># Bisection Method</span>
+<span class="Comment"># Computes an approximate solution of f(x)=0 using the bisection method</span>
+<span class="Comment">#</span>
+<span class="Comment"># Input:  f:        function: ( f: R -&gt; R )</span>
+<span class="Comment">#         a and b:     float: numbers a and b such that f(a) * f(b) &lt; 0</span>
+<span class="Comment">#         tol:         float: tolerance</span>
+<span class="Comment">#         verbose:   boolean: True=print, False = no print</span>
+<span class="Comment">#         </span>
+<span class="Comment"># Output: c:           float: an approximate solution c of f(x)=0 </span>
+<span class="Comment">#         err_bound:   float: bound on the error</span>
+<span class="Comment">#         numeval:       int: number of function evaluations</span>
+<span class="Comment">#</span>
+<span class="Comment"># Assumption: f is continuous on [a,b]</span>
+
+<span class="Statement">def</span> <span class="Identifier">bisect</span>( f, a, b, tol, verbose ):
+
+  numeval = <span class="Constant">0</span>
+
+  err_bound = []
+
+  k = <span class="Constant">0</span>
+
+  fa = f(a)
+  numeval += <span class="Constant">1</span>
+
+  <span class="Statement">if</span> ( fa == <span class="Constant">0</span> ): <span class="Comment"># `a` is a solution, done</span>
+    <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( <span class="String">'</span><span class="String">f(a) = 0, returning `a` as a solution </span><span class="String">'</span> )
+    <span class="Statement">return</span> a, <span class="Constant">0.</span>, numeval
+
+  fb = f(b)
+  numeval += <span class="Constant">1</span>
+
+  <span class="Statement">if</span> ( fb == <span class="Constant">0</span> ): <span class="Comment"># `b` is a solution, done</span>
+    <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( <span class="String">'</span><span class="String">f(b) = 0, returning `b` as a solution </span><span class="String">'</span> )
+    <span class="Statement">return</span> b, <span class="Constant">0.</span>, numeval
+
+  <span class="Statement">if</span> ( ( fa &gt; <span class="Constant">0</span> ) <span class="Statement">and</span> ( fb &gt; <span class="Constant">0</span> ) ) <span class="Statement">or</span> ( ( fa &lt; <span class="Constant">0</span> ) <span class="Statement">and</span> ( fb &lt; <span class="Constant">0</span> ) ):
+    <span class="Identifier">print</span>( <span class="String">'</span><span class="String">[ error ] f(a) and f(b) have the same sign</span><span class="String">'</span> )
+    <span class="Statement">return</span> <span class="Identifier">float</span>(<span class="String">&quot;</span><span class="String">NaN</span><span class="String">&quot;</span>), numeval, <span class="Identifier">float</span>(<span class="String">&quot;</span><span class="String">NaN</span><span class="String">&quot;</span>)
+
+  <span class="Statement">if</span> ( ( b - a ) / <span class="Constant">2</span> &lt;=  tol ):
+    c = ( a + b ) / <span class="Constant">2</span>
+    err_bound.append( ( b - a ) / <span class="Constant">2</span> )
+    <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( <span class="String">'</span><span class="String">( b - a ) / 2 &lt;=  tol, f(a) and f(b) opposite signs</span><span class="String">'</span> )
+    <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( <span class="String">'</span><span class="String">returning c = ( b + a ) / 2 as an approximate solution</span><span class="String">'</span> )
+    <span class="Statement">return</span> c, numeval, err_bound
+
+  <span class="Statement">while</span> ( ( b - a ) / <span class="Constant">2</span> &gt; tol ):
+
+    c = ( a + b ) / <span class="Constant">2</span>
+
+    err_bound.append( ( b - a ) / <span class="Constant">2</span> )
+
+    <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( f<span class="String">&quot;</span><span class="String">{k:3d}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{c:20.16f}</span><span class="String">&quot;</span>, <span class="String">'</span><span class="String">  </span><span class="String">'</span>, f<span class="String">&quot;</span><span class="String">{err_bound[k]:3.1e}</span><span class="String">&quot;</span> )
+
+    k = k + <span class="Constant">1</span>
+
+    fc = f(c)
+    numeval += <span class="Constant">1</span>
+
+    <span class="Statement">if</span> ( fc == <span class="Constant">0</span> ): <span class="Comment"># `c` is a solution, done</span>
+      <span class="Statement">return</span> c, <span class="Constant">0.</span>, numeval
+
+    <span class="Statement">if</span> ( ( fb &gt; <span class="Constant">0</span> ) <span class="Statement">and</span> ( fc &gt; <span class="Constant">0</span> ) ) <span class="Statement">or</span> ( ( fb &lt; <span class="Constant">0</span> ) <span class="Statement">and</span> ( fc &lt; <span class="Constant">0</span> ) ):
+<span class="Comment">#     `a` and `c` make the new interval</span>
+<span class="Comment">#     so replace `b` with `c`  </span>
+      b = c
+      fb = fc
+
+    <span class="Statement">else</span>:
+<span class="Comment">#     `c` and `b` make the new interval</span>
+<span class="Comment">#     so replace `a` with `c` </span>
+      a = c
+      fa = fc
+
+    c = ( a + b ) / <span class="Constant">2</span>
+
+  err_bound.append( (b - a ) / <span class="Constant">2</span> )
+
+  <span class="Statement">if</span> ( verbose ): <span class="Identifier">print</span>( f<span class="String">&quot;</span><span class="String">{k:3d}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{c:20.16f}</span><span class="String">&quot;</span>, <span class="String">'</span><span class="String">  </span><span class="String">'</span>, f<span class="String">&quot;</span><span class="String">{err_bound[k]:3.1e}</span><span class="String">&quot;</span> )
+
+  <span class="Statement">return</span> c, err_bound, numeval
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

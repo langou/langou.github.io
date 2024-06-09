@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/forward__substitution.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.PreProc { color: #1874cd; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment">#</span>
+<span class="Comment">##############################################################################################</span>
+<span class="Comment">#</span>
+<span class="Comment"># forward__substitution</span>
+<span class="Comment">#</span>
+<span class="Comment"># This work is licensed under a Creative Commons Attribution 4.0 International License</span>
+<span class="Comment"># <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></span>
+<span class="Comment"># Copyright (c) 2021, Julien Langou. All rights reserved.</span>
+<span class="Comment">#</span>
+<span class="Comment"># useage: </span>
+<span class="Comment"># =&gt; for the ``standard interface``, do</span>
+<span class="Comment">#           x = forward__substitution___x( A, b )</span>
+<span class="Comment">#</span>
+<span class="Comment"># =&gt; for the ``in-place`` interface, do</span>
+<span class="Comment">#           forward__substitution___x( A, b, inplace = True )</span>
+<span class="Comment">#</span>
+<span class="Comment"># the flag ``unit`` is to say whether there are one on the diagonal of A.</span>
+<span class="Comment"># If unit is ``True`` then 1 are assumed on the diagonal of A. We do not reference the diagonal</span>
+<span class="Comment"># and you can store whatever in it.</span>
+<span class="Comment">#</span>
+<span class="Comment"># Note that we do not check whether A is lower triangular, it is assumed to be.</span>
+<span class="Comment"># Only the lower part of A is referenced. The zeros in the upper part are assumed.</span>
+<span class="Comment"># You can store whatever you want in the upper part of A.</span>
+<span class="Comment">#</span>
+<span class="Statement">def</span> <span class="Identifier">forward__substitution</span>( A, b_, inplace = <span class="Identifier">False</span>, unit = <span class="Identifier">False</span> ):
+<span class="Comment">#</span>
+  <span class="PreProc">import</span> numpy <span class="Statement">as</span> np
+  <span class="PreProc">import</span> copy
+<span class="Comment">#</span>
+  <span class="Statement">if</span> ( inplace ):
+    b = b_
+  <span class="Statement">else</span>:
+    b = copy.deepcopy(b_)
+<span class="Comment">#    </span>
+  n = A.shape[<span class="Constant">0</span>]
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n,):
+    <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,i):
+      b[i] = b[i] - A[i,j] * b[j]
+    <span class="Statement">if</span> <span class="Statement">not</span> unit:
+      b[i] = b[i] / A[i,i]
+<span class="Comment">#    </span>
+  <span class="Statement">if</span> <span class="Statement">not</span> inplace:
+    <span class="Statement">return</span> b
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

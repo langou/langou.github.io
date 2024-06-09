@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/newtdd.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.PreProc { color: #1874cd; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment"># Newton Divided Difference algorithm</span>
+
+<span class="Comment"># input:  x and y: the points to be interpolated ( x_i, y_i) by the interpolating polynomial</span>
+<span class="Comment"># output: c:       the coefficients of the interpolating polynomial in nested form (with base nodes x_i)</span>
+
+<span class="Comment"># dimensions:</span>
+<span class="Comment">#    x is of size n</span>
+<span class="Comment">#    y must be of at least size n and the entries 0 to n-1 of y are considered</span>
+<span class="Comment">#    c is of size n-1</span>
+<span class="Comment">#    the polynomial p has degree n-1</span>
+
+<span class="Comment"># there are an in-place and an out-of-place versions</span>
+
+<span class="Comment"># for out-of-place</span>
+<span class="Comment">#      c = newtdd( x, y )</span>
+
+<span class="Comment"># for in-place</span>
+<span class="Comment">#      newtdd_inplace( x, y )</span>
+<span class="Comment"># then `y` in input are the y-values to be interpolated, </span>
+<span class="Comment"># and `y` in output is `c`</span>
+
+<span class="Comment"># the bulk of the work is done in the function newtdd_inplace</span>
+
+<span class="Comment"># once `c` is constructed, to evaluate the polynomial p, at the points xx, </span>
+<span class="Comment"># to get yy such that yy = p(xx), one can use the accompanying polyval_nested.py</span>
+<span class="Comment"># function, in the following manner</span>
+<span class="Comment">#     yy = polyval_nested( c, x, xx )</span>
+<span class="Comment"># with the `x`, the input x of newtdd, and the `y`, the output c of newtdd.</span>
+
+<span class="Comment"># a check that things might work correctly is to check that, for some x and y,</span>
+<span class="Comment">#    np.isclose( polyval_nested( *newtdd(x,y), x, x ), y ) </span>
+<span class="Comment"># is true.</span>
+
+<span class="Comment"># example of use at: </span>
+<span class="Comment"># <a href="https://colab.research.google.com/drive/1qi5fDnFfQDfR_Iy4NSfsUHHpcUnRPVD8">https://colab.research.google.com/drive/1qi5fDnFfQDfR_Iy4NSfsUHHpcUnRPVD8</a></span>
+
+<span class="PreProc">import</span> copy
+<span class="PreProc">import</span> numpy <span class="Statement">as</span> np
+
+<span class="Statement">def</span> <span class="Identifier">newtdd_inplace</span>( x, y ):
+    n = <span class="Identifier">len</span>( x )
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">1</span>,n):
+        <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(n-i-<span class="Constant">1</span>,-<span class="Constant">1</span>,-<span class="Constant">1</span>):
+            y[j+i] = ( y[j+i] - y[j+i-<span class="Constant">1</span>] ) / ( x[j+i] - x[j] )
+    <span class="Statement">return</span> y
+
+<span class="Statement">def</span> <span class="Identifier">newtdd</span>( x, y ):
+    c = copy.deepcopy( y )
+    newtdd_inplace( x, c )
+    <span class="Statement">return</span> c
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

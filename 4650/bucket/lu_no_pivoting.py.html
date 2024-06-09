@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/lu_no_pivoting___x.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.String { color: #4a708b; }
+.Special { color: #8a2be2; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment">#</span>
+<span class="Comment"># useage:   </span>
+<span class="Comment"># =&gt; for the ``standard interface``, do</span>
+<span class="Comment">#           L, U = lu_no_pivoting___x( A )</span>
+<span class="Comment">#</span>
+<span class="Comment"># =&gt; for the ``in-place`` interface, do</span>
+<span class="Comment">#           lu_no_pivoting___x( A, inplace = True )</span>
+<span class="Comment">#</span>
+<span class="Comment"># performs LU_no_pivoting on `A`</span>
+<span class="Comment">#</span>
+<span class="Comment"># input:  A:       n-by-n matrix to be factored</span>
+<span class="Comment"># output: L an U:  the L and U factors defined by:</span>
+<span class="Comment">#                  (1) L is n-by-n lower unit triangular</span>
+<span class="Comment">#                  (2) U is n-by-n upper triangular</span>
+<span class="Comment">#                  (3) A = L * U</span>
+<span class="Comment">#</span>
+<span class="Comment"># in the ``in-place`` interface L and U are stored one on top of the other, </span>
+<span class="Comment"># in the array A. So, in input, you give A; in ouput, you get L and U stacked </span>
+<span class="Comment"># one on top of the other.</span>
+<span class="Comment">#</span>
+<span class="Comment"># warning: no pivoting is used, this algorithm will exit with error message if </span>
+<span class="Comment"># an exact-zero pivot is encountered, this code might be quite unstable when </span>
+<span class="Comment"># small pivots are encountered during the factorization.</span>
+<span class="Comment">#</span>
+<span class="Statement">def</span> <span class="Identifier">lu_no_pivoting___x</span>( A_, inplace = <span class="Identifier">False</span> ):
+<span class="Comment">#    </span>
+  <span class="Statement">if</span> ( inplace ):
+    A = A_
+  <span class="Statement">else</span>:
+    A = copy.deepcopy(A_)
+<span class="Comment"># begin main code</span>
+  n = A.shape[<span class="Constant">0</span>]
+  <span class="Statement">for</span> k <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n-<span class="Constant">1</span>):
+    <span class="Statement">if</span> ( A[k,k] == <span class="Constant">0.</span> ): <span class="Identifier">print</span>(<span class="String">&quot;</span><span class="String">oops, zero pivot encountered</span><span class="Special">\n</span><span class="String">&quot;</span>); <span class="Statement">break</span>
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(k+<span class="Constant">1</span>,n):
+      A[i,k] = A[i,k] / A[k,k]
+      <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(k+<span class="Constant">1</span>,n):
+        A[i,j] = A[i,j] - A[k,j] * A[i,k]
+<span class="Comment"># end main code   </span>
+  <span class="Statement">if</span> <span class="Statement">not</span> inplace:
+    L = np.tril(A,-<span class="Constant">1</span>)+np.eye(n)
+    U = np.triu(A)
+    <span class="Statement">return</span> L, U
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

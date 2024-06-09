@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/newtdd__ala_sauer.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.PreProc { color: #1874cd; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment"># Newton Divided Difference algorithm, following Sauer's algorithm</span>
+
+<span class="Comment"># input:  x and y: the points to be interpolated ( x_i, y_i) by the interpolating polynomial</span>
+<span class="Comment"># output: c:       the coefficients of the interpolating polynomial in nested form (with base nodes x_i)</span>
+
+<span class="Comment"># dimensions:</span>
+<span class="Comment">#    x is of size n</span>
+<span class="Comment">#    y must be of at least size n and the entries 0 to n-1 of y are considered</span>
+<span class="Comment">#    c is of size n-1</span>
+<span class="Comment">#    the polynomial p has degree n-1</span>
+
+<span class="Comment"># there are an in-place and an out-of-place versions</span>
+
+<span class="Comment"># for out-of-place</span>
+<span class="Comment">#      c = newtdd__ala_sauer( x, y )</span>
+
+<span class="Comment"># once `c` is constructed, to evaluate the polynomial p, at the points xx, </span>
+<span class="Comment"># to get yy such that yy = p(xx), one can use the accompanying </span>
+<span class="Comment"># polyval_nested_w_base_points.py</span>
+<span class="Comment"># function, in the following manner</span>
+<span class="Comment">#     yy = polyval_nested_w_base_points( c, x, xx )</span>
+<span class="Comment"># with the `x`, the input x of newtdd__ala_sauer, and the `y`, </span>
+<span class="Comment"># the output c of newtdd__ala_sauer.</span>
+
+<span class="Comment"># a check that things might work correctly is to check that, for some x and y,</span>
+<span class="Comment">#    np.isclose( polyval_nested_w_base_points( *newtdd__ala_sauer(x,y), x, x ), y ) </span>
+<span class="Comment"># is true.</span>
+
+<span class="Comment"># example of use at: </span>
+<span class="Comment"># <a href="https://colab.research.google.com/drive/174ssa5vC6scoSSb1Dni2Z6lsDfc6MNuq">https://colab.research.google.com/drive/174ssa5vC6scoSSb1Dni2Z6lsDfc6MNuq</a></span>
+
+<span class="PreProc">import</span> copy
+<span class="PreProc">import</span> numpy <span class="Statement">as</span> np
+
+<span class="Statement">def</span> <span class="Identifier">newtdd__ala_sauer</span>( x, y ):
+
+    n = <span class="Identifier">len</span>( x )
+    v = np.zeros([n,n])
+    c = np.zeros([n])
+
+    <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n):
+        v[j,<span class="Constant">0</span>] = y[j]
+
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">1</span>,n):
+        <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n-i):
+            v[j,i] = ( v[j+<span class="Constant">1</span>,i-<span class="Constant">1</span>] - v[j,i-<span class="Constant">1</span>] ) / ( x[j+i] - x[j] )
+
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n):
+        c[i] = v[<span class="Constant">0</span>,i]
+
+    <span class="Statement">return</span> c
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

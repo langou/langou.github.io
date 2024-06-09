@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/gaussian_elimination__section_2_1.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.String { color: #4a708b; }
+.Special { color: #8a2be2; }
+.Comment { color: #0000ee; font-style: italic; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment"># perform row reduction on `A` using the Gaussian elimination</span>
+<span class="Comment"># apply same transformations to `b`</span>
+<span class="Comment"># algorithm as per Section 2.1</span>
+<span class="Comment"># no pivoting is used</span>
+<span class="Comment">#</span>
+<span class="Comment"># input:  A and b: represent linear system of equations Ax=b we want to solve</span>
+<span class="Comment"># output: A and b: equivalent linear system of equations Ax=b </span>
+<span class="Comment">#                  such that A is upper triangular.</span>
+<span class="Comment">#</span>
+<span class="Comment"># there is a deep copy of A and b in input to mimic a matlab-like interface</span>
+<span class="Comment"># this might be more user-friendly for python beginers</span>
+<span class="Statement">def</span> <span class="Identifier">gaussian_elimination__section_2_1</span>( A_, b_ ):
+  A = copy.deepcopy(A_)
+  b = copy.deepcopy(b_)
+  n = A.shape[<span class="Constant">0</span>]
+  <span class="Statement">for</span> k <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n-<span class="Constant">1</span>):
+    <span class="Statement">if</span> ( A[k,k] == <span class="Constant">0.</span> ): <span class="Identifier">print</span>(<span class="String">&quot;</span><span class="String">oops, zero pivot encountered</span><span class="Special">\n</span><span class="String">&quot;</span>); <span class="Statement">break</span>
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(k+<span class="Constant">1</span>,n):
+      mult = A[i,k] / A[k,k]
+      <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(k+<span class="Constant">1</span>,n):
+        A[i,j] = A[i,j] - A[k,j] * mult
+      b[i] = b[i] - b[k] * mult
+      A[i,k] = <span class="Constant">0.</span>
+  <span class="Statement">return</span> A, b
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

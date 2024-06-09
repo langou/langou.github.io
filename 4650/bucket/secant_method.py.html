@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/secant_method.py.html</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Statement { color: #b03060; font-weight: bold; }
+.String { color: #4a708b; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">def</span> <span class="Identifier">secant_method</span>( f, x0, x1, numiter, r ):
+
+  true_fwd_rel_error = <span class="Identifier">abs</span>( r - x0 ) / <span class="Identifier">abs</span>( r )
+  <span class="Identifier">print</span>( f<span class="String">&quot;</span><span class="String">{0:2d}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{x0:.16f}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{true_fwd_rel_error:.2e}</span><span class="String">&quot;</span> )
+
+  true_fwd_rel_error = <span class="Identifier">abs</span>( r - x1 ) / <span class="Identifier">abs</span>( r )
+  <span class="Identifier">print</span>( f<span class="String">&quot;</span><span class="String">{1:2d}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{x1:.16f}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{true_fwd_rel_error:.2e}</span><span class="String">&quot;</span> )
+
+  fx0 = f( x0 )
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">1</span>,numiter):
+    fx1 = f( x1 )
+    x = x1 - fx1 * ( x1 - x0 ) / ( fx1 - fx0 )
+    true_fwd_rel_error = <span class="Identifier">abs</span>( r - x ) / <span class="Identifier">abs</span>( r )
+    <span class="Identifier">print</span>( f<span class="String">&quot;</span><span class="String">{i+1:2d}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{x:.16f}</span><span class="String">&quot;</span>, f<span class="String">&quot;</span><span class="String">{true_fwd_rel_error:.2e}</span><span class="String">&quot;</span> )
+    x0 = x1
+    fx0 = fx1
+    x1 = x
+  <span class="Statement">return</span> x
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->
