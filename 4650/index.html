@@ -45,6 +45,15 @@ Table of Contents
       <a href="#1.3">1.3</a> Limits of Accuracy
       <a href="#1.4">1.4</a> Newton's Method
       <a href="#1.5">1.5</a> Root-Finding without Derivatives
+   Chapter 2 - Systems of Equations
+      <a href="#2.1">2.1</a> Gaussian Elimination
+      <a href="#2.2">2.2</a> The LU Factorization
+      <a href="#2.3">2.3</a> Sources of Error
+      <a href="#2.4">2.4</a> The PA = LU Factorization
+      <a href="#2.5">2.5</a> ( not covered in Summer 2022 ) Iterative Methods
+      <a href="#2.6">2.6</a> ( not covered in Summer 2022 ) Methods for Symmetric Positive-Definite Matrices
+      <a href="#2.7">2.7</a> Nonlinear Systems of Equations
+
 
 
 <a id="homework">===============================================</a>
@@ -52,7 +61,8 @@ Homework
 ===============================================
     homework #1: due on Monday June 10th 2024: <a href="./homework/homework1.pdf">PDF</a> (similar exercises list <a href="./homework/homework1_similar.pdf">PDF</a>)
     homework #2: due on Monday June 17th 2024: <a href="./homework/homework2.pdf">PDF</a> (similar exercises list <a href="./homework/homework2_similar.pdf">PDF</a>)
-
+    homework #3: due on Monday June 24th 2024: <a href="./homework/homework3.pdf">PDF</a> (similar exercises list <a href="./homework/homework3_similar.pdf">PDF</a>)
+ 
     
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
@@ -70,7 +80,12 @@ Our bucket of algorithms
       <a href="./bucket/secant_method.py.html">secant_method.py (HTML)</a>
       <a href="./bucket/method_of_false_position.py.html">method_of_false_position.py (HTML)</a>
       <a href="./bucket/inverse_quadratic_interpolation.py.html">inverse_quadratic_interpolation.py (HTML)</a>
-
+   Section 2.1  Gaussian Elimination
+      <a href="./bucket/gaussian_elimination__section_2_1.py.html">gaussian_elimination__section_2_1.py (HTML)</a>
+      <a href="./bucket/backward_substitution.py.html">backward_substitution.py (HTML)</a>
+   Section 2.2  The LU Factorization
+      <a href="./bucket/lu_no_pivoting.py.html">lu_no_pivoting.py (HTML)</a>
+      <a href="./bucket/forward__substitution.py.html">forward__substitution.py (HTML)</a>
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
@@ -463,5 +478,215 @@ Chapter 1 - Solving Equations
          help =&gt; <a href="https://colab.research.google.com/drive/1ghqOaqXrL3TIs46cOTE2FZ8PTt3itUl7">exercise CP.0.1.5.3, Getting Started (COLAB)</a>
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+
+
+===============================================
+Chapter 2 - Systems of Equations
+===============================================
+
+<a id="2.1"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 2.1  Gaussian Elimination
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/90">Section 2.1 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      bucket algorithm: <a href="./bucket/gaussian_elimination__section_2_1.py.html">gaussian_elimination__section_2_1.py (HTML)</a>
+      bucket algorithm: <a href="./bucket/backward_substitution.py.html">backward_substitution.py (HTML)</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_1.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_1.html">solutions to EX.2.1.{1,3,5,7}.Sauer3</a>
+
+         exercise EX.2.1.2.a (<a href="./2.1/exercise_ex_2_1_02_a2c_____sauer3/exercise_ex_2_1_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.1/exercise_ex_2_1_02_a2c_____sauer3/exercise_ex_2_1_02_a_______sauer3____sol_langou.pdf">exercise EX.2.1.2.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/15nTh989L747L9p3OHsf6JvBSG72ghGPu">exercise EX.2.1.2.a.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.1.3 (<a href="./2.1/exercise_ex_2_1_03_a2b_____sauer3/exercise_ex_2_1_03_a2b_____sauer3.pdf">PDF</a>)
+         <a href="./2.1/exercise_ex_2_1_03_a2b_____sauer3/exercise_ex_2_1_03_a2b_____sauer3____sol_langou.pdf">exercise EX.2.1.3.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1FHXErhF1TkEg-_iF9EHotY2mhI3c49Do">exercise EX.2.1.3.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.1.5 (<a href="./2.1/exercise_ex_2_1_05_________sauer3/exercise_ex_2_1_05_________sauer3.pdf">PDF</a>)
+         <a href="./2.1/exercise_ex_2_1_05_________sauer3/exercise_ex_2_1_05_________sauer3____sol_langou.pdf">exercise EX.2.1.5.Sauer3, Answer from Julien (PDF)</a>
+
+         exercise EX.2.1.7 (<a href="./2.1/exercise_ex_2_1_07_________sauer3/exercise_ex_2_1_07_________sauer3.pdf">PDF</a>)
+         <a href="./2.1/exercise_ex_2_1_07_________sauer3/exercise_ex_2_1_07_________sauer3____sol_langou.pdf">exercise EX.2.1.7.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1XR1Czryz1w0nN5sLL8jgzytDjV_NNUYi">exercise EX.2.1.7.Sauer3, Answer from Julien (COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #3
+   Section 2.1  Gaussian Elimination
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.2.1.2.b2c (<a href="./2.1/exercise_ex_2_1_02_a2c_____sauer3/exercise_ex_2_1_02_b2c_____sauer3.pdf">PDF</a>)
+         exercise EX.2.1.6 (<a href="./2.1/exercise_ex_2_1_06_________sauer3/exercise_ex_2_1_06_________sauer3.pdf">PDF</a>)
+         exercise EX.2.1.8 (<a href="./2.1/exercise_ex_2_1_08_________sauer3/exercise_ex_2_1_08_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="2.2"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 2.2  The LU Factorization
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/98">Section 2.2 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      bucket algorithm: <a href="./bucket/lu_no_pivoting.py.html">lu_no_pivoting.py (HTML)</a>
+      bucket algorithm: <a href="./bucket/forward__substitution.py.html">forward__substitution.py (HTML)</a>
+
+      additional example 2.2.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve2_2">(video, Sauer, 2'47")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_2.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_2.html">solutions to EX.2.2.{1,3,5,7,9}.Sauer3</a>
+
+         exercise EX.2.2.2.a (<a href="./2.2/exercise_ex_2_2_02_a_______sauer3/exercise_ex_2_2_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.2/exercise_ex_2_2_02_a_______sauer3/exercise_ex_2_2_02_a_______sauer3____sol_langou.pdf">exercise EX.2.2.2.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1Av8Vn_gwXXKtLulKxGETXHEuK_ER_ldL">exercise EX.2.2.2.a.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.2.4.a (<a href="./2.2/exercise_ex_2_2_04_a_______sauer3/exercise_ex_2_2_04_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.2/exercise_ex_2_2_04_a_______sauer3/exercise_ex_2_2_04_a_______sauer3____sol_langou.pdf">exercise EX.2.2.4.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1YgoHxlDmVqVcQf22NcB4OX17sSTPS4tL">exercise EX.2.2.4.a.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.2.7 (<a href="./2.2/exercise_ex_2_2_07_________sauer3/exercise_ex_2_2_07_________sauer3.pdf">PDF</a>)
+         <a href="./2.2/exercise_ex_2_2_07_________sauer3/exercise_ex_2_2_07_________sauer3____sol_langou.pdf">exercise EX.2.2.7.Sauer3, Answer from Julien (PDF)</a>
+
+         exercise CP.2.2.1.a (<a href="./2.2/exercise_cp_2_2_01_a_______sauer3/exercise_cp_2_2_01_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.2/exercise_cp_2_2_01_a_______sauer3/exercise_cp_2_2_01_a_______sauer3____sol_langou.pdf">exercise CP.2.2.1.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1Av8Vn_gwXXKtLulKxGETXHEuK_ER_ldL">exercise CP.2.2.1.a.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise CP.2.2.2.a (<a href="./2.2/exercise_cp_2_2_02_a_______sauer3/exercise_cp_2_2_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.2/exercise_cp_2_2_02_a_______sauer3/exercise_cp_2_2_02_a_______sauer3____sol_langou.pdf">exercise CP.2.2.2.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1YgoHxlDmVqVcQf22NcB4OX17sSTPS4tL">exercise CP.2.2.2.a.Sauer3, Answer from Julien (COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #3
+   Section 2.2  The LU Factorization
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.2.2.2.b2c (<a href="./2.2/exercise_ex_2_2_02_b2c_____sauer3/exercise_ex_2_2_02_b2c_____sauer3.pdf">PDF</a>)
+         exercise EX.2.2.4.b (<a href="./2.2/exercise_ex_2_2_04_b_______sauer3/exercise_ex_2_2_04_b_______sauer3.pdf">PDF</a>)
+         exercise EX.2.2.6 (<a href="./2.2/exercise_ex_2_2_06_________sauer3/exercise_ex_2_2_06_________sauer3.pdf">PDF</a>)
+         exercise EX.2.2.8 (<a href="./2.2/exercise_ex_2_2_08_________sauer3/exercise_ex_2_2_08_________sauer3.pdf">PDF</a>)
+         exercise CP.2.2.1.b2c (<a href="./2.2/exercise_cp_2_2_01_b2c_____sauer3/exercise_cp_2_2_01_b2c_____sauer3.pdf">PDF</a>)
+         exercise CP.2.2.2.b (<a href="./2.2/exercise_cp_2_2_02_b_______sauer3/exercise_cp_2_2_02_b_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="2.3"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 2.3  Sources of Error
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/105">Section 2.3 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_3.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_3.html">solutions to EX.2.3.{1,3,5,7,9,11,13,15,17}.Sauer3</a>
+
+         exercise EX.2.3.2.a (<a href="./2.3/exercise_ex_2_3_02_a_______sauer3/exercise_ex_2_3_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.3/exercise_ex_2_3_02_a_______sauer3/exercise_ex_2_3_02_a_______sauer3____sol_langou.pdf">exercise EX.2.3.2.a.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/14vOZ0yhkkon5EBVUPjRILlRaC-P8Ktfi">exercise EX.2.3.2.a.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.3.5 (<a href="./2.3/exercise_ex_2_3_05_________sauer3/exercise_ex_2_3_05_________sauer3.pdf">PDF</a>)
+         <a href="./2.3/exercise_ex_2_3_05_________sauer3/exercise_ex_2_3_05_________sauer3____sol_langou.pdf">exercise EX.2.3.5.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1vNFzKXfm_Fd2-BttkXhUdT86M7dOTAVf">exercise EX.2.3.5.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise CP.2.3.1 (<a href="./2.3/exercise_cp_2_3_01_________sauer3/exercise_cp_2_3_01_________sauer3.pdf">PDF</a>)
+         <a href="./2.3/exercise_cp_2_3_01_________sauer3/exercise_cp_2_3_01_________sauer3____sol_langou.pdf">exercise CP.2.3.1.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1YjBvnQZNZYyeWpx5IR5p0M9As0esFe4j">exercise CP.2.3.1.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise CP.2.3.3 (<a href="./2.3/exercise_cp_2_3_03_________sauer3/exercise_cp_2_3_03_________sauer3.pdf">PDF</a>)
+         <a href="./2.3/exercise_cp_2_3_03_________sauer3/exercise_cp_2_3_03_________sauer3____sol_langou.pdf">exercise CP.2.3.3.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1qPbZqHhLwn8E0HQODdnI_NWOv9-bSkLp">exercise CP.2.3.3.Sauer3, Answer from Julien (COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #3
+   Section 2.3  Sources of Error
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.2.3.2.b2c (<a href="./2.3/exercise_ex_2_3_02_b2c_____sauer3/exercise_ex_2_3_02_b2c_____sauer3.pdf">PDF</a>)
+         exercise EX.2.3.6 (<a href="./2.3/exercise_ex_2_3_06_________sauer3/exercise_ex_2_3_06_________sauer3.pdf">PDF</a>)
+         exercise CP.2.3.4 (<a href="./2.3/exercise_cp_2_3_04_________sauer3/exercise_cp_2_3_04_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="2.4"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 2.4  The PA = LU Factorization
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/115">Section 2.4 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 2.4.2 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve2_4">(video, Sauer, 4'25")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_4.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_4.html">solutions to EX.2.4.{1,3,5,7,9}.Sauer3</a>
+
+	 exercise EX.2.4.3 <!-- (<a href="./2.4/exercise_ex_2_4_03_________sauer3/exercise_ex_2_4_03_________sauer3.pdf">PDF</a>) -->
+         <a href="./2.4/exercise_ex_2_4_03_________sauer3/exercise_ex_2_4_03_________sauer3____sol_langou.pdf">exercise EX.2.4.3.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1xmC3zRLV6RhRFHzMGZTYlLKtCH7ElGDj">exercise EX.2.4.3.Sauer3, Answer from Julien (COLAB)</a>
+
+         exercise EX.2.4.10.a (<a href="./2.4/exercise_ex_2_4_10_a_______sauer3/exercise_ex_2_4_10_a_______sauer3.pdf">PDF</a>)
+         <a href="./2.4/exercise_ex_2_4_10_a_______sauer3/exercise_ex_2_4_10_a_______sauer3____sol_langou.pdf">exercise EX.2.4.10.a.Sauer3, Answer from Julien (PDF)</a>
+
+
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #3
+   Section 2.4  The PA = LU Factorization
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.2.4.2.c2d (<a href="./2.4/exercise_ex_2_4_02_c2d_____sauer3/exercise_ex_2_4_02_c2d_____sauer3.pdf">PDF</a>)
+         exercise EX.2.4.4 (<a href="./2.4/exercise_ex_2_4_04_________sauer3/exercise_ex_2_4_04_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="2.5"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ( not covered in Summer 2022 ) 
+   Section 2.5  Iterative Methods
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/126">Section 2.5 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_5.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_5.html">solutions to EX.2.5.{1,3,5}.Sauer3</a>
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+
+<a id="2.6"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ( not covered in Summer 2022 ) 
+   Section 2.6  Methods for Symmetric Positive-Definite Matrices
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/138">Section 2.6 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_6.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_6.html">solutions to EX.2.6.{1,3,5,7,9,11,13,15}.Sauer3</a>
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="2.7"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 2.7  Nonlinear Systems of Equations
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/152">Section 2.7 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_2_7.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_2_7.html">solutions to EX.2.7.{1,3,5}.Sauer3</a>
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+
+
 
 </pre>
