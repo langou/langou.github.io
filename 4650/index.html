@@ -53,7 +53,12 @@ Table of Contents
       <a href="#2.5">2.5</a> ( not covered in Summer 2024 ) Iterative Methods
       <a href="#2.6">2.6</a> ( not covered in Summer 2024 ) Methods for Symmetric Positive-Definite Matrices
       <a href="#2.7">2.7</a> Nonlinear Systems of Equations
-
+   Chapter 3 - Interpolation
+      <a href="#3.1">3.1</a> Data and Interpolating Functions
+      <a href="#3.2">3.2</a> Interpolation Error
+      <a href="#3.3">3.3</a> Chebyshev Interpolation
+      <a href="#3.4">3.4</a> ( not covered in Summer 2024 ) Cubic Splines
+      <a href="#3.5">3.5</a> ( not covered in Summer 2024 ) B&eacute;zier Curves
 
 
 <a id="homework">===============================================</a>
@@ -62,8 +67,7 @@ Homework
     homework #1: due on Monday June 10th 2024: <a href="./homework/homework1.pdf">PDF</a> (similar exercises list <a href="./homework/homework1_similar.pdf">PDF</a>)
     homework #2: due on Monday June 17th 2024: <a href="./homework/homework2.pdf">PDF</a> (similar exercises list <a href="./homework/homework2_similar.pdf">PDF</a>)
     homework #3: due on Monday June 24th 2024: <a href="./homework/homework3.pdf">PDF</a> (similar exercises list <a href="./homework/homework3_similar.pdf">PDF</a>)
- 
-    
+    homework #4: due on Monday July 1st 2024: <a href="./homework/homework4.pdf">PDF</a> (similar exercises list <a href="./homework/homework4_similar.pdf">PDF</a>)
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 <a id="bucket">===============================================</a>
@@ -86,6 +90,11 @@ Our bucket of algorithms
    Section 2.2  The LU Factorization
       <a href="./bucket/lu_no_pivoting.py.html">lu_no_pivoting.py (HTML)</a>
       <a href="./bucket/forward__substitution.py.html">forward__substitution.py (HTML)</a>
+   Section 3.1  Data and Interpolating Functions
+      <a href="./bucket/newtdd.py.html">newtdd.py (HTML)</a>
+      <a href="./bucket/newtdd__ala_sauer.py.html">newtdd__ala_sauer.py (HTML)</a>
+      <a href="./bucket/polyval_nested_w_base_points.py.html">polyval_nested_w_base_points.py (HTML)</a>
+      <a href="./bucket/sin1.py.html">sin1.py (HTML)</a>
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
@@ -687,6 +696,140 @@ Chapter 2 - Systems of Equations
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 
+===============================================
+Chapter 3 - Interpolation
+===============================================
+
+<a id="3.1"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 3.1  Data and Interpolating Functions
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/161">Section 3.1 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      bucket algorithm: <a href="./bucket/newtdd.py.html">newtdd.py (HTML)</a>
+      bucket algorithm: <a href="./bucket/newtdd__ala_sauer.py.html">newtdd__ala_sauer.py (HTML)</a>
+      bucket algorithm: <a href="./bucket/polyval_nested_w_base_points.py.html">polyval_nested_w_base_points.py (HTML)</a>
+      bucket algorithm: <a href="./bucket/sin1.py.html">sin1.py (HTML)</a>
+
+      unit test for newtdd.py: <a href="https://colab.research.google.com/drive/1qi5fDnFfQDfR_Iy4NSfsUHHpcUnRPVD8">COLAB</a>
+      unit test for newtdd__ala_sauer.py: <a href="https://colab.research.google.com/drive/174ssa5vC6scoSSb1Dni2Z6lsDfc6MNuq">COLAB</a>
+      unit test for sin1.py: <a href="https://colab.research.google.com/drive/1re2cmh8443yRIuqkU_uUkWyzBWt1innZ">COLAB</a>
+
+      reproduce examples 3.3, 3.4, 3.5 and 3.6 <a href="https://colab.research.google.com/drive/1USXEQ2C3iHPVjNWIXOYDZOw-i4a5Vpm7">COLAB</a>
+
+      reproduce example 3.7 <a href="https://colab.research.google.com/drive/1FMrOO5abHOOflUS6bgAUJjiRt1Xa-grE">COLAB</a>
+      reproduce example 3.7 using numpy np.polynomial.polynomial.polyfit and np.polynomial.polynomial.polyval <a href="https://colab.research.google.com/drive/1V8TX67o9bGPzO1JXh6AXHXYuhBGxk6vH">COLAB</a>
+
+      additional example 3.1.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve3_1">(video, Sauer, 6'24")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_3_1.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_1.html">solutions to EX.3.1.{1,3,5,7,9,11,13,15,17}.Sauer3</a>
+
+         exercise EX.3.1.1.a.Sauer (<a href="./3.1/exercise_ex_3_1_01_a_______sauer3/exercise_ex_3_1_01_a_______sauer3.pdf">PDF</a>)
+         <a href="./3.1/exercise_ex_3_1_01_a_______sauer3/exercise_ex_3_1_01_a_______sauer3____sol_langou.pdf">exercise EX.3.1.1.a.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1PTbCPu8PGH-2AtLUg6vfdEgAJ_aKTOrt">exercise EX.3.1.1.a.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.3.1.2.a.Sauer (<a href="./3.1/exercise_ex_3_1_02_a_______sauer3/exercise_ex_3_1_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./3.1/exercise_ex_3_1_02_a_______sauer3/exercise_ex_3_1_02_a_______sauer3____sol_langou.pdf">exercise EX.3.1.2.a.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1BTq_0IcW6zc7cmCuzNj3DkOWypQbsS6W">exercise EX.3.1.2.a.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.3.1.5.Sauer (<a href="./3.1/exercise_ex_3_1_05_________sauer3/exercise_ex_3_1_05_________sauer3.pdf">PDF</a>)
+         <a href="./3.1/exercise_ex_3_1_05_________sauer3/exercise_ex_3_1_05_________sauer3____sol_langou.pdf">exercise EX.3.1.5.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1PdkL7_0yW7CCBqj22YlVIGc2GwQDbsWh">exercise EX.3.1.5.Sauer, Colab Help from Julien (COLAB)</a>
+
+	 exercise EX.3.1.7.Sauer (<a href="./3.1/exercise_ex_3_1_07_________sauer3/exercise_ex_3_1_07_________sauer3.pdf">PDF</a>)
+         <a href="./3.1/exercise_ex_3_1_07_________sauer3/exercise_ex_3_1_07_________sauer3____sol_langou.pdf">exercise EX.3.1.7.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1Uswdel4EIsmdtlilbX06L-6_AVDelJYu">exercise EX.3.1.7.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.3.1.17.Sauer (<a href="./3.1/exercise_ex_3_1_17_________sauer3/exercise_ex_3_1_17_________sauer3.pdf">PDF</a>)
+         <a href="./3.1/exercise_ex_3_1_17_________sauer3/exercise_ex_3_1_17_________sauer3____sol_langou.pdf">exercise EX.3.1.17.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/18ib4wsRwTsUqVwA6LxgIReG2Dc18pAO2">exercise EX.3.1.17.Sauer, Colab Help from Julien (COLAB)</a>
 
 
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 3.1  Data and Interpolating Functions
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.3.1.1.b2c.Sauer (<a href="./3.1/exercise_ex_3_1_01_b2c_____sauer3/exercise_ex_3_1_01_b2c_____sauer3.pdf">PDF</a>)
+         exercise EX.3.1.2.b2c.Sauer (<a href="./3.1/exercise_ex_3_1_02_b2c_____sauer3/exercise_ex_3_1_02_b2c_____sauer3.pdf">PDF</a>)
+         exercise EX.3.1.4.Sauer (<a href="./3.1/exercise_ex_3_1_04_________sauer3/exercise_ex_3_1_04_________sauer3.pdf">PDF</a>)
+         exercise EX.3.1.6.Sauer (<a href="./3.1/exercise_ex_3_1_06_________sauer3/exercise_ex_3_1_06_________sauer3.pdf">PDF</a>)
+         exercise EX.3.1.8.Sauer (<a href="./3.1/exercise_ex_3_1_08_________sauer3/exercise_ex_3_1_08_________sauer3.pdf">PDF</a>)
+         exercise EX.3.1.10.Sauer (<a href="./3.1/exercise_ex_3_1_10_________sauer3/exercise_ex_3_1_10_________sauer3.pdf">PDF</a>)
+         exercise EX.3.1.18.Sauer (<a href="./3.1/exercise_ex_3_1_18_________sauer3/exercise_ex_3_1_18_________sauer3.pdf">PDF</a>)
+         exercise CP.3.1.4.Sauer (<a href="./3.1/exercise_cp_3_1_04_________sauer3/exercise_cp_3_1_04_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="3.2"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 3.2  Interpolation Error
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/173">Section 3.2 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_3_2.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_2.html">solutions to EX.3.2.{1,3,5}.Sauer3</a>
+
+	 exercise EX.3.2.1.Sauer (<a href="./3.2/exercise_ex_3_2_01_________sauer3/exercise_ex_3_2_01_________sauer3.pdf">PDF</a>)
+         <a href="./3.2/exercise_ex_3_2_01_________sauer3/exercise_ex_3_2_01_________sauer3____sol_langou.pdf">exercise EX.3.2.1.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1ZT7KFrkVfylnVCN9uXj-35JVXkNJ8yEL">exercise EX.3.2.1.Sauer, Colab Help from Julien (COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 3.2  Interpolation Error
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.3.2.2.Sauer (<a href="./3.2/exercise_ex_3_2_02_________sauer3/exercise_ex_3_2_02_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="3.3"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 3.3  Chebyshev Interpolation
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/180">Section 3.3 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 3.3.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve3_3">(video, Sauer, 2'42")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_3_3.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_3.html">solutions to EX.3.3.{1,3,5,7,9}.Sauer3</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 3.3  Chebyshev Interpolation
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+
+<a id="3.4"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 3.4  ( not covered in Summer 2022 ) Cubic Splines
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/189">Section 3.4 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_3_4.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_4.html">solutions to EX.3.4.{1,3,5,7,9,11,13,15,17,19,21}.Sauer3</a>
+
+<a id="3.5"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 3.5  ( not covered in Summer 2022 ) B&eacute;zier Curves
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/201">Section 3.5 (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_3_5.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_5.html">solutions to EX.3.5.{1,3,5,7,9,11}.Sauer3</a>
+
+	 
 </pre>
