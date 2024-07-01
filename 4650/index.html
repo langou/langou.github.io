@@ -59,6 +59,13 @@ Table of Contents
       <a href="#3.3">3.3</a> Chebyshev Interpolation
       <a href="#3.4">3.4</a> ( not covered in Summer 2024 ) Cubic Splines
       <a href="#3.5">3.5</a> ( not covered in Summer 2024 ) B&eacute;zier Curves
+   Chapter 4 - Least Squares
+      <a href="#4.1">4.1</a> Least Squares and the Normal Equations
+      <a href="#4.2">4.2</a> A Survey of Models
+      <a href="#4.3">4.3</a> QR Factorization
+      <a href="#4.4">4.4</a> ( not covered in Summer 2024 ) Generalized Minimum Residual (GMRES) Method
+      <a href="#4.5">4.5</a> Nonlinear Least Squares
+
 
 
 <a id="homework">===============================================</a>
@@ -68,6 +75,7 @@ Homework
     homework #2: due on Monday June 17th 2024: <a href="./homework/homework2.pdf">PDF</a> (similar exercises list <a href="./homework/homework2_similar.pdf">PDF</a>)
     homework #3: due on Monday June 24th 2024: <a href="./homework/homework3.pdf">PDF</a> (similar exercises list <a href="./homework/homework3_similar.pdf">PDF</a>)
     homework #4: due on Monday July 1st 2024: <a href="./homework/homework4.pdf">PDF</a> (similar exercises list <a href="./homework/homework4_similar.pdf">PDF</a>)
+    homework #5: due on Monday July 8th 2024: <a href="./homework/homework5.pdf">PDF</a> (similar exercises list <a href="./homework/homework5_similar.pdf">PDF</a>)
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 <a id="bucket">===============================================</a>
@@ -749,7 +757,7 @@ Chapter 3 - Interpolation
 
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #4
    Section 3.1  Data and Interpolating Functions
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -780,7 +788,7 @@ Chapter 3 - Interpolation
          <a href="https://colab.research.google.com/drive/1ZT7KFrkVfylnVCN9uXj-35JVXkNJ8yEL">exercise EX.3.2.1.Sauer, Colab Help from Julien (COLAB)</a>
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #4
    Section 3.2  Interpolation Error
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -802,7 +810,7 @@ Chapter 3 - Interpolation
          <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_3.html">solutions to EX.3.3.{1,3,5,7,9}.Sauer3</a>
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #4
    Section 3.3  Chebyshev Interpolation
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -832,4 +840,162 @@ Chapter 3 - Interpolation
          <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_5.html">solutions to EX.3.5.{1,3,5,7,9,11}.Sauer3</a>
 
 	 
+===============================================
+Chapter 4 - Least Squares
+===============================================
+
+<a id="4.1"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 4.1  Least Squares and the Normal Equations
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/212">Section 4.1  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_4_1.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_4_1.html">solutions to EX.4.1.{1,3,5,7,9,11}.Sauer3</a>
+
+         exercise EX.4.1.1.b.Sauer (<a href="./4.1/exercise_ex_4_1_01_b_______sauer3/exercise_ex_4_1_01_b_______sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_01_b_______sauer3/exercise_ex_4_1_01_b_______sauer3____sol_langou.pdf">exercise EX.4.1.1.b.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1QmlNOuhGT-_UtSpXJJ9VSGUpDS99kDly">exercise EX.4.1.1.b.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.4.1.2.b.Sauer (<a href="./4.1/exercise_ex_4_1_02_b_______sauer3/exercise_ex_4_1_02_b_______sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_02_b_______sauer3/exercise_ex_4_1_02_b_______sauer3____sol_langou.pdf">exercise EX.4.1.2.b.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/19z_bgBQjCaILOA_0w3p6_K4Dg8edxQRm">exercise EX.4.1.2.b.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.4.1.4.Sauer (<a href="./4.1/exercise_ex_4_1_04_________sauer3/exercise_ex_4_1_04_________sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_04_________sauer3/exercise_ex_4_1_04_________sauer3____sol_langou.pdf">exercise EX.4.1.4.Sauer, Answer from Julien (PDF)</a>
+
+         exercise EX.4.1.6.Sauer (<a href="./4.1/exercise_ex_4_1_06_________sauer3/exercise_ex_4_1_06_________sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_06_________sauer3/exercise_ex_4_1_06_________sauer3____sol_langou.pdf">exercise EX.4.1.6.Sauer, Answer from Julien (PDF)</a>
+
+         exercise EX.4.1.8.a.Sauer (<a href="./4.1/exercise_ex_4_1_08_a_______sauer3/exercise_ex_4_1_08_a_______sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_08_a_______sauer3/exercise_ex_4_1_08_a_______sauer3____sol_langou.pdf">exercise EX.4.1.8.a.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1-t_9FiXuS5PlzpZeB3vVY6IxLS_6hf4d">exercise EX.4.1.8.a.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise EX.4.1.9.a.Sauer (<a href="./4.1/exercise_ex_4_1_09_a_______sauer3/exercise_ex_4_1_09_a_______sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_ex_4_1_09_a_______sauer3/exercise_ex_4_1_09_a_______sauer3____sol_langou.pdf">exercise EX.4.1.9.a.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1_rkglFPEyktaBG3zKfu6q0lIKwVdZTo8">exercise EX.4.1.9.a.Sauer, Colab Help from Julien (COLAB)</a>
+
+         exercise CP.4.1.10.Sauer (<a href="./4.1/exercise_cp_4_1_10_________sauer3/exercise_cp_4_1_10_________sauer3.pdf">PDF</a>)
+         <a href="./4.1/exercise_cp_4_1_10_________sauer3/exercise_cp_4_1_10_________sauer3____sol_langou.pdf">exercise CP.4.1.10.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1V0q1v8w5gNVNpgOGYQaZBKbY7llPecQw">exercise CP.4.1.10.Sauer, Colab Help from Julien (COLAB)</a>
+
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 4.1  Least Squares and the Normal Equations
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.4.1.1.a.Sauer (<a href="./4.1/exercise_ex_4_1_01_a_______sauer3/exercise_ex_4_1_01_a_______sauer3.pdf">PDF</a>)
+         exercise EX.4.1.1.c.Sauer (<a href="./4.1/exercise_ex_4_1_01_c_______sauer3/exercise_ex_4_1_01_c_______sauer3.pdf">PDF</a>)
+         exercise EX.4.1.2.a.Sauer (<a href="./4.1/exercise_ex_4_1_02_a_______sauer3/exercise_ex_4_1_02_a_______sauer3.pdf">PDF</a>)
+         exercise EX.4.1.8.b.Sauer (<a href="./4.1/exercise_ex_4_1_08_b_______sauer3/exercise_ex_4_1_08_b_______sauer3.pdf">PDF</a>)
+         exercise EX.4.1.9.b.Sauer (<a href="./4.1/exercise_ex_4_1_09_b_______sauer3/exercise_ex_4_1_09_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.1.5.Sauer   (<a href="./4.1/exercise_cp_4_1_05_________sauer3/exercise_cp_4_1_05_________sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/13gw6Vwiz6cQjx3lElAJtqnxC6vhabWkv">getting started</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="4.2"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 4.2  A Survey of Models
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/224">Section 4.2  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 4.2.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve4_2">(video, Sauer, 4'22")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_4_2.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_4_2.html">solutions to EX.4.2.{1,3,5}.Sauer3</a>
+
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 4.2  A Survey of Models
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise CP.4.2.6.Sauer   (<a href="./4.2/exercise_cp_4_2_06_________sauer3/exercise_cp_4_2_06_________sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/1KQChAXtFm-tQmeb9GvaHJPkkNDIiarVY">COLAB</a>)
+         exercise CP.4.2.7.Sauer   (<a href="./4.2/exercise_cp_4_2_07_________sauer3/exercise_cp_4_2_07_________sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/1DJFK_hsx23JiX1GF4BFuaNKCtLG7FoeO">COLAB</a>)
+         exercise CP.4.2.8.Sauer   (<a href="./4.2/exercise_cp_4_2_08_________sauer3/exercise_cp_4_2_08_________sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/15l78g98Fkzl65f_C2uqjC8WCBzK31qT-">COLAB</a>)
+         exercise CP.4.2.9.Sauer   (<a href="./4.2/exercise_cp_4_2_09_________sauer3/exercise_cp_4_2_09_________sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/1juTBIlQWf06NjXEzScfy2CNc4MPUJOS-">getting started</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="4.3"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 4.3  QR Factorization
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/236">Section 4.3  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 4.3.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve4_3">(video, Sauer, 3'07")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_4_3.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_4_3.html">solutions to EX.4.3.{1,3,5,7,9,11,13}.Sauer3</a>
+
+         exercise EX.4.3.2.a.Sauer (<a href="./4.3/exercise_ex_4_3_02_________sauer3/exercise_ex_4_3_02_a_______sauer3.pdf">PDF</a>)
+
+         exercise EX.4.3.7.a.Sauer (<a href="./4.3/exercise_ex_4_3_07_________sauer3/exercise_ex_4_3_07_a_______sauer3.pdf">PDF</a>)
+
+         exercise EX.4.3.8.a.Sauer (<a href="./4.3/exercise_ex_4_3_08_________sauer3/exercise_ex_4_3_08_a_______sauer3.pdf">PDF</a>)
+
+         exercise CP.4.3.5.Sauer (<a href="./4.3/exercise_cp_4_3_05_________sauer3/exercise_cp_4_3_05_________sauer3.pdf">PDF</a>)
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 4.3  QR Factorization
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.4.3.2.b.Sauer (<a href="./4.3/exercise_ex_4_3_02_________sauer3/exercise_ex_4_3_02_b_______sauer3.pdf">PDF</a>)
+         exercise EX.4.3.7.b.Sauer (<a href="./4.3/exercise_ex_4_3_07_________sauer3/exercise_ex_4_3_07_b_______sauer3.pdf">PDF</a>)
+         exercise EX.4.3.8.b.Sauer (<a href="./4.3/exercise_ex_4_3_08_________sauer3/exercise_ex_4_3_08_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.3.6.Sauer (<a href="./4.3/exercise_cp_4_3_06_________sauer3/exercise_cp_4_3_06_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="4.4"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 4.4  ( not covered in Summer 2022 ) Generalized Minimum Residual (GMRES) Method
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/251">Section 4.4  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_4_4.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_4_4.html">solutions to EX.4.4.{1,3}.Sauer3</a>
+
+<a id="4.5"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 4.5  Nonlinear Least Squares
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/256">Section 4.5  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_4_5.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_4_5.html">solutions to EX.4.5.{1,3,5,7}.Sauer3</a>
+
+         exercise CP.4.5.1.a.Sauer (<a href="./4.5/exercise_cp_4_5_01_________sauer3/exercise_cp_4_5_01_a_______sauer3.pdf">PDF</a>)A (<a href="https://colab.research.google.com/drive/1y0lOFet1pjwBMRq1W6tNk-y6UGeTN0L1">COLAB</a>)
+         exercise CP.4.5.2.a.Sauer (<a href="./4.5/exercise_cp_4_5_02_________sauer3/exercise_cp_4_5_02_a_______sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/1Yv1h2tUSi3rnBQl9hMOAcE03-w3MXndV">COLAB</a>)
+         exercise CP.4.5.3.a.Sauer (<a href="./4.5/exercise_cp_4_5_03_________sauer3/exercise_cp_4_5_03_a_______sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/166Q9rVkcLIeNyaqrZSYjMF_X6Vy1ZGG_">COLAB</a>)
+         exercise CP.4.5.4.a.Sauer (<a href="./4.5/exercise_cp_4_5_04_________sauer3/exercise_cp_4_5_04_a_______sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/1Fnl-aiNY6Umxq6Mq2254K9rS5h-oR78w">COLAB</a>)
+         exercise CP.4.5.7.Sauer (<a href="./4.5/exercise_cp_4_5_07_________sauer3/exercise_cp_4_5_07_________sauer3.pdf">PDF</a>)
+         exercise CP.4.5.11.a.Sauer (<a href="./4.5/exercise_cp_4_5_11_________sauer3/exercise_cp_4_5_11_a_______sauer3.pdf">PDF</a>)
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #5
+   Section 4.5  Nonlinear Least Squares
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise CP.4.5.1.b.Sauer (<a href="./4.5/exercise_cp_4_5_01_________sauer3/exercise_cp_4_5_01_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.5.2.b.Sauer (<a href="./4.5/exercise_cp_4_5_02_________sauer3/exercise_cp_4_5_02_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.5.3.b.Sauer (<a href="./4.5/exercise_cp_4_5_03_________sauer3/exercise_cp_4_5_03_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.5.4.b.Sauer (<a href="./4.5/exercise_cp_4_5_04_________sauer3/exercise_cp_4_5_04_b_______sauer3.pdf">PDF</a>)
+         exercise CP.4.5.8.Sauer (<a href="./4.5/exercise_cp_4_5_08_________sauer3/exercise_cp_4_5_08_________sauer3.pdf">PDF</a>)
+         exercise CP.4.5.11.b.Sauer (<a href="./4.5/exercise_cp_4_5_11_________sauer3/exercise_cp_4_5_11_b_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
 </pre>
