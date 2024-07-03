@@ -3,22 +3,19 @@
 <img src="vrac/cc.logo.large.png" alt="Creative Commons Logo" width="10%" height="auto">  <img src="vrac/cc-by.png" alt="Creative Commons Logo" width="10%" height="auto">
 This work is licensed under a Creative Commons Attribution 4.0 International License
 <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>
-Copyright (c) 2021-2024, Julien Langou. All rights reserved.
+Copyright (c) 2021-2023, Julien Langou. All rights reserved.
 ==============================================================================================
 
 Julien Langou
 
-Summer 2024
+Summer 2022
 
-MATH 4650-E01
-CSCI 4650-E01
-MATH 5660-E01
+MATH 4650-E02
+CSCI 4650-E02
 
 Numerical Analysis I
 
-<a href="2244/syllabus_2244_MATH4650-E01_2024summer.pdf">syllabus for MATH 4650 E01, Summer 2024 (pdf)</a>
-<a href="2244/syllabus_2244_CSCI4650-E01_2024summer.pdf">syllabus for CSCI 4650 E01, Summer 2024 (pdf)</a>
-<a href="2244/syllabus_2244_MATH5660-E01_2024summer.pdf">syllabus for MATH 5660 E01, Summer 2024 (pdf)</a>
+<a href="2224/syllabus_MATHCSCI4650-E02_2224_2022summer.pdf">syllabus (pdf)</a>
 
 <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/main.html">textbook additional resources</a>
 
@@ -26,6 +23,7 @@ Numerical Analysis I
 Welcome
 ===============================================
 
+      welcome from Julien <a href="https://www.youtube.com/watch?v=Ej5Obl2EAQE">(YouTube, 8'36")</a>
       How to get/submit Google Colab Jupyter Notebook <a href="https://www.youtube.com/watch?v=MiKGolqPf4A">(YouTube, 9'25")</a>
 
 <a id="toc">===============================================</a>
@@ -45,37 +43,45 @@ Table of Contents
       <a href="#1.3">1.3</a> Limits of Accuracy
       <a href="#1.4">1.4</a> Newton's Method
       <a href="#1.5">1.5</a> Root-Finding without Derivatives
-   Chapter 2 - Systems of Equations
+Chapter 2 - Systems of Equations
       <a href="#2.1">2.1</a> Gaussian Elimination
       <a href="#2.2">2.2</a> The LU Factorization
       <a href="#2.3">2.3</a> Sources of Error
       <a href="#2.4">2.4</a> The PA = LU Factorization
-      <a href="#2.5">2.5</a> ( not covered in Summer 2024 ) Iterative Methods
-      <a href="#2.6">2.6</a> ( not covered in Summer 2024 ) Methods for Symmetric Positive-Definite Matrices
+      <a href="#2.5">2.5</a> ( not covered in Summer 2022 ) Iterative Methods
+      <a href="#2.6">2.6</a> ( not covered in Summer 2022 ) Methods for Symmetric Positive-Definite Matrices
       <a href="#2.7">2.7</a> Nonlinear Systems of Equations
-   Chapter 3 - Interpolation
+Chapter 3 - Interpolation
       <a href="#3.1">3.1</a> Data and Interpolating Functions
       <a href="#3.2">3.2</a> Interpolation Error
       <a href="#3.3">3.3</a> Chebyshev Interpolation
-      <a href="#3.4">3.4</a> ( not covered in Summer 2024 ) Cubic Splines
-      <a href="#3.5">3.5</a> ( not covered in Summer 2024 ) B&eacute;zier Curves
-   Chapter 4 - Least Squares
+      <a href="#3.4">3.4</a> ( not covered in Summer 2022 ) Cubic Splines
+      <a href="#3.5">3.5</a> ( not covered in Summer 2022 ) B&eacute;zier Curves
+Chapter 4 - Least Squares
       <a href="#4.1">4.1</a> Least Squares and the Normal Equations
       <a href="#4.2">4.2</a> A Survey of Models
       <a href="#4.3">4.3</a> QR Factorization
-      <a href="#4.4">4.4</a> ( not covered in Summer 2024 ) Generalized Minimum Residual (GMRES) Method
+      <a href="#4.4">4.4</a> ( not covered in Summer 2022 ) Generalized Minimum Residual (GMRES) Method
       <a href="#4.5">4.5</a> Nonlinear Least Squares
-
-
+Chapter 5 - Numerical Differentiation and Integration
+      <a href="#5.1">5.1</a> Numerical Differentiation
+      <a href="#5.2">5.2</a> Newton-Cotes Formulas for Numerical Integration
+      <a href="#5.3">5.3</a> Romberg Integration
+      <a href="#5.4">5.4</a> Adaptive Quadrature
+      <a href="#5.5">5.5</a> Gaussian Quadrature
+ 
 
 <a id="homework">===============================================</a>
 Homework
 ===============================================
-    homework #1: due on Monday June 10th 2024: <a href="./homework/homework1.pdf">PDF</a> (similar exercises list <a href="./homework/homework1_similar.pdf">PDF</a>)
-    homework #2: due on Monday June 17th 2024: <a href="./homework/homework2.pdf">PDF</a> (similar exercises list <a href="./homework/homework2_similar.pdf">PDF</a>)
-    homework #3: due on Monday June 24th 2024: <a href="./homework/homework3.pdf">PDF</a> (similar exercises list <a href="./homework/homework3_similar.pdf">PDF</a>)
-    homework #4: due on Monday July 1st 2024: <a href="./homework/homework4.pdf">PDF</a> (similar exercises list <a href="./homework/homework4_similar.pdf">PDF</a>)
-    homework #5: due on Monday July 8th 2024: <a href="./homework/homework5.pdf">PDF</a> (similar exercises list <a href="./homework/homework5_similar.pdf">PDF</a>)
+    homework #1: due on Saturday June 11th 2022: <a href="./homework/homework1.pdf">PDF</a> (similar exercises list <a href="./homework/homework1_similar.pdf">PDF</a>)
+    homework #2: due on Saturday June 18th 2022: <a href="./homework/homework2.pdf">PDF</a> (similar exercises list <a href="./homework/homework2_similar.pdf">PDF</a>)
+    homework #3: due on Saturday June 25th 2022: <a href="./homework/homework3.pdf">PDF</a> (similar exercises list <a href="./homework/homework3_similar.pdf">PDF</a>)
+    homework #5: due on Saturday July 9th 2022: <a href="./homework/homework5.pdf">PDF</a> (similar exercises list <a href="./homework/homework5_similar.pdf">PDF</a>)
+    homework #6: due on Saturday July 16th 2022: <a href="./homework/homework6.pdf">PDF</a> (similar exercises list <a href="./homework/homework6_similar.pdf">PDF</a>)
+    homework #7: due on Saturday July 23rd 2022: <a href="./homework/homework7.pdf">PDF</a> (similar exercises list <a href="./homework/homework7_similar.pdf">PDF</a>)
+    
+    
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 <a id="bucket">===============================================</a>
@@ -103,7 +109,6 @@ Our bucket of algorithms
       <a href="./bucket/newtdd__ala_sauer.py.html">newtdd__ala_sauer.py (HTML)</a>
       <a href="./bucket/polyval_nested_w_base_points.py.html">polyval_nested_w_base_points.py (HTML)</a>
       <a href="./bucket/sin1.py.html">sin1.py (HTML)</a>
-
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 ===============================================
@@ -296,6 +301,8 @@ Chapter 0 - Fundamentals
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
+
+
 ===============================================
 Chapter 1 - Solving Equations
 ===============================================
@@ -304,6 +311,8 @@ Chapter 1 - Solving Equations
    Section 1.1  The Bisection Method
    <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/43">Section 1.1 (Vital Source)</a>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      section 1.1, Prof. Stetson Zirkelbach <a href="https://youtu.be/NAG3ozuudm0">(YouTube, 5'30")</a>
 
       bucket algorithm: <a href="./bucket/bisect.py.html">bisect.py (HTML)</a>
 
@@ -314,26 +323,26 @@ Chapter 1 - Solving Equations
          <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_1_1.html">solutions to EX.1.1.{1,3,5}</a>
 
          exercise EX.1.1.1 (<a href="./1.1/exercise_ex_1_1_01_a2c_____sauer3/exercise_ex_1_1_01_a2c_____sauer3.pdf">PDF</a>)
-         <a href="./1.1/exercise_ex_1_1_01_a2c_____sauer3/exercise_ex_1_1_01_a2c_____sauer3___sol_langou.pdf">exercise EX.0.1.1.Sauer3, Answer from Julien (PDF)</a>
+         <a href="./1.1/exercise_ex_1_1_01_a2c_____sauer3/exercise_ex_1_1_01_a2c_____sauer3___sol_langou.pdf">exercise EX.1.1.1.Sauer3, Answer from Julien (PDF)</a>
          <a href="https://colab.research.google.com/drive/1VJ3_rGh9d07bndBNkzysv7xzU7U_35LN">exercise EX.1.1.1.Sauer3, Answer from Julien (COLAB)</a>
 
          exercise EX.1.1.3 (<a href="./1.1/exercise_ex_1_1_03_a2c_____sauer3/exercise_ex_1_1_03_a2c_____sauer3.pdf">PDF</a>)
-         <a href="./1.1/exercise_ex_1_1_03_a2c_____sauer3/exercise_ex_1_1_03_a2c_____sauer3___sol_langou.pdf">exercise EX.0.1.3.Sauer3, Answer from Julien (PDF)</a>
+         <a href="./1.1/exercise_ex_1_1_03_a2c_____sauer3/exercise_ex_1_1_03_a2c_____sauer3___sol_langou.pdf">exercise EX.1.1.3.Sauer3, Answer from Julien (PDF)</a>
          <a href="https://colab.research.google.com/drive/19pmIPmjKy23ryyoVU5c0K3zeZdgm96pI">exercise EX.1.1.3.Sauer3, Answer from Julien (COLAB)</a>
 
          exercise EX.1.1.7 (<a href="./1.1/exercise_ex_1_1_07_a2e_oer_langou/exercise_ex_1_1_07_a2e_oer_langou.pdf">PDF</a>)
-         <a href="./1.1/exercise_ex_1_1_07_a2e_oer_langou/exercise_ex_1_1_07_a2e_oer_langou___sol_langou.pdf">exercise EX.0.1.7.Langou, Answer from Julien (PDF)</a>
+         <a href="./1.1/exercise_ex_1_1_07_a2e_oer_langou/exercise_ex_1_1_07_a2e_oer_langou___sol_langou.pdf">exercise EX.1.1.7.Langou, Answer from Julien (PDF)</a>
          <a href="https://colab.research.google.com/drive/1NdHyu9rQKNS44TM-G5gNn2SWsH84CP90">exercise EX.1.1.7.Langou, Short Answer from Julien (COLAB)</a>
          <a href="https://colab.research.google.com/drive/1gtEuT7_kJUzySUxTbv2dAsyo_VRIqFuN">exercise EX.1.1.7.Langou, Long Answer from Julien (COLAB)</a>
 
          exercise CP.1.1.1 (<a href="./1.1/exercise_cp_1_1_01_a2c_____sauer3/exercise_cp_1_1_01_a2c_____sauer3.pdf">PDF</a>)
-         <a href="./1.1/exercise_cp_1_1_01_a2c_____sauer3/exercise_cp_1_1_01_a2c_____sauer3____sol_langou.pdf">exercise CP.0.1.1.Sauer3, Answer from Julien (PDF)</a>
+         <a href="./1.1/exercise_cp_1_1_01_a2c_____sauer3/exercise_cp_1_1_01_a2c_____sauer3____sol_langou.pdf">exercise CP.1.1.1.Sauer3, Answer from Julien (PDF)</a>
          <a href="https://colab.research.google.com/drive/10iYN2gfKaqoFF8Q4RDa3Y7569rp0Yrak">exercise CP.1.1.1.Sauer3, Short Answer from Julien (COLAB)</a>
          <a href="https://colab.research.google.com/drive/1w9rst-uC52HqrB9TUBTFc9AGchog384R">exercise CP.1.1.1.Sauer3, Long Answer from Julien (COLAB)</a>
 
          exercise CP.1.1.6 (<a href="./1.1/exercise_cp_1_1_06_________sauer3/exercise_cp_1_1_06_________sauer3.pdf">PDF</a>)
-         <a href="./1.1/exercise_cp_1_1_06_________sauer3/exercise_cp_1_1_06_________sauer3____sol_langou.pdf">exercise CP.0.1.6.Sauer3, Answer from Julien (PDF)</a>
-         <a href="https://colab.research.google.com/drive/1t_uyY621T6yoBfAOCjZpq-O2sTzV5XFO">exercise CP.1.1.1.Sauer3, Short Answer from Julien (COLAB)</a>
+         <a href="./1.1/exercise_cp_1_1_06_________sauer3/exercise_cp_1_1_06_________sauer3____sol_langou.pdf">exercise CP.1.1.6.Sauer3, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1t_uyY621T6yoBfAOCjZpq-O2sTzV5XFO">exercise CP.1.1.6.Sauer3, Short Answer from Julien (COLAB)</a>
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Homework #2
@@ -350,6 +359,8 @@ Chapter 1 - Solving Equations
    Section 1.2  Fixed-Point Iteration
    <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/49">Section 1.2 (Vital Source)</a>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      section 1.2, Prof. Stetson Zirkelbach <a href="https://youtu.be/69alnXgmSHY">(YouTube, 8'13")</a>
 
       additional example 1.2.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve1_2">(video, Sauer, 2'27")</a>
 
@@ -387,6 +398,8 @@ Chapter 1 - Solving Equations
    Section 1.3  Limits of Accuracy
    <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/62">Section 1.3 (Vital Source)</a>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      section 1.3, Prof. Stetson Zirkelbach <a href="https://youtu.be/tfahxdvCsJk">(YouTube, 9'14")</a>
 
       additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_1_3.html">(HTML)</a>
 
@@ -489,7 +502,6 @@ Chapter 1 - Solving Equations
          help =&gt; <a href="https://colab.research.google.com/drive/1ghqOaqXrL3TIs46cOTE2FZ8PTt3itUl7">exercise CP.0.1.5.3, Getting Started (COLAB)</a>
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
-
 
 
 ===============================================
@@ -656,7 +668,7 @@ Chapter 2 - Systems of Equations
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
 <a id="2.5"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   ( not covered in Summer 2024 ) 
+   ( not covered in Summer 2022 ) 
    Section 2.5  Iterative Methods
    <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/126">Section 2.5 (Vital Source)</a>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
@@ -671,7 +683,7 @@ Chapter 2 - Systems of Equations
 
 
 <a id="2.6"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   ( not covered in Summer 2024 ) 
+   ( not covered in Summer 2022 ) 
    Section 2.6  Methods for Symmetric Positive-Definite Matrices
    <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/138">Section 2.6 (Vital Source)</a>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
@@ -751,7 +763,7 @@ Chapter 3 - Interpolation
 
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #4
+   Homework #5
    Section 3.1  Data and Interpolating Functions
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -782,7 +794,7 @@ Chapter 3 - Interpolation
          <a href="https://colab.research.google.com/drive/1ZT7KFrkVfylnVCN9uXj-35JVXkNJ8yEL">exercise EX.3.2.1.Sauer, Colab Help from Julien (COLAB)</a>
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #4
+   Homework #5
    Section 3.2  Interpolation Error
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -804,7 +816,7 @@ Chapter 3 - Interpolation
          <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_3_3.html">solutions to EX.3.3.{1,3,5,7,9}.Sauer3</a>
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #4
+   Homework #5
    Section 3.3  Chebyshev Interpolation
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -877,7 +889,7 @@ Chapter 4 - Least Squares
 
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #6
    Section 4.1  Least Squares and the Normal Equations
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -905,7 +917,7 @@ Chapter 4 - Least Squares
 
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #6
    Section 4.2  A Survey of Models
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -938,7 +950,7 @@ Chapter 4 - Least Squares
          exercise CP.4.3.5.Sauer (<a href="./4.3/exercise_cp_4_3_05_________sauer3/exercise_cp_4_3_05_________sauer3.pdf">PDF</a>)
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #6
    Section 4.3  QR Factorization
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -979,7 +991,7 @@ Chapter 4 - Least Squares
          exercise CP.4.5.11.a.Sauer (<a href="./4.5/exercise_cp_4_5_11_________sauer3/exercise_cp_4_5_11_a_______sauer3.pdf">PDF</a>)
 
 <div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Homework #5
+   Homework #6
    Section 4.5  Nonlinear Least Squares
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
 
@@ -989,6 +1001,163 @@ Chapter 4 - Least Squares
          exercise CP.4.5.4.b.Sauer (<a href="./4.5/exercise_cp_4_5_04_________sauer3/exercise_cp_4_5_04_b_______sauer3.pdf">PDF</a>)
          exercise CP.4.5.8.Sauer (<a href="./4.5/exercise_cp_4_5_08_________sauer3/exercise_cp_4_5_08_________sauer3.pdf">PDF</a>)
          exercise CP.4.5.11.b.Sauer (<a href="./4.5/exercise_cp_4_5_11_________sauer3/exercise_cp_4_5_11_b_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+=====================================================
+Chapter 5 - Numerical Differentiation and Integration
+=====================================================
+
+<a id="5.1"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 5.1  Numerical Differentiation
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/270">Section 5.1  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_5_1.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_5_1.html">solutions to EX.5.1.{1,3,5,7,9,11,13,15,17,19,21,23,25}.Sauer3</a>
+
+         exercise EX.5.1.1.Sauer (<a href="./5.1/exercise_ex_5_1_01_________sauer3/exercise_ex_5_1_01_________sauer3.pdf">PDF</a>)
+         <a href="./5.1/exercise_ex_5_1_01_________sauer3/exercise_ex_5_1_01_________sauer3____sol_langou.pdf">exercise EX.5.1.1.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1JjM3R-n9RK20R8_TDdKOQQ5CZTk25vfA">exercise EX.5.1.1.Sauer, Colab Help from Julien (COLAB)</a>
+	 
+         exercise EX.5.1.3.Sauer (<a href="./5.1/exercise_ex_5_1_03_________sauer3/exercise_ex_5_1_03_________sauer3.pdf">PDF</a>)
+         <a href="./5.1/exercise_ex_5_1_03_________sauer3/exercise_ex_5_1_03_________sauer3____sol_langou.pdf">exercise EX.5.1.3.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1rcWecA_rDytR9eCWrSuf2GpHAi0-Gt5P">exercise EX.5.1.3.Sauer, Colab Help from Julien (COLAB)</a>
+
+	 exercise CP.5.1.1.Sauer (<a href="./5.1/exercise_cp_5_1_01_________sauer3/exercise_cp_5_1_01_________sauer3.pdf">PDF</a>)
+         <a href="https://colab.research.google.com/drive/1G-ZzaPqoDWDClilLG6K6lCHhhd1KIJji">exercise CP.5.1.1.Sauer, Colab Help from Julien (COLAB)</a>
+	 
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #7
+   Section 5.1  Numerical Differentiation
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.5.1.2.Sauer (<a href="./5.1/exercise_ex_5_1_02_________sauer3/exercise_ex_5_1_02_________sauer3.pdf">PDF</a>)
+         exercise EX.5.1.4.Sauer (<a href="./5.1/exercise_ex_5_1_04_________sauer3/exercise_ex_5_1_04_________sauer3.pdf">PDF</a>)
+         exercise EX.5.1.8.Sauer (<a href="./5.1/exercise_ex_5_1_08_________sauer3/exercise_ex_5_1_08_________sauer3.pdf">PDF</a>)
+         exercise EX.5.1.10.Sauer (<a href="./5.1/exercise_ex_5_1_10_________sauer3/exercise_ex_5_1_10_________sauer3.pdf">PDF</a>)
+         exercise EX.5.1.18.Sauer (<a href="./5.1/exercise_ex_5_1_18_________sauer3/exercise_ex_5_1_18_________sauer3.pdf">PDF</a>)
+         exercise EX.5.1.20.Sauer (<a href="./5.1/exercise_ex_5_1_20_________sauer3/exercise_ex_5_1_20_________sauer3.pdf">PDF</a>)
+         exercise CP.5.1.2.Sauer (<a href="./5.1/exercise_cp_5_1_02_________sauer3/exercise_cp_5_1_02_________sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+
+<a id="5.2"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 5.2  Newton-Cotes Formulas for Numerical Integration
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/280">Section 5.2  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 5.2.2 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve5_3">(video, Sauer, 4'06")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_5_2.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_5_2.html">solutions to EX.5.2.{1,3,5,7,9,11,13,15,17}.Sauer3</a>
+
+         exercise EX.5.2.4.a.Sauer (<a href="./5.2/exercise_ex_5_2_04_________sauer3/exercise_ex_5_2_04_a_______sauer3.pdf">PDF</a>)
+         exercise EX.5.2.4.a.Sauer, Answer from Julien <a href="./5.2/exercise_ex_5_2_04_________sauer3/exercise_ex_5_2_04_a_______sauer3____sol_langou.pdf">(PDF)</a>
+         exercise EX.5.2.4.a.Sauer, Colab Help from Julien <a href="https://colab.research.google.com/drive/190libB0ObBkh-uVgzJS-fZAHpD_-EFsO">(COLAB)</a>
+	 
+         exercise EX.5.2.6.a.Sauer (<a href="./5.2/exercise_ex_5_2_06_________sauer3/exercise_ex_5_2_06_a_______sauer3.pdf">PDF</a>)
+         exercise EX.5.2.6.a.Sauer, Answer from Julien <a href="./5.2/exercise_ex_5_2_06_________sauer3/exercise_ex_5_2_06_a_______sauer3____sol_langou.pdf">(PDF)</a>
+         exercise EX.5.2.6.a.Sauer, Colab Help from Julien <a href="https://colab.research.google.com/drive/190libB0ObBkh-uVgzJS-fZAHpD_-EFsO">(COLAB)</a>
+
+	 exercise CP.5.2.1.b.Sauer (<a href="./5.2/exercise_cp_5_2_01_________sauer3/exercise_cp_5_2_01_b_______sauer3.pdf">PDF</a>)
+         <a href="https://colab.research.google.com/drive/11pOIFvreHFRiRvguFiFmPYhRMT-0pQ6q?usp=sharing">exercise CP.5.2.1.b.Sauer, Colab Help from Julien (COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #7
+   Section 5.2  Newton-Cotes Formulas for Numerical Integration
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.5.2.4.b.Sauer (<a href="./5.2/exercise_ex_5_2_04_________sauer3/exercise_ex_5_2_04_b_______sauer3.pdf">PDF</a>)
+         exercise EX.5.2.6.b.Sauer (<a href="./5.2/exercise_ex_5_2_06_________sauer3/exercise_ex_5_2_06_b_______sauer3.pdf">PDF</a>)
+         exercise CP.5.2.1.a.Sauer (<a href="./5.2/exercise_cp_5_2_01_________sauer3/exercise_cp_5_2_01_a_______sauer3.pdf">PDF</a>)
+         exercise CP.5.2.2.a.Sauer (<a href="./5.2/exercise_cp_5_2_02_________sauer3/exercise_cp_5_2_02_a_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="5.3"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 5.3  Romberg Integration
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/292">Section 5.3  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional example 5.3.1 <a href="https://mediaplayer.pearsoncmg.com/assets/sauer_na3e_ve5_3">(video, Sauer, 3'07")</a>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_5_3.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_5_3.html">solutions to EX.5.3.{1,3,5}.Sauer3</a>
+
+	 exercise EX.5.3.2.a.Sauer (<a href="./5.3/exercise_ex_5_3_02_________sauer3/exercise_ex_5_3_02_a_______sauer3.pdf">PDF</a>)
+         <a href="./5.3/exercise_ex_5_3_02_________sauer3/exercise_ex_5_3_02_a_______sauer3____sol_langou.pdf">exercise EX.5.3.2.a.Sauer, Answer from Julien (PDF)</a>
+         <a href="https://colab.research.google.com/drive/1YVuXc4AH7CFZRS5QVmQMlOVvdMnQRtcA">exercise EX.5.3.2.a.Sauer, Colab Help from Julien (COLAB)</a>
+
+	 exercise CP.5.3.1.b.Sauer (<a href="./5.3/exercise_cp_5_3_01_________sauer3/exercise_cp_5_3_01_b_______sauer3.pdf">PDF</a>)
+         exercise CP.5.3.1.b.Sauer, Answer from Julien <a href="https://colab.research.google.com/drive/1amn0MJ1KGAYQ4CT6pPy4SICM5vU6TNMI">(COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #7
+   Section 5.3  Romberg Integration
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.5.3.2.b.Sauer (<a href="./5.3/exercise_ex_5_3_02_________sauer3/exercise_ex_5_3_02_b_______sauer3.pdf">PDF</a>)
+         exercise CP.5.3.1.a.Sauer (<a href="./5.3/exercise_cp_5_3_01_________sauer3/exercise_cp_5_3_01_a_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="5.4"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 5.4  Adaptive Quadrature
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/295">Section 5.4  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_5_4.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_5_4.html">solutions to EX.5.4.{1,3}.Sauer3</a>
+
+	 exercise CP.5.4.1.b.Sauer (<a href="./5.4/exercise_cp_5_4_01_________sauer3/exercise_cp_5_4_01_b_______sauer3.pdf">PDF</a>)
+         exercise CP.5.4.1.b.Sauer, Answer from Julien <a href="https://colab.research.google.com/drive/1FmPqmj9bSpJZCqhqQTlaBHE7U98KcTns">(COLAB)</a>
+
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #7
+   Section 5.4  Adaptive Quadrature
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise CP.5.4.1.a.Sauer (<a href="./5.4/exercise_cp_5_4_01_________sauer3/exercise_cp_5_4_01_a_______sauer3.pdf">PDF</a>)
+
+   <a href="#toc">&#9195; go back to toc &#9195;</a>
+
+<a id="5.5"><div style="color:black; background:palegreen">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Section 5.5  Gaussian Quadrature
+   <a href="https://bookshelf.vitalsource.com/#/books/9780134697376/pageid/300">Section 5.5  (Vital Source)</a>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      additional examples from Sauer <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/addexamples/addex_5_5.html">(HTML)</a>
+
+      exercises
+
+         <a href="https://media.pearsoncmg.com/aw/aw_sauer_num_analysis_3/solutions/sol_5_5.html">solutions to EX.5.5.{1,3,5,7,9}.Sauer3</a>
+
+	 exercise EX.5.5.6.b.Sauer (<a href="./5.5/exercise_ex_5_5_06_________sauer3/exercise_ex_5_5_06_b_______sauer3.pdf">PDF</a>)
+         exercise EX.5.5.6.b.Sauer, Answer from Julien <a href="https://colab.research.google.com/drive/1J84HfrV1V12Fvmq5ero4N4saOJd6h-gn">(COLAB)</a>
+
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Homework #7
+   Section 5.5  Gaussian Quadrature
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+         exercise EX.5.5.6.d.Sauer (<a href="./5.5/exercise_ex_5_5_06_________sauer3/exercise_ex_5_5_06_d_______sauer3.pdf">PDF</a>) (<a href="https://colab.research.google.com/drive/15lAP-ZoWHIBB1cFnjunA8lYU1bQB8A__">COLAB, getting started</a>)
+
+
 
    <a href="#toc">&#9195; go back to toc &#9195;</a>
 
