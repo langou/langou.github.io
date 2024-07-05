@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/4650.git/bucket/classical_gram_schmidt__level1.py.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="macvim">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+.Constant { color: #ff8c00; }
+.Identifier { color: #458b74; }
+.Statement { color: #b03060; font-weight: bold; }
+.Comment { color: #0000ee; font-style: italic; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Comment"># perform a QR factorization of `A` using the Classical Gram-Schmidt algorithm</span>
+<span class="Comment">#</span>
+<span class="Comment"># input:  Q and R, (R is &quot;memory space&quot; where you want R, only upper part is referenced)</span>
+<span class="Comment"># R is in/out. Q is input only</span>
+<span class="Comment"># output: Q and R</span>
+<span class="Statement">def</span> <span class="Identifier">classical_gram_schmidt__level1</span>( Q, R ):
+  n = Q.shape[<span class="Constant">1</span>]
+  <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n):
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,j):
+      R[i,j] = Q[:,i].T @ Q[:,j]
+    <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,j):
+      Q[:,j] = Q[:,j] - Q[:,i] * R[i,j]
+    R[j,j] = np.linalg.norm(Q[:,j])
+    Q[:,j] = Q[:,j]/R[j,j]
+  <span class="Statement">return</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->
