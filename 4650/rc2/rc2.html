@@ -1,0 +1,48 @@
+<pre>
+The Computer Project #2 is The Euler–Bernoulli Beam. This is page 102-105 of the book. See reality check #2.
+
+You need to do question 1 through 5. DO NOT DO 6, 7 and 8. And you have the Question 6 below:
+
+Question #6. Compare full format versus sparse format.
+
+(1) Do a “scalability"' study of the solve. That is: time the solve (using tic/toc commands) (in both cases full format and sparse format) as a function of n. (n is the size of the matrix.)
+As n increases, how does the time to solution increase in either case?
+
+(2) Compare as well the memory requirement in both cases. How does the memory needed for your application grow as a function of n?
+
+Some comments. These comments should make sense once you read the whole question and have thought about it. If this makes no sense at a first read, this is OK. Please read the question first!
+
+Comments:
+
+(1) In Question #2. "Plot the solution from Step 1 against the correct solution y(x) = (f/24EI) etc. "
+=> For  (f/24EI) please understand ( f / 24 / E / I ) OK?
+
+(2) For Question #6: please go easy on your laptop. N=1,000 in FULL format should be fine with most of your laptops. N=10,000 : some laptop will crash, those who do not will take a LONG time. N = 100,000 is NOT FEASIBLE in a laptop. 
+If you SPARSE format you should be able to tackle 10,000 no sweat, and 100,000 should be doable on most laptops. So PLEASE TAKE IT EASY WITH N on your LAPTOPS. Last year, it was crash/reboot/crash/reboot. 
+
+(3) For Question #4. What value of p in question 4 shall we take? It is not said what value of p we should  take.
+
+So in question 5, we ask you to use p=100 kg/m. And you need to do a computer simulation with this value of p. We need a value of p to do a simulation. This is question 5. Question 4 (the one we speak about) does not need a value for p.
+
+In question 4, you need to check that the formula for y(x) is a solution for the problem. 
+So given the right hand side made of (1) the weight of the beam itself and (2) a sinusoidal pile to the beam, so this f(x) = -480 w d ( PLUS ) s(x) (as given in question 4), we want to check that 
+Equation 2.27 
+	E I (d^4 y / dx^4 ) = f(x) + s(x) 
+is satisfied for y(x) as given in question 4. (So you need to differentiate y four times and check. This is a Calculus I question.)
+You also need to check that the clamped-free beam condition are satisfied. 
+Namely: y(0) = 0 and ( d y / dx ) ( 0 ) = 0 and ( d^2 y / dx^2 ) ( L ) = 0 and ( d^3 y / dx^3 ) ( L ) = 0.
+
+So question 4 is about checking that the analytical solution given satisfies our problem. There is no programming. Just Calculus.
+
+p is anything. It is a parameter. (So it is a constant with respect to x.)
+
+Note: you are asked to check that the analytical solution given satisfies our problem. You are not asked to prove that this is the unique solution to this problem. This is a good question to ask. But it is not asked. 
+
+(4) For Question #2. 
+
+You should get the Figure2.png. That the computed solution is EXACTLY (1e-16) the exact solution. If you get something like Figure1.png, this is because the vector “x" does not start at x=0 but the vector x starts at x=1/n. 
+You want n points from 1/n to 1 by steps of 1/n.  (this is what you have when you do: x = linspace(1/n,l,n); )
+You do not want n points from 0 to 1 by steps of 1/(n-1). (this is what you have when you do: x = linspace(0,l,n); )
+In other words, we get (0,0) for “free” and have to manually add it in.
+
+</pre>

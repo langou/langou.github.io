@@ -1,0 +1,65 @@
+<pre>
+To get you started, I am sharing the following Colab Notebook:
+https://colab.research.google.com/drive/1Wnz1bde5BaaYABxifNHNG_3ilcpwovl1
+ 
+You only need to work related to part #1.
+ 
+First thing you have to do is make sure that what I give you works correctly, so
+(1) copy the code in a private notebook,
+(2) uncomment the line of codes around the TODO,
+(3) run the codes,
+(4) let me know if questions or problems.
+ 
+Then, please, consider the following two questions
+ 
+Question 1:
+ 
+This is the forward problem. We change our position to ( x = 21; y = 176; z = 10072 ) and our time correction to d = 0.0012.
+We also change the position of the four satellites to
+A1 = 15600; B1 =  7540; C1 = 20140;
+A2 = 18760; B2 =  2750; C2 = 18610;
+A3 = 17610; B3 = 14630; C3 = 13480;
+A4 = 19170; B4 =   610; C4 = 18390;
+ 
+What should the time t1, t2, t3 and t4 be?
+ 
+Question 2:
+ 
+This is the inverse problem. ( That is we know the satellites positions, we know the times t1, t2, t3 and t4. We want to find our position.)
+We change the position of the four satellites and times to
+A1 = 18500; B1 =  4980; C1 = 18405; t1 = 0.068369;
+A2 = 19641; B2 =  8000; C2 = 16000; t2 = 0.071752;
+A3 = 12356; B3 = 11129; C3 = 20719; t3 = 0.065283;
+A4 = 18876; B4 = 17001; C4 = 7776; t4 = 0.082428;
+ 
+Using Multivariate Newton’s method, find our position to ( x; y; z ) and our time correction to d.
+ 
+More information:
+ 
+I also made a 45’ video about this where I try to explain it all:
+https://www.youtube.com/watch?v=u5VT11Yq8GQ
+ 
+This is a pretty cool problem. It would be great if you watch the video and try to understand as much as you can. Send me questions. As many as you want, I can explain.
+ 
+In short, 
+ 
+(1) we work with Cartesian coordinate or spherical coordinate with center the center of the Earth.
+ 
+(2) we want to use GPS satellites to compute our position on Earth. Our position in Cartersian coordinate is (x,y,z). So we want to compute (x,y,z) from the data of the satellites. 
+ 
+(3) there are GPS satellites in the sky turning around our heads. Satellites know their positions in Cartersian coordinates, (A,B,C), and the time at which data is sent, and they keep on emitting signals with this data. So we keep on receiving data (A,B,C,time at which message is sent) from any satellite we can see. This data is sent through radio waves that travel at the speed of light (about 300,000 km per second).
+ 
+(4) For each satellite, we know its position (A,B,C) and the time message was sent. Assume we also know the time when we receive. Then we can compute the time it took for message to come to us. Assume message travel at speed of light, then we can compute our distance from satellite: c * t. Now we know that we are on a sphere of radius c * t and center (A,B,C). Now add two more satellites, and we can find our position as being the intersection of 3 spheres. Bingo. So we need to solve for x,y,z something like
+( A0 - x )^2 + ( B0 - y )^2 + ( C0 - z )^2 - c^2 * t0^2 = 0
+( A1 - x )^2 + ( B1 - y )^2 + ( C1 - z )^2 - c^2 * t1^2 = 0
+( A2 - x )^2 + ( B2 - y )^2 + ( C2 - z )^2 - c^2 * t2^2 = 0
+We can use multivariate Newton’s method to solve this.
+ 
+(5) Now the problems start. First three spheres have (in general) two intersections. So there are two (x,y,z) solutions of the nonlinear system of equations above. Which one to take? Well, one is in outer space, and one is on the surface of Earth, so that’s ``easy``. We can safely take the one on the surface of Earth. (If you go in outer space, please let me know, and I’ll give you the other solution which might be where you really are!)
+ 
+(6) Then it is a really bad idea to measure a distance with the speed of light!!!! Speed of light is 300,000 km/sec. So with 1 second accurate clock, you are making errors of 300,000 km!!! I am not sure that’s good enough for any earthly purpose :). If we have 1 millisecond accurate clock, we will make 300 km errors. Oh my! Colorado is 600 km long, so about half of Colorado as an error!!! 1 microsecond will give 300 meters error,  this starts to be "reasonable”.  And then the most accurate clock are about 10 nanosecond accurate, and so they should give us about 3 meters of error. So we want atomic clock to measure the time of the signal (which travel at speed of light) to come to us, and get meter accuracy.
+ 
+(7) Well, atomatic clocks are kind of expensive. And so we cannot afford it in our GPS receiver. So we put them in the satellites, but not in our GPS devices. So now we cannot compute t1, t2, and t3 accurately, we can only compute t1+d, t2+d t3+d where d is the error of our local GPS receiver clock. (Same error for all GPS signal received.) So this adds one variable (d) and so, we need a fourth equation coming from a fourth satellite.  Adding the variable d helps as well to mitigate with the fact that the speed of light is not really known. The value 299792 km/sec is in the void (emptiness) and the speed of light is slower in the air. And it is actually complicated depending on the length of the layer of the atmosphere the signal is traversing which depends on the position of the satellites, so this gets complicated. 
+ 
+(8) This is it for problem #1. Then problem #6 explore how by adding satellites we can increase the accuracy. We need more accuracy in particular when the satellites are clustered together. 
+</pre>
