@@ -27,23 +27,24 @@ your answer to 6 significant decimal places. Hint: The answer is t_=0.350239.
 <b>(Question 4)</b> Now solve the same problem as in Question 2 but this times
 using Newton’s method. At each iteration of Newton’s method, display the
 forward error, that is the absolute value of the difference between your
-current iterate and the solution (as computed in Question 2).
+current iterate and the solution (as computed in Question 2). Use the solution
+of Question 2 with as computed with 16-digit accuracy. (Do not use the solution
+with only 6-digit accuracy.)
  
 More information about the reality check:
  
 We have a parametrized curve ( x(t), y(t) ) with parameter t that goes from 0
-to 1.  
-x = lambda t: 0.5 + 0.3 * t + 3.9 * t**2 - 4.7 * t**3 
-y = lambda t: 1.5 + 0.3 * t + 0.9 * t**2 - 2.7 * t**3 
-So we can move on the curve with parameter t that steps with uniform steps
-between 0 and 1.  ttt = np.linspace( 0, 1, 1000) This is the left blue curve.
-You see that uniform steps in t does not mean, uniform in space. The speed of
-the growth of the curve is sometimes slower and sometimes faster. The goal of
-reality check is to try to have a uniform growth in space. So the speed is
-constant. To do this, we will compute L, the length of the arc. Choose a step
-size s from 0 to L. And then, for each step size, s, find the parameter t_(s)
-such that length ( t_(s) ) = s. If you do this you get the right red curve. You
-see that the speed of growth of the red curve is now constant.
+to 1.  x = lambda t: 0.5 + 0.3 * t + 3.9 * t**2 - 4.7 * t**3 y = lambda t: 1.5
++ 0.3 * t + 0.9 * t**2 - 2.7 * t**3 So we can move on the curve with parameter
+t that steps with uniform steps between 0 and 1.  ttt = np.linspace( 0, 1,
+1000) This is the left blue curve.  You see that uniform steps in t does not
+mean, uniform in space. The speed of the growth of the curve is sometimes
+slower and sometimes faster. The goal of reality check is to try to have a
+uniform growth in space. So the speed is constant. To do this, we will compute
+L, the length of the arc. Choose a step size s from 0 to L. And then, for each
+step size, s, find the parameter t_(s) such that length ( t_(s) ) = s. If you
+do this you get the right red curve. You see that the speed of growth of the
+red curve is now constant.
  
 There are many applications where (1) the curves are parametrized by a
 parameter “t”, (2) a uniform step size in “t” does not lead to uniform
@@ -61,8 +62,8 @@ an animation.
 Please feel welcome to read the full description in the book and why this
 matters. I typed a little bit of it https://langou.github.io/4650/rc5/rc5.pdf
  
-Here is a colab code that plots the curve that we are studying in reality check 5 
-<a href="https://colab.research.google.com/drive/1nzCm8GhFeEk52b5Qe9SQVitm49V4hAVR">https://colab.research.google.com/drive/1nzCm8GhFeEk52b5Qe9SQVitm49V4hAVR</a>
+Here is a colab code that plots the curve that we are studying in reality check
+5 <a href="https://colab.research.google.com/drive/1nzCm8GhFeEk52b5Qe9SQVitm49V4hAVR">https://colab.research.google.com/drive/1nzCm8GhFeEk52b5Qe9SQVitm49V4hAVR</a>
 
 
 <img src="rc5_pic0.jpg">
