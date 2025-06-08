@@ -1,0 +1,215 @@
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[margin=.8in]{geometry}
+\parindent=0in
+%\parskip=1em
+
+\usepackage[compact]{titlesec}  % to reduce spacing around section headings
+\usepackage{enumitem}  % allows for compact lists
+\usepackage[vskip=0.5em,leftmargin=1.5em]{quoting}  % indented offset text, for e.g. course descriptions
+
+\usepackage{fourier}
+
+\usepackage{times}
+
+\usepackage{color}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\usepackage[pdftitle={syllabus for Numerical Analysis I, Summer 2024, Langou},
+            colorlinks=true,allcolors=darkblue,linkcolor=darkblue,urlcolor=darkblue]{hyperref}
+\renewcommand\UrlFont{\color{darkblue}}  % styling for \url
+\newcommand{\mailto}[1]{\href{mailto:#1}{#1}}
+
+\setlength{\parindent}{0em}
+
+\pagestyle{empty}  % no page numbers
+
+\begin{document}
+
+\begin{center}{\LARGE
+MATH 4650-E01 -- Numerical Analysis I
+}
+\bigskip
+
+Summer 2024
+
+%\emph{Class meetings}: Monday--Wednesday 9:30am--10:45am via Zoom
+
+Department of Mathematical and Statistical Sciences, University of Colorado Denver
+\end{center}\vspace*{-1em}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Instructor information}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\emph{Instructor:} Julien Langou,
+email: \mailto{julien.langou@ucdenver.edu} or through Canvas.\\
+
+\emph{Office hours:} By appointment. I will try to be as
+flexible as possible while trying to maximize the attendance at my office hour.\\
+
+\medskip
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Course catalog description and requisites}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\begin{quoting}
+
+\emph{MATH 4650 -  Numerical Analysis I - 3 Credits}\\
+\\
+A first semester course in numerical methods and analysis fundamental to many
+algorithms encountered in scientific computing, data science, machine learning,
+and computational models in science and engineering. Rounding errors and
+numerical stability of algorithms; solution of linear and nonlinear equations;
+data modeling with interpolation and least-squares; and optimization methods.\\
+\\
+This course assumes that students have the equivalent of differential and
+integral calculus (e.g., MATH 2411), linear algebra (e.g., MATH 3191 or 3195),
+and computer programming (e.g., MATH 1376 or CSCI 1410).\\
+\\
+Prereq: MATH 3191 or MATH 3195 with a C- or higher.\\ 
+\\
+
+%\end{quoting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Course Goals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Completion of this course will provide you with
+\begin{enumerate}
+
+\item an understanding of the basic theory of solving mathematical problems
+with computers while being cognizant of floating-point arithmetic including
+issues of overflow and underflow.
+
+\item knowledge of the different issues surrounding errors in using numerical
+methods including machine epsilon, error analysis, convergence, rounding error,
+truncation error, and norms.
+
+\item an appreciation of the difficulties involved in finding reliable
+solutions as well as be able to apply various methods for estimating errors in
+solutions in order to judge how reliable those solutions are.
+
+\item an awareness of conditioning of problems and stability of algorithms and
+the distinguish between the two.
+
+\end{enumerate}
+
+\section*{Programming Language}
+
+We will be using Python through Google Colab Jupyter Notebook (\url{https://colab.research.google.com/}).
+
+% This is an upper division level mathematics class and some level of abstraction
+% and proof writing and proof skills will be taught and evaluated. This class
+% will cover ``matrix computation''/``matrix methods''/``matrix algorithms'' and,
+% in addition, some more theoretical concepts. A previous ``proof class'' is not
+% required for this class. This class can be viewed as a gentle introduction to
+% proof and abstract mathematics.  I will also demonstrate some programming using
+% Python and Google Colab (\url{https://colab.research.google.com/}). No
+% programming experience is needed.  Similarly as proof, this class can be viewed
+% as a gentle introduction to programming.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Course materials and procedures}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\hangindent=1em
+\emph{Textbook.} \emph{Numerical Analysis, 3rd edition}
+by 
+\href{http://math.gmu.edu/~tsauer/}{Tim Sauer}, 
+ISBN-13: 9780134697376, published by Pearson, in 2018.
+The link to the textbook is \url{https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340/9780134697376}.
+
+%\hangindent=1em
+%\emph{Procedure for Exam Proctoring.} 
+%For exams, I will offer a few Zoom proctoring sessions, and you can pick the
+%session that fit your schedule.  In general, I found that Friday works well for
+%exams. During the exam, I will welcome everyone to the Zoom session, camera
+%must be on, I will send the exam to everyone present, and I expect the exam
+%returned on Canvas before you leave the Zoom session.  There will be three
+%exams and one final exam.  I realize that this process of proctoring exams
+%leaves a lots of loopholes for possible academic dishonesty.  A large part of
+%my teaching philosophy is based on trusting you for engaging in academic
+%honesty during the semester including during exams. See also the later
+%discussion on academic honesty.\\
+%
+%\hangindent=1em
+%\emph{Mandatory virtual meetings.} 
+%Although this class is online, in order to get to know you and work together, I
+%will require some mandatory virtual meetings as part of your written homework
+%assignments. They will be called ``oral exams'', and we will go over some
+%written homework questions together in a virtual settings. It is very important
+%to me to connect with you (virtually) and so {\color{red} these virtual meetings are a
+%requirement for passing this class.}
+
+%\hangindent=1em
+\emph{More procedures.} 
+Assignments and additional course materials will be posted on Canvas.
+Announcements, including any revisions to this syllabus, will be announced and
+posted on Canvas.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Evaluation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+During the semester, grades will be posted on Canvas.
+Students should regularly check their recorded grades, and immediately bring
+any discrepancies or disputes to the attention of the instructor.  Note that
+the grade calculation capabilities of Canvas are limited and may not be
+accurate. Use the grading scheme as described in this syllabus to compute your
+course grade.\\
+
+You are encouraged to work together in groups outside of class, as well as
+consult other resources.  However, your solutions must be your own.  Any
+submitted solutions that I feel have been mostly copied from other sources,
+including classmates, textbooks, or the web, will receive no credit.  See also
+the later discussion on academic honesty.\\
+
+\paragraph{Homework (10\% $\times$ 7 = 70\%).}
+There will be 7 homework during the semester. Each homework is worth 10\% of
+the final grade.  For each homework, you need to turn in 
+a ``Google Colab Jupyter Notebook shared link''
+%a ``.IPYNB'' file, 
+and a PDF with handwritten or typed solutions.
+The homework will be made with some questions from the textbook, some ``reality check'' from the textbook, and/or some questions written by your instructors.
+\\
+
+\paragraph{Project (10\% $\times$ 3 = 30\%).}
+There will be 3 ``reality check'' projects during the semester. Each project is worth 10\% of
+the final grade.
+For each reality check, you need to turn in 
+a ``Google Colab Jupyter Notebook shared link''
+%a ``.IPYNB'' file, 
+and a PDF with handwritten or typed solutions.\\
+
+\paragraph{Final course grade scale.}
+Final course letter grades will be assigned according to a student's total course score (calculated as described above).
+Letter grades for specific scores are given in the following table.
+\smallskip
+
+\renewcommand{\arraystretch}{1.15}
+\hspace*{3em}\begin{tabular}{rl@{\quad}|@{\quad}rl@{\quad}|@{\quad}rl|@{\quad}rl|@{\quad}rl}
+$\ge 93\%$ & A  & $\ge 87\%$ & B+ & $\ge 77\%$ & C+ & $\ge 60\%$ & D\phantom{+} & $< 60\%$ & F\\
+$\ge 90\%$ & A- & $\ge 83\%$ & B  & $\ge 70\%$ & C  \\
+           &    & $\ge 80\%$ & B- & 
+\end{tabular}
+
+\paragraph{Due Dates.}
+~\\
+\begin{center}
+\begin{tabular}{lll}
+Homework \#1 & Monday June 10th 2024 & at 11:59pm\\
+Homework \#2 & Monday June 17th 2024 & at 11:59pm\\
+Homework \#3 & Monday June 24th 2024 & at 11:59pm\\
+Homework \#4 & Monday July  1st 2024 & at 11:59pm\\
+Homework \#5 & Monday July  8th 2024 & at 11:59pm\\
+Homework \#6 & Monday July 15th 2024 & at 11:59pm\\
+Homework \#7 & Monday July 22nd 2024 & at 11:59pm\\
+Reality Checks \#1, \#2 and \#4  & Friday July 26th 2024 & at 11:59pm\\
+\end{tabular}
+\end{center}
+
+\end{document}
