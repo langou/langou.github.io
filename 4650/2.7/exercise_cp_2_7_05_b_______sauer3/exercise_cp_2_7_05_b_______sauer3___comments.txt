@@ -1,0 +1,22 @@
+Comments for CP.2.7.5.b:
+
+(1) In CP.2.7.5.a, Sauer gives solution. In CP.2.7.5.b, Sauer does not give you
+the solutions for this problem. So you can remove the ``box`` that starts with
+# Per Sauer, we have two exact solution x1 and 2 such that
+The two solutions are actually not too hard to write analytically. First one
+starts with (17/9, . . . ) and second one starts with ( 1, . . .) I am not sure
+why Sauer does not give them, but it might be good for you to try to figure
+this out.
+
+(2) Do not forget to square your radii!!! In CP.2.7.5.a all radii are 1. So you
+do not see the 1^2 very much. Do not forget to square the radii.
+
+(3) I think my loop for Newton is 6 iterations as a default. If you see some
+convergence at step 6 but do not 1e-14 accuracy, do not hesitate to increase
+the number of iterations a tat. For me for problem CP.2.7.5.b, I needed 11
+iterations. This is OK. It depends on your starting point. I think I was little
+far, so Newton spent 5 iterations bouncing around and not really converging,
+and then it finally decided to converge and I had a nice quadratic convergence
+with errors like 1e-1, 1e-2, 1e-4, 1e-8, and 1e-16. So once you are in the
+``locally quadratically convergent`` region this works fine, but it might take
+some bouncing around to find this region. This is OK.
