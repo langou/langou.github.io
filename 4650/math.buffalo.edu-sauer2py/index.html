@@ -1,0 +1,346 @@
+<!-- style: cw_2005 default -->
+<!-- template: module -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Python Translations of the Sauer Numerical Analysis 2e Projects</title>
+
+
+
+
+
+
+
+
+<!-- META tags for site search -->
+<!--
+<META-NOSEARCH>nosearch</META-NOSEARCH>
+-->
+<!-- END META tags for site search -->
+	<link rel="StyleSheet" href="index_files/style.css" type="text/css">
+	<style type="text/css">
+	   <!--
+	   body
+	   {
+
+
+
+	   	background-color: white;
+
+
+	   	margin: 2px 60px 15px 10px;
+	   }
+	   
+	   h1#stylehead {
+	      padding: 0;
+          margin: 0;
+	   }
+	   
+	   h2.websearch {
+			font-weight: bold;
+			padding: 0;
+			margin: 0;
+			font-size: 1em;
+	   }
+
+	   h3.websearch {
+			font-weight: bold;
+			padding: 0;
+			margin: 0;
+			font-size: 1em;
+	   }
+	   
+	   .sr_only {
+            position:absolute;
+			left:-999px;
+			top:auto;
+			width:1px;
+			height:1px;
+			overflow:hidden;
+       }
+	   
+	   .nostyle_inline {
+		    font-size: 1em;
+		    font-weight: normal;
+		    padding: 0;
+		    margin: 0;
+		    display: inline;
+	   }
+	   -->
+	</style>
+
+
+
+
+
+<script language="javascript">
+<!-- 
+
+function updatenav(theurl)
+{
+    // if statement is used to 
+	// be sure the frame exists -st
+
+	
+		
+	
+	if (parent.navbar) {
+		parent.navbar.document.location.href = theurl;
+	}
+	
+	
+	// return true is important here
+	// allows the href to work -st
+return true;
+}
+
+// -->
+</script>
+
+
+	
+
+
+
+
+
+
+<!-- st reusing the js for expanding left nav -->
+<script type="text/javascript" language="Javascript">
+		<!-- Hide script from older browsers
+			
+		var submenus;
+		var myindex;
+        var thisMenu;
+		
+	// st this is how we degrade gracefully for older browsers
+	// also note that the expanded navs will be visible 
+	// in any browsers that dont support scripting at all
+	// as they will never have been made invisible
+	
+	document.write('<style type="text/css">');
+	if (document.getElementById) {	
+	   document.write('.submenu  {display:none}');
+	} else {
+  	   document.write('.submenu  {}');
+	}
+	document.write('</style>');
+	
+		
+		function expandMenu(currMenu) {
+	
+			if (document.getElementById) {
+						
+			    // this opens the new item
+				// also used to show skip nav links
+				thisMenu = document.getElementById(currMenu).style;
+				thisMenu.display = "block";
+					
+			}
+		}
+		
+		function hideSkip(currMenu) {
+	
+			if (document.getElementById) {
+						
+			    // this hides skip nav links
+				thisMenu = document.getElementById(currMenu).style;
+				thisMenu.display = "none";
+					
+			}
+		}
+		
+		
+
+		// End hiding script -->
+	</script><style type="text/css">.submenu  {display:none}</style>
+	
+	
+
+
+
+
+</head>
+
+<!--body alink="#000000" link="#76CC82" vlink="#76CC82"-->
+<!--body alink="#000000" link="#746dd5" vlink="#948df5"-->
+<body alink="#000000" link="#746dd5" vlink="#746dd5">
+<a name="topofpage" id="topofpage"><img src="index_files/pixel.gif" alt="" border="0" height="1" hspace="0" vspace="0" width="1"><!--/a--><img src="index_files/pixel.gif" alt="Content Frame" border="0" height="1" hspace="0" vspace="0" width="1"><br>
+
+
+
+
+	  
+
+
+
+
+
+        
+
+
+
+
+
+<!-- skip stuff-->
+<a href="#lastcrumb" title="Skip Breadcrumb Navigation" onfocus="expandMenu('breadskip');" onblur="hideSkip('breadskip');"><img src="index_files/pixel.gif" alt="Skip Breadcrumb Navigation" border="0" height="1" hspace="0" vspace="0" width="1"></a><div class="submenu" id="breadskip"><span class="breadcrumbs">[Skip Breadcrumb Navigation]</span><noscript>: <a href="#lastcrumb"><span class="breadcrumbs">[Skip Breadcrumb Navigation]</span></a></noscript><br>&nbsp;</div>
+
+<table border="0" cellpadding="0" cellspacing="2">
+	<tbody><tr align="left" valign="top">
+
+        
+	
+		
+
+                
+        
+	
+		
+
+                
+
+	<br>
+	<h1 id="stylehead"><span class="contentHeader">Python Translations of the Sauer Numerical Analysis 2e Projects</span></h1>
+
+
+        <!-- Last Crumb -->
+		
+                     
+
+                        	</tr>
+</tbody></table>
+
+
+
+
+	<span class="basicContent">
+<table width="900">
+<tbody><tr align="left" valign="top">
+<td class="basiccontent" width="900">
+These codes are written to facilitate the use of Timothy Sauer's textbook "Numerical Analysis" (2nd ed.)<br>
+with free open-source software.<br>
+To run them, you need Python (2.X, though modification for 3.X should be trivial) and the packages <a href=http://www.scipy.org/NumPy_for_Matlab_Users>NumPy</a>, <a href=http://new.scipy.org/index.html>SciPy</a> and <a href=http://matplotlib.sourceforge.net/gallery.html>Matplotlib</a>.<br>
+If you find errors or have suggestions, please contact ringland at buffalo.edu.<br>
+<a href=http://blue.math.buffalo.edu/sauerpy/index.html>Codes for the 1st edition of the book</a> are also available.
+
+</td></tr></tbody></table> 
+           <p>
+</p><p>
+</p><table width="900">
+<tbody><tr align="left" valign="top">
+<td class="basiccontent" width="150">
+<b>Introduction:</b>
+<ul>
+<li><a href="nest.py">Program 0.1</a> (nest.py) <a href=nest.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 1:</b>
+<ul>
+<li><a href="bisection.py">Program 1.1</a> (bisection.py) <a href=test_bisection.py.png>screenshot</a>
+</li><li><a href="fpi.py">Program 1.2</a> (fpi.py) <a href=test_fpi.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 2:</b>
+<ul>
+<li><a href="sparsesetup.py">Program 2.1</a> (sparsesetup.py) <a href=sparsesetup.py.png>screenshot</a>
+</li><li><a href="jacobi.py">Program 2.2</a> (jacobi.py) <a href=jacobi.py.png>screenshot</a>
+</li><li><a href="broyden2.py">Program 2.3</a> (broyden2.py) <a href=broyden2.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 3:</b>
+<ul>
+<li><a href="newtdd.py">Program 3.1</a> (newtdd.py) <a href=test_newtdd.py.png>screenshot</a>
+</li><li><a href="clickinterp.py">Program 3.2</a> (clickinterp.py) <a href=clickinterp.py.png>screenshot</a>
+</li><li><a href="sin1.py">Program 3.3</a> (sin1.py) <a href=sin1.py.png>screenshot</a>
+</li><li><a href="sin2.py">Program 3.4</a> (sin2.py) <a href=sin2.py.png>screenshot</a>
+</li><li><a href="splinecoeff.py">Program 3.5</a> (splinecoeff.py) <a href=splinecoeff.py.png>screenshot</a>
+</li><li><a href="splineplot.py">Program 3.6</a> (splineplot.py) <a href=splineplot.py.png>screenshot</a>
+</li><li><a href="bezierdraw.py">Program 3.7</a> (bezierdraw.py) <a href=bezierdraw.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 5:</b>
+<ul>
+<li><a href="romberg.py">Program 5.1</a> (romberg.py) <a href=romberg.py.png>screenshot</a>
+</li><li><a href="adapquad.py">Program 5.2</a> (adapquad.py) <a href=adapquad.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 6:</b>
+<ul>
+<li><a href="euler.py">Program 6.1</a> (euler.py) <a href=euler.py.png>screenshot</a>
+</li><li><a href="euler2.py">Program 6.2</a> (euler2.py) <a href=euler2.py.png>screenshot</a>
+</li><li><a href="pend.py">Program 6.3</a> (pend.py) <a href=pend.py.png>screenshot</a>
+</li><li><a href="orbit.py">Program 6.4</a> (orbit.py) <a href=orbit.py.png>screenshot</a>
+</li><li><a href="hh.py">Program 6.5</a> (hh.py) <a href=hh.py.png>screenshot</a>
+</li><li><a href="tacoma.py">Program 6.6</a> (tacoma.py) <a href=tacoma.py.png>screenshot</a>
+</li><li><a href="exmultistep.py">Program 6.7</a> (exmultistep.py) <a href=exmultistep.py.png>screenshot</a>
+</li><li><a href="predcorr.py">Program 6.8</a> (predcorr.py) <a href=test_predcorr.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 7:</b>
+<ul>
+<li><a href="nlbvpfd.py">Program 7.1</a> (nlbvpfd.py) <a href=nlbvpfd.py.png>screenshot</a>
+</li><li><a href="bvpfem.py">Program 7.2</a> (bvpfem.py) <a href=bvpfem.py.png>screenshot</a>
+</li></ul>
+</td>
+<td class="basiccontent" width="250">
+<b>Chapter 8:</b>
+<ul>
+<li><a href="heatfd.py">Program 8.1</a> (heatfd.py)  <a href=heatfd.py.png>screenshot</a>
+</li><li><a href="heatbd.py">Program 8.2</a> (heatbd.py)  <a href=heatbd.py.png>screenshot</a> 
+</li><li><a href="heatbdn.py">Program 8.3</a> (heatbdn.py) <a href=heatbdn.py.png>screenshot</a>
+</li><li><a href="crank.py">Program 8.4</a> (crank.py) <a href=crank.py.png>screenshot</a>
+</li><li><a href="poisson.py">Program 8.5</a> (poisson.py), <a href=mymesh.py>mymesh.py</a> <a href=poisson.py.png>screenshot</a>
+</li><li><a href="poissonfem.py">Program 8.6</a> (poissonfem.py) <a href=poissonfem.py.png>screenshot</a>
+</li><li><a href="burgers.py">Program 8.7</a> (burgers.py)  <a href=burgers.py.png>screenshot 1</a> <a href=burgers.py.2.png>2</a>
+</li><li><a href="fisher2d.py">Program 8.8</a> (fisher2d.py) <a href=fisher2d.py.png>screenshot 1</a> <a href=fisher2d.py.2.png>2</a>
+</li><li><a href="brusselator.py">Program 8.9</a> (brusselator.py) <a href=brusselator.py.png>screenshot 1</a>  <a href=brusselator.py.code.png>2</a>
+</li></ul>
+<b>Chapter 9:</b>
+<ul>
+<li><a href="halton.py">Program 9.1</a> (halton.py) <a href=halton.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 10:</b>
+<ul>
+<li><a href="dftinterp.py">Program 10.1</a> (dftinterp.py) <a href=dftinterp.py.png>screenshot</a>
+</li><li><a href="dftfilter.py">Program 10.2</a> (dftfilter.py) <a href=dftfilter.py.png>screenshot</a>
+</li><li><a href="wiener.py">Program 10.3</a> (wiener.py) <a href=wiener.py.png>screenshot</a> <a href=daft.wav>daft.wav</a> 
+</li></ul>
+<b>Chapter 11:</b>
+<ul>
+<li><a href="codec.py">Program 11.1</a> (codec.py) <a href=codec.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 12:</b>
+<ul>
+<li><a href="powerit.py">Program 12.1</a> (powerit.py) <a href=powerit.py.png>screenshot</a>
+</li><li><a href="invpowerit.py">Program 12.2</a> (invpowerit.py) <a href=invpowerit.py.png>screenshot</a>
+</li><li><a href="rqi.py">Program 12.3</a> (rqi.py) <a href=rqi.py.png>screenshot</a>
+</li><li><a href="nsi.py">Program 12.4</a> (nsi.py) <a href=nsi.py.png>screenshot</a>
+</li><li><a href="unshiftedqr.py">Program 12.5</a> (unshiftedqr.py) <a href=unshiftedqr.py.png>screenshot</a>
+</li><li><a href="shiftedqr0.py">Program 12.6</a> (shiftedqr0.py) <a href=shiftedqr0.py.png>screenshot</a>
+</li><li><a href="shiftedqr.py">Program 12.7</a> (shiftedqr.py) <a href=shiftedqr.py.png>screenshot</a>
+</li><li><a href="hessen.py">Program 12.8</a> (hessen.py) <a href=hessen.py.png>screenshot</a>
+</li></ul>
+<b>Chapter 13:</b>
+<ul>
+<li><a href="gss.py">Program 13.1</a> (gss.py) <a href=test_gss.py.png>screenshot</a>
+</li><li><a href="spi.py">Program 13.2</a> (spi.py) <a href=test_spi.py.png>screenshot</a>
+</li><li><a href="neldermead.py">Program 13.3</a> (neldermead.py) <a href=test_neldermead.py.png>screenshot</a>
+</li></ul>
+<b>Extras:</b>
+<ul>
+<li><a href="bounce.py">Program B.1</a> (bounce.py) <a href=bounce.py.png>screenshot</a>
+</li><li><a href="wilkpoly.py">Wilkinson polynomial</a> (wilkpoly.py)  <a href=wilkpoly.py.png>screenshot</a>
+</li><li><a href="sample.pdf">Sample pdf file</a> (sample.pdf)
+</li><li><a href="5.txt"-->Bezier curve</a> (5.txt) <a href=readbez.py.png>screenshot</a>
+</li><li><a href="f.txt"-->Bezier curve</a> (f.txt)
+</li><li><a href="T.txt"-->Bezier curve</a> (T.txt)
+</li><li><a href="windmill.txt">Windmill data</a> (windmill.txt)
+</li><li><a href="scrippsm.txt">Scripps monthly data</a> (scrippsm.txt)
+</li><li><a href="scrippsy.txt">Scripps yearly data</a> (scrippsy.txt)
+</li></ul>
+</td>
+</tr>
+</tbody></table>
+
+      
+<br>
+
+
+
+
+
+</body></html>
