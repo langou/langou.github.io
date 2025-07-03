@@ -1,4 +1,89 @@
 <pre>
+<div style="color:black; background:#ff99ff">   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Reality Check 2 - The Euler–Bernoulli Beam
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+
+      Questions are at:           <a href="rc2.pdf">Reality Check 2 - The Euler–Bernoulli Beam (PDF)</a>
+      "Getting Started" Colab at: <a href="https://colab.research.google.com/drive/16mdKtiOJnNOemxN0FGB1l_JzvDflOMeW">Reality Check 2 - The Euler–Bernoulli Beam (COLAB)</a>
+
+Some comments:
+
+(*) First there are two parts in Homework #7: (1) a (typed or handwritten) part
+and (2) a colab part.  I initially had written “Please only turn in a colab
+notebook. There are some questions that need to be answer by writing, but
+please do this in colab directly by using “text” mode. Do not turn in any
+handwritten work.” Then I decided that it would be better to have both (1) a
+(typed or handwritten) part and (2) a colab part. But I forgot to remove the
+text.
+ 
+If you want to only turn in a colab notebook where you type the long answers in
+colab, that’s OK. If you prefer to hand write the long answer, do as you
+prefer. So bottom line: it is OK to submit “typed or handwritten” work.
+ 
+The suggestion is: 
+(--) question 1 is handwritten or typed.  
+(--) question 2 is colab.  
+(--) question 3 is a mix of (handwritten or typed ) and (colab).  
+(--) question 4 is handwritten or typed.  
+(--) question 5 is a mix of (handwritten or typed ) and (colab).
+ 
+(*) You might be asking yourself, for question 4, what numerical value for p we
+need to use. Indeed, it is not said what numerical value of p we should  use.
+In question 5, we are tasked to use p=100 kg/m. Please use same value for
+question 4.
+
+(*) In question 4, we need to check that the formula for y(x) is a solution for
+the problem. So given the right hand side made of (1) the weight of the beam
+itself and (2) a sinusoidal pile to the beam, so this is f(x) = -480 w d ( PLUS
+) s(x) (as given in question 4), we want to check that Equation 2.27 
+    E I (d^4 y / dx^4 ) = f(x) + s(x) 
+is satisfied for y(x) as given in question 4. (So we need to differentiate y
+four times and check. This is a Calculus I question.) We also need to check
+that the clamped-free beam condition are satisfied.  
+Namely: y(0) = 0 and ( d y / dx ) ( 0 ) = 0 and ( d^2 y / dx^2 ) ( L ) = 0 
+and ( d^3 y / dx^3 ) ( L ) = 0.
+ 
+Question 4 is about checking that the analytical solution given satisfies our
+problem. There is no programming. Just Calculus.
+ 
+p is anything. It is a parameter. (So it is a constant with respect to x.)
+ 
+Note: you are asked to check that the analytical solution given satisfies our
+problem. You are not asked to prove that this is the unique solution to this
+problem. This is a good question to ask. But it is not asked.
+ 
+(4) For question #1,
+ 
+you should get a plot that looks like this:
+<a href="realitycheck_2_q_2_________sauer3____plot1.pdf">good plot (PDF)</a>
+
+you should not get a plot that looks like this:
+<a href="realitycheck_2_q_2_________sauer3____plot2.pdf">bad plot (PDF)</a>
+
+The red dot (computed solution with n=10) should be exactly (up to machine
+precision) on the red line (exact closed-form solution). The computed solution
+is EXACTLY (up to machine precision) the exact solution. If you get something
+like <a href="realitycheck_2_q_2_________sauer3____plot2.pdf">bad plot (PDF)</a>, this is likely because our
+vector “x" should not start at x=0 but the vector “x” starts at x=h (or
+equivalently at x=L/n).
+ 
+We want n points from 1/n to L by steps of L/n. One way to do it is: x =
+np.linspace( h, L, n) We do not want n points from 0 to L by steps of L/(n-1).
+So if you do something like: x = np.linspace( 0, L, n) this is likely going to
+result in a plot like <a href="realitycheck_2_q_2_________sauer3____plot2.pdf">bad plot (PDF)</a>.  In other
+words, we get the first point (0,0) for “free” and we have to manually add it
+in. The point x=0 is not part of the solution. (It is implicitly there.)
+ 
+As usual, let me know if questions.
+
+
+
+
+
+</pre>
+
+<!--
+<pre>
 The Computer Project #2 is The Euler–Bernoulli Beam. This is page 102-105 of the book. See reality check #2.
 
 You need to do question 1 through 5. DO NOT DO 6, 7 and 8. And you have the Question 6 below:
