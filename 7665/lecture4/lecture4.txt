@@ -1,0 +1,376 @@
+
+===================================================================
+
+regarder lecture01 sur TRSV / TRSM
+
+  time python
+
+===================================================================
+
+'view' is your friend
+
+===> see example in lecture01 for performance and TRSM
+===> see as well something like
+
+    Q[1:n,2:n] = LAPACK.ormqr!('R','N',Q1[2:n,1:n-1],tau,Q[1:n,2:n])
+
+You have to have the "Q[1:n,2:n] = "
+But we would not have this issue were we using views
+
+===================================================================
+
+see: 02_special_matrices_elementary_operations/
+
+A = rand(5,5)
+A2 = Symmetric(A)
+B = rand(5)
+@edit A2 * B
+@code_warntype A2 * B
+C = rand(5)
+@code_warntype mul!(C,A2,B)
+@code_warntype mul!(C,A2,B,true,false)
+@code_warntype LinearAlgebra._mul!(C,A2,B,true,false)
+@code_warntype LinearAlgebra.generic_matvecmul!(C,'S',A,B,true,false)
+
+===================================================================
+
+commentaires sur les normes pour les matrices
+==> opnorm(A,2)
+==> opnorm(A,1)
+==> opnorm(A,Inf)
+
+===================================================================
+
+see: lecture01/main_trsv.jl
+
+au lieu de 
+	x = deepcopy( b ) 
+	x = deepcopy( b ) 
+	x = deepcopy( b ) 
+
+on peut faire 
+        x = Vector{Float64}(undef,n)
+x .= b
+	x .= b
+	x .= b
+
+Par contre
+        x = Vector{Float64}(undef,n)
+	x = b
+	x = b
+	x = b
+ne va pas marcher
+
+===================================================================
+
+https://github.com/JuliaLang/LinearAlgebra.jl/pull/1489
+
+===================================================================
+
+see: 01_julia_programming__global/
+
+if you need to use "global", this is because you are doing a loop in the REPL.
+and need a variable to go in-and-out of the for-loop. To avoid this, you need
+to create function for what you do. This is better coding practice anyway.
+
+==> 01_julia_programming__global
+
+===================================================================
+
+https://github.com/milankl/StochasticRounding.jl
+
+] add StochasticRounding
+# Note: ] opens the package manager
+using StochasticRounding
+A = randn(Float32sr,3,3)
+b = randn(Float32sr,3)
+A\b
+A\b
+A\b
+
+===================================================================
+
+A = randn(Float16,3,3)
+bitstring(Float16(3.140625)) 
+
+===================================================================
+
+setprecision(BigFloat, 512)
+n = 10
+A = rand(BigFloat,n,n)
+
+===================================================================
+
+review homework01
+
+===================================================================
+
+condition number, backward stability and forward stability
+
+solve Ax = b, get y, how good y is?
+
+some philosophical questions here, 
+what does it mean to solve Ax = b ?
+
+Look at || x - y ||
+
+No: look at backward error
+
+explain definition of backward error.
+
+show the picture
+
+-- we solve an exact problem approximately (forward error analysis)
+-- we solve an approximate problem exactly (backward error analysis)
+
+write the definition of backward error
+
+"given a "possible" solution y, we ask ourselves what change in (A,b) are
+needed for y to be a(n exact) solution of Ax =b."
+
+(*) What did we gain? We are still making errors?
+And moreover y is still y, we did not even change the solution
+
+(*) explain why:
+
+(--) we can often compute the backward error of an algorithm, 
+while that sounds a crazy, for some problems (Ax=b, f(x)=0, etc.),
+the backward error is easy to compute once we have an approximate solution
+
+(--) we will show that we can prove that our algorithms are "backward stable". 
+This means that relative perturbaton on A and b is 1e-16.
+
+(--) forward error includes condition number and so any results on forward error is "large" and is therefore
+hard to interpret
+
+(*) so one more time, the strategy is as follows
+(--) we are interested in x - y (forward error)
+(--) we look at backward error (we find a formula based on the definition)
+(--) we prove backward error is small (error analysis)
+(--) we look at condition number (we change gear here and consider the problem and an exact solve)
+(--) we now control forward error by combining backward error and condition number (look at picture)
+
+(*) theory of condition number
+
+condition number is about a problem, stability is about algorithms
+in exact arithmetic, all algorithms are stable (otherwise they are not called "algorithms")
+
+show the same picture again, but explain what we know and what we want to compute with "condition number"
+A,x and b such that Ax=b, we do a small perturbation on the problem (A,b), we
+ask what is the perturbation on output
+
+a condition number is essentially the norm of a derivative
+
+We assume at the first order that the variation in Δx will be linear in the variation in (ΔA,Δb).
+The condition number is the slope.
+If the depedency is not linear (like quadratic), condition number is then infinite.
+
+Give some examples:
+(--) p(x) = 0 with polynomial
+(--) evaluate f(x)
+(--) compute A * x
+(--) solve A x = b
+
+Condition number can be less than 1, for example, the problem of evaluation f(x)=1 is very well conditioned!
+However in linear algebra Condition number will be larger than one (in general?)
+
+condition number of a problem, "solve Ax=b", for a given A and a given b.
+
+Do not confuse with "the condition number of the matrix A"
+κ(A) is the greatest value for all the condition number of "solve Ax=b", for a
+given A and for all right hand sides b
+For any square invertible A, there exists a b such that "solve Ax=b" is κ(A).
+For any square invertible A, there exists a b such that "solve Ax=b" is 1.
+
+We do not care about computing the condition number up to 
+
+(*) Do we allow perturbations on A and b, how does that work? how do we measure?
+In general something like ||Δb|| / ||b|| ≤ ε_b and ||ΔA|| / ||A|| ≤ ε_A
+
+Shall we always assume perturbtion on A or on b? 
+if you want to solve f(x) = 0, you know 0 exactly. No perturbation on b
+If you want to solve A x = b, where A is a discretization using a stencil from finite difference, no perturbation on A
+
+(*) Structured perturbations:
+(--) If A is sparse, we often want to perturb A + E with E the same sparsity pattern as A
+(--) symmetric: If A is symmetric, we really want symmetric pertrubations only!
+(--) real: If A is real, we really want real pertrubations only (as opposed to complex ones)!
+There was a nice paper from Daniel Kressner where he studied perturbation of
+eigenvalues of A+E when A is real and E is real.  In the past, only E complex
+had been studied. Improvement of sqrt(2) if I am being correct.
+(--) Componentwise error analysis, Componentwise condition number: | E | ≤ ε | A | (term by tem)
+
+(*) backward error analysis
+
+(--) same picture again, but explain what we know and what we are trying to compute
+
+(*) two questions:
+(--) nice definition but, given the problem "solve Ax=b", how do we compute a
+backward error given a computed solution 'y'
+(--) how do we prove that an algorithm is backward stable (error analysis)
+
+(*) "solve Ax = b"
+(---) give the backward error fomula
+(---) give a backward error
+and backward stability analyis Ax = b
+
+(*) do the proof for stability of LU
+
+     A + |ΔA| = LU 
+     | ΔA | ≤ ε | L | . | U |
+
+explain what | L | . | U | means and that we have n^2 inequalities here
+and then we need a γ here or an "n" in front of the ε 
+
+(*) look at the backward error, forward error and condition number for a sum: x_i
+
+(*) LAPACK has some routines to estimate condition number, compute backward and forward errors
+
+===================================================================
+
+Cholesky:
+
+(*) André-Louis Cholesky (1875-1918, KIA)
+https://en.wikipedia.org/wiki/André-Louis_Cholesky
+He served in the French military as an artillery officer and was killed in
+battle a few months before the end of World War I. (Killed on 08/31/1918.)
+
+(*) A = C * C^T   (or A = U^T * U )
+convention: always a lower times a upper. (We could have chosen the reverse from the get go.)
+
+(*) What is an SPD matrix? If and only if condition. Hermitian in ℂ. 
+❓ diagonal of a Hermitian matrix?
+
+(*) Use A = C * C^T to solve A x = b
+
+(*) A symmetric matrix will be a "triangle". So input a triangle, output a triangle, goal is to do this in place.
+
+(*) why do we care about SPD matrices? Why symmetric? Why SPD?
+
+(*) derivations of an algorithm
+(---) n(n+1)/2 equations, n(n+1)/2 unknown
+(---) From LU, but then LDLT
+(---) Elementary Gaussian elimination matrices, but then symmetrize, we end up with LDL^T [ see Darve, julia ]
+(---) sum of rank 1 updates (ala LU)
+(---) derivation by block algorithms
+
+(*) why does Cholesky works for SPD matrices?
+❓ when would it break?
+❓ why does it work?
+
+(*) saving of FLOPS by using syr instead of ger, syrk instead of gerk
+(*) cost: 1/3*n^3
+
+❓ why is Cholesky faster than LU 
+  [ Hint: three reasons ]
+
+(*) implementations and derivation of variants
+    left looking
+    right looking
+    recursive (📝, that's your homework!)
+    bordered
+
+❓ what is the problèm in Julia with the 
+      A33 .= A33 - A32 * A32'
+[ This is called a SYRK ]
+
+[ Note: how the SQRT is now a CHOL ]
+
+[ Note: same variants for LU, QR ]
+
+[ Note: to move to level 3 BLAS, we have to move by block. ]
+[ Note: We can level 0, 1, and 2 by moving one column at a time but not level 3 ]
+
+(*) stability
+
+❓ which variant is better?
+  ● bordered?
+  ● left?
+  ● right?
+  ● recursive?
+
+⚙️  LAPACK ⚙️  potrf
+⚙️  JULIA  ⚙️  cholesky(Symmetric(A,:L))
+
+===================================================================
+
+🧐 random topic
+
+  ● in right looking say, what is the NB that reduces the amount of I/O?
+  ● tiled algorithms and out-of-order scheduling with runtimes
+
+===================================================================
+
+(*) what about if A is symmetric indefinite?
+
+(---) Cholesky does not work
+
+(---) we would like to keep the cost at 1/3*n^3 by exploiting (and preserving) symmetry
+
+(---) PAPᵀ = LDLᵀ , look for 1x1 pivot or 2x2 pivot, so L had either 1x1 or symmetric 2x2 diagonal block
+	(---) Bunch Kaufman - partial pivoting
+	(---) Bunch and Parlett - complete pivoting strategy
+
+🧐 beautiful theory on how to choose the pivot between a 1x1 or a 2x2 block
+
+(---) Aasen PAPᵀ = LTLᵀ, where T is symmetric tridiagonal
+
+⚙️  LAPACK ⚙️  dsytrf      --> Bunch Kaufman - partial pivoting
+⚙️  LAPACK ⚙️  dsytrf_rook --> Rook pivoting for LDLT
+⚙️  LAPACK ⚙️  dsytrf_aa.f --> Aasen
+
+🧐 for sparse direct, only MA57 from HSL Mathematical Software Library
+
+📑 Yuehua Feng, Jianwei Xiao, and Ming Gu
+Randomized Complete Pivoting for Solving Symmetric Indefinite Linear Systems
+SIAM Journal on Matrix Analysis and Applications, Vol. 39, Iss. 4 (2018)
+https://doi.org/10.1137/17M1150013
+
+📑 C. Ashcraft, R. Grimes, and J. Lewis, Accurate symmetric indefinite linear equation solvers, SIAM J. Matrix Analysis and Applications, 20 (1998), pp. 513–561.
+
+===================================================================
+
+Pivoted Cholesky for semi-definite matrices
+
+⚙️  LAPACK ⚙️  pstrf.f    --> pivoted Cholesky
+⚙️  JULIA  ⚙️  cholesky(A, RowMaximum(); tol = 0.0, check = true)
+
+👉 low rank factorization
+
+👉 randomized version for pivot selection
+
+📑 
+Ethan N. Epperly, Joel A. Tropp, and Robert J. Webber
+Embrace Rejection: Kernel Matrix Approximation by Accelerated Randomly Pivoted Cholesky
+SIAM Journal on Matrix Analysis and Applications, Vol. 46, Iss. 4 (2025)
+https://doi.org/10.1137/24M1699048
+
+===================================================================
+❓ why is Cholesky faster than LU
+
+  👉 1/3 n^3 vs 2/3 n^3
+
+  👉 1/2 n^2 vs n^2, this means less data movement
+
+💡 a paper proved that actually there can be 2*sqrt(2) less I/O for Cholesky than LU!
+
+📑 Olivier Beaumont, Lionel Eyraud-Dubois, Julien Langou, and Mathieu Vérité. 2022. I/O-Optimal Algorithms for Symmetric Linear Algebra Kernels. In Proceedings of the 34th ACM Symposium on Parallelism in Algorithms and Architectures (SPAA '22). Association for Computing Machinery, New York, NY, USA, 423–433. https://doi.org/10.1145/3490148.3538587
+
+  👉 no pivoting: (1) save on pivoting per se but also (2) enable tile algorithm etc.
+  you do not need to look for the pivot, which means you do not need to compute all
+  the entries before looking for one
+
+===================================================================
+❓ which variant is better?
+
+  ● bordered? 👉 to know whether A is SPD or not
+
+  ● left? 👉 the least amount of write which is good for out of core computation
+
+  ● right? 👉 highly parallelizable, we can prove that with a parallel BLAS, critical path
+    good for multicore computing using multi-threaded BLAS
+
+  ● recursive? 👉 cache oblivious
+
+===================================================================
+

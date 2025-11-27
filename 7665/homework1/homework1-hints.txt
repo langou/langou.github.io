@@ -1,0 +1,39 @@
+
+(*) Question 1 and most of the others:
+To compute backward and forward errors, you can use something like:
+  @printf("forward error  = %6.2e\n",norm(x̂ - x,1)/(norm(x̂,1)))
+  @printf("backward error = %6.2e",norm(b - A*x,1)/(opnorm(A,1)*norm(x,1)))
+I let you guess what A, b, x, and x̂ are.
+
+(*) Question 1 and 2: 
+The number of operations for LU is about 2/3*n^3. 
+The number of operations for Cholesky is about 1/3*n^3. 
+So, for example, to compute the GFlops/sec of LU, you can do:
+  perf = 2.0/3.0*n*n*n/t*1e-9
+  @printf("n = %5d, time = %8.4f (sec), perf = %6.2f (GFlops/sec)\n",n,t,perf)
+
+(*) Question 4: 
+To create a “random” matrix of a given condition number, you can do something like:
+
+  n = 500
+  log10KA = 12
+
+  U = qr( randn(rng,Float64,n,n)  ).Q;
+  V = qr( randn(rng,Float64,n,n)  ).Q;
+  S = Diagonal(10. .^ (LinRange(0, -log10KA, n)))
+  A = U * S * V';
+
+That way, A is 500x500 and its condition number is 1e12. You can check by doing
+  @printf("condition number of A = %6.2e\n",cond(A))
+
+You can change n and log10KA to get any size and any condition number you want. 
+
+The code might be a tat cryptic as is for you right now but we’ll work on SVD algorithms soon so it will have no secret to you soon.
+
+(*) Question 5 and 6: 
+Please note that LU without pivoting is accessible from Julia with
+  lu!(A, NoPivot())
+
+And that Darve gives some code for LU, in particular the one with Rook pivoting is at:
+https://github.com/EricDarve/numerical_linear_algebra/blob/master/src/getrf.jl#L83
+

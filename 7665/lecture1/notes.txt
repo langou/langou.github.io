@@ -1,0 +1,74 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TRSV / TRSM
+
+	o start with TRSV
+
+	o L x = b
+
+	o derivation of the algorithm, this is called a forward substitution
+
+	o we do it in-place because we can
+
+	o cost is O(n^2)
+		- so if n is x2, computation is x4
+		- we look in general at GFLOPS/sec
+
+	o be careful that a random triangular system of equation is very ill-conditioned
+		- either have a "heavy" diagonal 
+		- or use exact arithmetic (-2,-1,0,1,2 with 1 on diagonal and integer b)
+
+	o we want to solve L x = b
+		- we do not want to do x = inv( L ) * b
+		- we want to do x = L \ b
+		- explain backslash
+
+	o use BLAS or Julia "UnitLowerTriangular()"
+		- explain the parameter for TRSV
+
+	o move on to TRSM
+		- TRSV is one RHS, TRSM is several RHS
+		- TRSM does either (left) B ← A \ B or (right) B ← B / A
+		- explain the parameters for TRSM
+
+	o show parallelim and speed up using 
+		BLAS.set_num_threads(8)
+
+	o recursive code for TRSM in julia
+
+	o comparison with python
+		- discuss various variants using vectorization
+		- note that numpy does not have a triangular solve (scipy has one)
+		- maybe add a comparison with C
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LU w/o pivoting
+
+(*) why LU?
+	o A x = b
+
+(*) not so good reasons in general, but sometimes good reasons
+	o inv( A )
+	o det( A )
+
+(*) different ways to derive LU
+	o n^2 equations for n^2 unknown
+	o elementary Gaussian elimination matrices
+		- an idea that is pervasive in linear algebra: multiplying on the left or the right to introduce zeros
+		- nice math
+	o "block" algorithm, start with 2x2 and derive
+	o rank-1 update
+		- review different form of matrix-matrix multiplication
+
+(*) When does LU w/o pivoting works?
+
+(*) When does an LU factorization (w/o pivoting) for a matrix exists? (even if some minor are zeros?)
+
+(*) stability of A = LU w/o pivoting
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LU with pivoting
+

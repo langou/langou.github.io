@@ -1,0 +1,240 @@
+
+===================================================================
+
+regarder lecture01 sur TRSV / TRSM
+
+  time python
+
+===================================================================
+
+'view' is your friend
+
+===> see example in lecture01 for performance and TRSM
+===> see as well something like
+
+    Q[1:n,2:n] = LAPACK.ormqr!('R','N',Q1[2:n,1:n-1],tau,Q[1:n,2:n])
+
+You have to have the "Q[1:n,2:n] = "
+But we would not have this issue were we using views
+
+===================================================================
+
+see: 02_special_matrices_elementary_operations/
+
+A = rand(5,5)
+A2 = Symmetric(A)
+B = rand(5)
+@edit A2 * B
+@code_warntype A2 * B
+C = rand(5)
+@code_warntype mul!(C,A2,B)
+@code_warntype mul!(C,A2,B,true,false)
+@code_warntype LinearAlgebra._mul!(C,A2,B,true,false)
+@code_warntype LinearAlgebra.generic_matvecmul!(C,'S',A,B,true,false)
+
+===================================================================
+
+commentaires sur les normes pour les matrices
+==> opnorm(A,2)
+==> opnorm(A,1)
+==> opnorm(A,Inf)
+
+===================================================================
+
+see: lecture01/main_trsv.jl
+
+au lieu de 
+	x = deepcopy( b ) 
+	x = deepcopy( b ) 
+	x = deepcopy( b ) 
+
+on peut faire 
+        x = Vector{Float64}(undef,n)
+x .= b
+	x .= b
+	x .= b
+
+Par contre
+        x = Vector{Float64}(undef,n)
+	x = b
+	x = b
+	x = b
+ne va pas marcher
+
+===================================================================
+
+https://github.com/JuliaLang/LinearAlgebra.jl/pull/1489
+
+===================================================================
+
+see: 01_julia_programming__global/
+
+if you need to use "global", this is because you are doing a loop in the REPL.
+and need a variable to go in-and-out of the for-loop. To avoid this, you need
+to create function for what you do. This is better coding practice anyway.
+
+==> 01_julia_programming__global
+
+===================================================================
+
+https://github.com/milankl/StochasticRounding.jl
+
+] add StochasticRounding
+# Note: ] opens the package manager
+using StochasticRounding
+A = randn(Float32sr,3,3)
+b = randn(Float32sr,3)
+A\b
+A\b
+A\b
+
+===================================================================
+
+A = randn(Float16,3,3)
+bitstring(Float16(3.140625)) 
+
+===================================================================
+
+setprecision(BigFloat, 512)
+n = 10
+A = rand(BigFloat,n,n)
+
+===================================================================
+
+review homework01
+
+===================================================================
+
+condition number, backward stability and forward stability
+
+solve Ax = b, get y, how good y is?
+
+some philosophical questions here, 
+what does it mean to solve Ax = b ?
+
+Look at || x - y ||
+
+No: look at backward error
+
+explain definition of backward error.
+
+show the picture
+
+-- we solve an exact problem approximately (forward error analysis)
+-- we solve an approximate problem exactly (backward error analysis)
+
+write the definition of backward error
+
+"given a "possible" solution y, we ask ourselves what change in (A,b) are
+needed for y to be a(n exact) solution of Ax =b."
+
+(*) What did we gain? We are still making errors?
+And moreover y is still y, we did not even change the solution
+
+(*) explain why:
+
+(--) we can often compute the backward error of an algorithm, 
+while that sounds a crazy, for some problems (Ax=b, f(x)=0, etc.),
+the backward error is easy to compute once we have an approximate solution
+
+(--) we will show that we can prove that our algorithms are "backward stable". 
+This means that relative perturbaton on A and b is 1e-16.
+
+(--) forward error includes condition number and so any results on forward error is "large" and is therefore
+hard to interpret
+
+(*) so one more time, the strategy is as follows
+(--) we are interested in x - y (forward error)
+(--) we look at backward error (we find a formula based on the definition)
+(--) we prove backward error is small (error analysis)
+(--) we look at condition number (we change gear here and consider the problem and an exact solve)
+(--) we now control forward error by combining backward error and condition number (look at picture)
+
+(*) theory of condition number
+
+condition number is about a problem, stability is about algorithms
+in exact arithmetic, all algorithms are stable (otherwise they are not called "algorithms")
+
+show the same picture again, but explain what we know and what we want to compute with "condition number"
+A,x and b such that Ax=b, we do a small perturbation on the problem (A,b), we
+ask what is the perturbation on output
+
+a condition number is essentially the norm of a derivative
+
+We assume at the first order that the variation in Δx will be linear in the variation in (ΔA,Δb).
+The condition number is the slope.
+If the depedency is not linear (like quadratic), condition number is then infinite.
+
+Give some examples:
+(--) p(x) = 0 with polynomial
+(--) evaluate f(x)
+(--) compute A * x
+(--) solve A x = b
+
+Condition number can be less than 1, for example, the problem of evaluation f(x)=1 is very well conditioned!
+However in linear algebra Condition number will be larger than one (in general?)
+
+condition number of a problem, "solve Ax=b", for a given A and a given b.
+
+Do not confuse with "the condition number of the matrix A"
+κ(A) is the greatest value for all the condition number of "solve Ax=b", for a
+given A and for all right hand sides b
+For any square invertible A, there exists a b such that "solve Ax=b" is κ(A).
+For any square invertible A, there exists a b such that "solve Ax=b" is 1.
+
+We do not care about computing the condition number up to 
+
+(*) Do we allow perturbations on A and b, how does that work? how do we measure?
+In general something like ||Δb|| / ||b|| ≤ ε_b and ||ΔA|| / ||A|| ≤ ε_A
+
+Shall we always assume perturbtion on A or on b? 
+if you want to solve f(x) = 0, you know 0 exactly. No perturbation on b
+If you want to solve A x = b, where A is a discretization using a stencil from finite difference, no perturbation on A
+
+(*) Structured perturbations:
+(--) If A is sparse, we often want to perturb A + E with E the same sparsity pattern as A
+(--) symmetric: If A is symmetric, we really want symmetric pertrubations only!
+(--) real: If A is real, we really want real pertrubations only (as opposed to complex ones)!
+There was a nice paper from Daniel Kressner where he studied perturbation of
+eigenvalues of A+E when A is real and E is real.  In the past, only E complex
+had been studied. Improvement of sqrt(2) if I am being correct.
+(--) Componentwise error analysis, Componentwise condition number: | E | ≤ ε | A | (term by tem)
+
+(*) backward error analysis
+
+(--) same picture again, but explain what we know and what we are trying to compute
+
+(*) two questions:
+(--) nice definition but, given the problem "solve Ax=b", how do we compute a
+backward error given a computed solution 'y'
+(--) how do we prove that an algorithm is backward stable (error analysis)
+
+(*) "solve Ax = b"
+(---) give the backward error fomula
+(---) give a backward error
+and backward stability analyis Ax = b
+
+(*) do the proof for stability of LU
+
+     A + |ΔA| = LU 
+     | ΔA | ≤ ε | L | . | U |
+
+explain what | L | . | U | means and that we have n^2 inequalities here
+and then we need a γ here or an "n" in front of the ε 
+
+(*) look at the backward error, forward error and condition number for a sum: x_i
+
+(*) LAPACK has some routines to estimate condition number, compute backward and forward errors
+
+⚙️  JULIA  ⚙️  cond, condskeel
+⚙️  LAPACK ⚙️  gbcon, gecon, gtcon, pbcon, pocon, ppcon, ptcon, spcon, sycon, tbcon, tpcon, trcon
+⚙️  LAPACK ⚙️  lacn2 [ reverse communication ]
+
+🤨 Julia does not "condest", a condition number estimator.
+
+📑 N.J. Higham, "FORTRAN codes for estimating the one-norm of a real or complex
+matrix, with applications to condition estimation", ACM Trans. Math. Soft.,
+vol. 14, no. 4, pp. 381-396, December 1988.
+
+⚙️  LAPACK ⚙️  gesvx, gesvxx, sysvx, sysvxx, posvx, posvxx [ and a few others ]
+

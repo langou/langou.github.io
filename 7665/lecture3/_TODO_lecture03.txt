@@ -1,0 +1,38 @@
+(*) montrer le plot dans le Trefethen and Bau avec les perturbations sur le Wilkinson polynomial
+et la sensitivity de chaque roots avec des cercles
+Donc on perturbe x^14 par exemple. On fait la sensitivity de chaque roots.
+On compare avec des pertrubations.
+
+(*) refaire le plot de Higham avec la stabilité de rook vs complete, etc.
+
+(*) check that 
+      A33 .= A33 - A32 * A32'
+touche la partie superieure de la matrice A, et sinon pourqoi?
+  function cholesky_lower_rightlooking_level3!(A)
+  function cholesky_lower_recursive!(A)
+
+(*) ajouter du BLAS dans mon algoritme BLOCK
+
+(*) probably should have been doing all this in Complex from the start!!!!
+
+(*) why does 
+      rdiv!(A21, Transpose(LowerTriangular(A11)))
+does not work????
+Why do I need to do
+      rdiv!(A21, LowerTriangular(A11)')
+
+(*) but where is my C?????
+
+BLAS.gemm
+  gemm(tA, tB, alpha, A, B)
+
+  Return alpha*A*B or the other three variants according to tA and tB.
+
+mult!() is OK and nicely done
+
+(*) genericlinearalgebra, why do I just need to put Hermitian? Why not Symmetric???
+#       GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)
+
+
+
+

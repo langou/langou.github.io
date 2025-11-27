@@ -1,0 +1,112 @@
+
+~~~~ TRSV / TRSM ~~~~~
+
+(*) follow Darve for the variants of TRSV: ij or ji, explain which is best
+given layout of A
+
+(*) explain forward error and backward error
+
+(*) we want A to be nonsingular, so we can random matrix
+
+📑 Alan Edelman
+Eigenvalues and Condition Numbers of Random Matrices
+SIAM Journal on Matrix Analysis and Applications
+Volume 9 • Issue 4 • October 1988
+Pages: 543 - 560
+DOI: 10.1137/0609045
+https://doi.org/10.1137/0609045
+
+📑 article with Jeffrey and Jack
+
+But be careful because a (random) triangular matrix is very ill conditioned
+This is why we need to "pump" the diagonal
+
+🧐 🔎 What is the condition number of a random triangular matrix?
+[ Darve and Wooters, p.118] It can be shown that lim m → ∞ ( Km )^(1/m) = C is a constant , where Km is the 2 - norm condition number of L. 
+
+(*) différence dans la stabilité si b 
+
+(---) A = zeros(Float64,n,n)
+      for j=1:n
+        A[j,j] = 1
+        A[j+1:n,j] = rand(rng, -2:2, n-j) 
+      end
+      x̂ = rand(rng, 0:9, (n,k)) 
+      b = A * x̂
+      ---> exact computation
+
+(---) b = randn(n,k)
+
+(---) b = rand(n,k)
+
+(---) xe = randn(n,k)
+      b = L * xe
+      ---> b will be in the numerical range of L
+
+(*) explain \
+    we do not compute x = A⁻¹ * b, we compute x = A \ b
+    explain / and \, ( A \ B ) vs ( A / B )
+
+(*) TRSV (one right-hand side), TRSM (multiple right-hand sides)
+
+(*) TRSM three loops, so six variants.
+    explain vectorization of these variants for performance
+
+(*) explain direct call to BLAS (calling sequence)
+
+    there a 2^4 = 16 implementations of TRSM in BLAS
+    all 16 are useful, believe me!
+
+(*) demo between 
+	A \ b
+	LowerTriangular(A) \ b
+	BLAS.trsm()
+    and our implementations
+
+ https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#Special-matrices
+ https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#Elementary-operations
+
+(*) BLAS.set_num_threads(8)
+
+    explain BLAS is optimized, + parallel so idea is to write algorithms 
+    in term of big fat (square) BLAS call
+
+(*) check that time grows as n^2, n^3, etc.
+
+(*) show the recursive TRSM in julia
+
+Note that TRSM does not add any FLOPS, the number of FLOPS is the same
+
+(---) why is recursive faster?
+(---) one interest is that we can use Strassen too for example in the MM
+
+(---) rationale for our algorithm: write them in Level 3 BLAS
+	(---) with large subblocks
+	(---) as square as possible 
+
+(---) paradigm behing LAPACK: write your algorithm in term of block algorithm
+with BLAS call, only optimize BLAS for architecture, you will get "poortable"
+performance out of the LAPACK algorithm 
+
+(---) note that TRSM is in the BLAS, so it is kind of weird to write TRSM as a BLAS
+
+(---) three levels for BLAS: Level-1, Level-2 and Level-3
+
+(*) show trsm.py, this is an example of vectorization
+It also shows why vectorization is SO important in python
+(---) def forward__substitution__scalar( A, b ):
+(---) def forward__substitution__vector( A, b ):
+(---) def forward__substitution__matrix(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+
+(*) mention that we will do stability analysis of TRSM later
+
+    result: backward stable
+	T ( x + δx ) = b
+    with |δx| ≤ ε |x|
+
+🧐 check whether this is componentwise or normwise
+and then we need a γ here or an "n" in front of the ε 
+
+
+
+

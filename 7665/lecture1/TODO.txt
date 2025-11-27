@@ -1,0 +1,15 @@
+
+== C ==
+
+I need to write some checks here, maybe I should call BLAS?
+
+== PYTHON ==
+
+It would be nice to compare with scipy, scipy has access to a triangular solve
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.solve_triangular.html
+
+== JULIA ==
+
+It would be nice to vectorize as well the julia code. (Similar to what was done
+in Python.) And then check the performance
+

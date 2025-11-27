@@ -1,0 +1,162 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Higham “What is” articles
+https://nhigham.com/index-of-what-is-articles/
+https://nhigham.com/2022/04/28/what-is-a-permutation-matrix/
+https://nhigham.com/2020/07/14/what-is-the-growth-factor-for-gaussian-elimination/
+https://nhigham.com/2020/08/04/what-is-numerical-stability/
+https://nhigham.com/2020/03/25/what-is-backward-error/
+https://nhigham.com/2020/07/21/what-is-a-symmetric-positive-definite-matrix/
+https://nhigham.com/2020/08/11/what-is-a-cholesky-factorization/
+https://nhigham.com/2020/09/15/what-is-a-householder-matrix/
+https://nhigham.com/2020/11/10/what-is-a-qr-factorization/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ ● For Homework #1: Cholesky: do not forget to start with a SPD matrix!
+ ● Also, I could share the lapack codes if desired.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Julia and HPC
+
+Frontier (AMD), #2 in Top 500 2025, Oak Ridge National Lab
+Aurora (Intel), #3 in Top 500 2025, Argonne National Lab
+
+The main reason is that a code (for example) Krylov.jl is polymorphic, that is
+to say, the same implementation can be efficient for many different types.
+
+Support for many different precisions (Float16, Float32, Float64, Float128). 
+
+But also support for several architectures (CPU / GPU) thanks to array typing
+(Vector{Float64}, CuVector{Float64}, ROCVector{Float64}).
+
+In addition, we can easily support GPUs in Julia thanks to JIT (just-in-time)
+compilation to LLVM, which is quite similar between the CPU and GPU.
+
+On AMD, there is the AMDGPU.jl interface and we just added methods for
+ROCArrays for LinearAlgebra.dot, LinearAlgebra.axpy, etc., which call ROCBLAS.
+
+Thanks to the multiple dispatch, Krylov.jl was then able to function smoothly
+on AMD GPUs.
+
+For Intel, it was a bit more complicated because oneMKL didn't have a C
+interface, so we couldn't call Intel's routines. We therefore created our own
+GPU kernels using KernelAbstractions.jl and then added the LinearAlgebra
+methods (which call our custom kernels) that we needed for the oneArray.
+
+In both cases, with the right GPU support and multiple dispatch, we were able
+to solve linear systems on the Frontier and Aurora supercomputers.
+
+Almost no work compared to a basic reimplementation of all Krylov methods in
+C++ with Intel kernels (Intel GPUs) or ROCBLAS calls (AMD GPUs).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+orthogonal in ℝ
+unitary in ℂ
+
+‼️  In LAPACK, ZUNGQR and DORGQR
+‼️  Akin to BLAS, ZHEMM and DSYMM
+
+orthonormal columns
+orthogonal columns
+QQᴴ is not QᴴQ
+
+
+QR factorization
+
+(---) Definition (3 things)
+
+(---) two types: thin and full
+
+(---) two cases: m ≥ n and m ≤ n
+
+🧮 main_geqrf_01.jl
+
+(---) Methods
+	(---) Gram Schmidt ❯❯❯❯ 🛠️ orthogonal projections
+	(---) Cholesky QR  ❯❯❯❯ 🛠️ normal equations
+	(---) Householder  ❯❯❯❯ 🛠️ Householder elementary reflection (unitary transformation)
+	(---) Givens       ❯❯❯❯ 🛠️ Givens rotation (unitary transformation)
+
+🧩 https://en.wikipedia.org/wiki/Jørgen_Pedersen_Gram
+🧩 https://en.wikipedia.org/wiki/Erhard_Schmidt
+🧩 https://en.wikipedia.org/wiki/Alston_Scott_Householder
+🧩 https://en.wikipedia.org/wiki/Wallace_Givens
+
+(---) Existence and Uniqueness
+
+   Existence by construction with the Gram Schmidt algorithm
+  ❓ to understand uniqueness, how can it not be unique?
+
+we will say "essentially unique"
+
+(---) Application for a Linear Least Squares
+ 👉 with the thin, with the full
+ ❓ would another norm be better? why 2-norm?
+
+🧮 homework02_01.jl
+
+ ❓ why: Q = Matrix(Q)
+
+ 🔜 what is the condition number of min \| A x - b \|_2 ?
+ 🔜 stability of algorithm?
+
+(---) Application for finding minimum norm solution
+
+🧮 homework02_02.jl
+
+random thoughts:
+(---) some variants: QR, LQ, QL and RQ
+
+⚙️  LAPACK ⚙️  geqrf
+⚙️  LAPACK ⚙️  orgqr
+⚙️  LAPACK ⚙️  ormqr
+
+⚙️  LAPACK ⚙️  gels
+
+⚙️  LAPACK ⚙️  larfg
+⚙️  LAPACK ⚙️  larf
+⚙️  LAPACK ⚙️  larft
+⚙️  LAPACK ⚙️  larfb
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   ( I - v * τ * v' ) * x
+     = x - v * τ * v' * x
+
+( parenthesis matter )
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ❓ lots of possible choices for the vector v and τ
+
+     👉 having ones on the diagonal of V makes sense since we have specialized kernels for handling triangular matrices
+
+     👉 it seems to be mainly historical or arbritrary reasons
+
+     📑 R.B. Lehoucq. The computation of elementary unitary matrices. ACM Trans. Math. Software, 22 (4) (1996), pp. 393-400
+        ● LINPACK
+        ● EISPACK
+        ● NAG
+        ● LAPACK
+
+     🔎 in ℂ, can we recompute τ from v? We can do it in ℝ.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Blocking with WY 
+
+
+
+QR with pivoting, low rank factorization
+randomized algorithm
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

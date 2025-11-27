@@ -1,0 +1,192 @@
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+julia  :: https://play.google.com/books/reader?id=lt9BEAAAQBAJ&pg=GBS.PR2
+python :: https://ericdarve.github.io/NLA/content/intro.html
+
+julia  :: https://github.com/EricDarve/numerical_linear_algebra
+python :: https://github.com/EricDarve/NLA/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  in homework1 what is missing is some kind of performance stuff
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  take that for the triangular matrix with -2, -1, 0, 1, 2 and do a small
+  perturbation to show how specific the problem is
+
+  also note that the fact that we start with b = Ax is not obvious
+  starting with a random b would change the solution
+  also whether we look at || A x - b || / || b || or || A x - b || / || A || / || x ||
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  what is LU?
+    * it is a factorization. (Like 35 = 7*5.)
+
+  why LU? 
+    Ax = b → LU x = b → x = U \ ( L \ b ) % do not forget parenthesis!
+    Ax = b → PAx = Pb → LU x = Pb → x = U \ ( L \ ( Pb ) ) % do not forget parenthesis!
+    Ax = b → PAQQᵀx = Pb → LU Qᵀx = Pb → x = Q( U \ ( L \ ( Pb ) ) ) % do not forget parenthesis!
+
+🧐 complete pivoting is not that easy in the end, the issue is that we do not want to create Q
+We can create P and Q with
+    P = Matrix(I, n, n); P = P[P_row,:]; 
+    Q = Matrix(I, n, n); Q = Q[:,P_col];
+While we can do Px with
+    x1 = x1[P_row,:]
+to do Qx we need to do
+    x1 = x1[invperm(P_col),:]
+
+  three ways to derive LU:
+  (*) n^2 equations, n^2 unknown
+  (*) elementary Gaussian elimination matrices
+  (*) "block algorithms"
+
+  fourth way
+  (*) same of rank-1 matrix
+
+  review variants of matrix-matrix multiplication
+  we can swap the three loops as we want, this gives
+     inner product variants         :: ijk or jik
+     matrix vector product variants :: jik or jki
+     row matrix product variants    :: ijk or jik
+     outer product variants         :: kij or kji
+
+  we can also review the variants for GEMV: either by column of by inner product (row variant)
+
+  explain that outer product is AB^T = a_1 b^1^T + a_2 b^2^T + a_3 b^3^T + ....
+  and so we will find it again with Q Qᵀ or U Σ Vᵀ or V D Vᵀ 
+
+  Darve - python ( https://ericdarve.github.io/NLA/content/lu_decomposition.html#deriving-the-algorithm-via-outer-products )
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  implementations
+
+  (--) not sure how much I want to 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*) cost: 2/3*n^3
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Darve - python ( https://ericdarve.github.io/NLA/content/existence_lu.html )
+
+  ❓ When does the LU factorization as we have now complete without failure? 
+  ❓ More general question: When is an LU factorization possible? 
+     [ hint: if A = 0, then 0 = I * 0 is an LU factorization ]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  pivoting strategies (part 1 / 2)
+
+  (--) motivation
+
+  (--) no pivoting, partial, rook, complete
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  stability of LU
+
+     A + |ΔA| = LU 
+     | ΔA | ≤ ε | L | . | U |
+
+  ❓ is it good?
+  ❓ did we assume pivoting? If yes which?
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  pivoting strategies (part 2 / 2)
+
+  ❓ what does partial pivoting guarantee?
+  ❓ what does rook pivoting guarantee?
+  ❓ what does complete pivoting guarantee?
+
+  (--) bound on pivot growth for these three strategies
+
+  more strategies
+  (--) parallel pivoting, incremental pivoting
+  (--) threshold pivoting
+  (--) +ε to small pivots
+  (--) random butterfly to avoid pivoting
+ 
+  ❓ why is partial pivoting so much better than complete from an efficient implementation point of view?
+  [ hint: this not because O(n^2) comparison vs O(n^3) ]
+
+  tradeoff in sparse direct methods between sparsity of the L and U factors and good pivots
+
+  storage of the pivot
+  (--) we want to store a vector, not a permutation matrix
+  (--) sometimes permutation matrix is easier to manipulate (for example manipulating P and Pᵀ, how would we do?)
+  (--) difference with LAPACK permutation vector and the julia/matlab one
+
+  ❓ cons and pros of the LAPACK permutation vector vs the julia/matlab one?
+     👉 the LAPACK permutation vector is easy to invert, this is useful for complete pivoting
+     🧐 check the claim above and write a code
+     👉 mainly historical reasons
+     🧐 Permutations: is it easier to get signature with the Lapack representation? Or with the Matlab one? Or same? 
+     🧐 Create some routines to go from one representation to the other?
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+random comments:
+  (---) LU works for rectanglar matrices
+  (---) LU can be useful to compute det(A)
+  (---) LU can be useful to compute inv(A)
+  (---) LU does not permute for diagonally dominant matrix (so can use LU with no pivoting)
+        [ does not permute for SPD matrices either ]
+  ❓ in average how many steps do you think is needed for rook pivoting to find a local maximum?
+
+  (---) low rank factorization for low rank matrix with LU and complete pivoting
+        we will see this with QR, Cholesky, and there will be some ideas about randomized method to find pivot
+
+  (---) Exercise 3.15 (Darve and Wooters) - Can you write a Julia code which implements the rook
+  pivoting strategy with only O(r^2n) floating-point operations, assuming the
+  while loop runs for O(1) iterations? (Instead of O(rn^2) for complete pivoting.)
+  🧐 is there a similar strategy/result for QR?
+
+random comments:
+  ⚙️  partial pivoting is GETRF in LAPACK
+  ⚙️  complete pivoting is GESC2 in LAPACK
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*) open question
+
+  🔎 given an n-by-n matrix A with random entries (pick your favorite distribution), what is E( ρ(A) )?
+
+We know worst-case for partial pivoting but we also know that it works "not too bad".
+
+📑 L. N. Trefethen and R. S. Schreiber, Average-case stability of Gaussian elimination, SIAM J. Matrix Anal. Appl., 11 (1990), pp. 335–360, https://doi.org/10.1137/0611023.
+
+📑 Bisain, A., Edelman, A. and Urschel, J. (2025), A new upper bound for the growth factor in Gaussian elimination with complete pivoting. Bull. London Math. Soc., 57: 1369-1387. https://doi.org/10.1112/blms.70034
+
+We produce an upper bound of n^(0.2079 * ln(n) + 0.91) for the growth factor in
+Gaussian elimination with complete pivoting — the first improvement upon
+Wilkinson's original 1961 bound of n^(-0.25 * ln(n) + 0.5).
+
+📑 Huang, H., Tikhomirov, K. Average-case analysis of the Gaussian elimination with partial pivoting. Probab. Theory Relat. Fields 189, 501–567 (2024). https://doi.org/10.1007/s00440-024-01276-2
+
+Given the random n×n standard Gaussian coefficient matrix A, the growth factor
+of the Gaussian elimination with partial pivoting is at most polynomially large
+in n with probability close to one.
+
+  🔎 randomized method for pivot selection
+
+Christopher Melgaard, Ming Gu
+Gaussian Elimination with Randomized Complete Pivoting
+arXiv:1511.08528
+
+📑 FIND REFERNECE FOR PARTIAL
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
