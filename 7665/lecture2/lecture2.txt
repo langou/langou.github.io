@@ -50,7 +50,7 @@ to do Qx we need to do
   (*) "block algorithms"
 
   fourth way
-  (*) same of rank-1 matrix
+  (*) sum of rank-1 matrices
 
   review variants of matrix-matrix multiplication
   we can swap the three loops as we want, this gives
