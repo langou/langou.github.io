@@ -36,8 +36,8 @@
 # cholesky_lower_recursive!(A)
 # cholesky_lower_leftlooking_level0!(A)
 # cholesky_lower_leftlooking_level2!(A)
-# cholesky_lower_leftlooking_level3!(A)
-  cholesky_lower_rightlooking_level3!(A)
+  cholesky_lower_leftlooking_level3!(A)
+# cholesky_lower_rightlooking_level3!(A)
 # cholesky_lower_bordered_level3!(A)
   x .= LowerTriangular(A) \ x
   x .= Transpose(LowerTriangular(A)) \ x

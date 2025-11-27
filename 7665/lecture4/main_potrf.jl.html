@@ -64,8 +64,8 @@ a { color: inherit; }
 <span class="Comment">#</span><span class="Comment"> cholesky_lower_recursive!(A)</span>
 <span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level0!(A)</span>
 <span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level2!(A)</span>
-<span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level3!(A)</span>
-  cholesky_lower_rightlooking_level3!(A)
+  cholesky_lower_leftlooking_level3!(A)
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_rightlooking_level3!(A)</span>
 <span class="Comment">#</span><span class="Comment"> cholesky_lower_bordered_level3!(A)</span>
   x <span class="Statement">.=</span> <span class="Type">LowerTriangular</span>(A) <span class="Statement">\</span> x
   x <span class="Statement">.=</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A)) <span class="Statement">\</span> x

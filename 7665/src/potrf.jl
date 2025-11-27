@@ -28,7 +28,7 @@
 
     n = size(A,1)
 
-    nb = 64
+    nb = 64 
 
     for j=1:nb:n
 
@@ -47,20 +47,21 @@
 
 #     these two steps could be combine in one by adding more views, but that would destroy A22
 
-      A22 .-= A21 * A21'
+#     A22 .-= A21 * A21'
 #     GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)
-#     BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)
+      BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)
 
-      A32 .-= A31 * A21'
+#     A32 .-= A31 * A21'
 #     mul!(A32, A31, Transpose(A21), -1.0e00, 1.0e00)
+      BLAS.gemm!( 'N', 'T', -1.0e+00, A31, A21, 1.0e+00, A32)
 
-      cholesky_lower_leftlooking_level2!(A22)
+#     cholesky_lower_leftlooking_level2!(A22)
 #     cholesky!(Symmetric(A22,:L))
-#     LAPACK.potrf!( 'L', A22 )
+      LAPACK.potrf!( 'L', A22 )
 
-      A32 .= A32 / Transpose(LowerTriangular(A22))
+#     A32 .= A32 / Transpose(LowerTriangular(A22))
 #     rdiv!(A32, LowerTriangular(A22)')
-#     BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A22, A32)
+      BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A22, A32)
 
     end
 

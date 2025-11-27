@@ -73,20 +73,21 @@ a { color: inherit; }
 
 <span class="Comment">#</span><span class="Comment">     these two steps could be combine in one by adding more views, but that would destroy A22</span>
 
-      A22 <span class="Statement">.-=</span> A21 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">     A22 .-= A21 * A21'</span>
 <span class="Comment">#</span><span class="Comment">     GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)</span>
-<span class="Comment">#</span><span class="Comment">     BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)</span>
+      BLAS.syrk!( <span class="Constant">'L'</span>, <span class="Constant">'N'</span>, <span class="Statement">-</span><span class="Constant">1.0e+00</span>, A21, <span class="Constant">1.0e+00</span>, A22)
 
-      A32 <span class="Statement">.-=</span> A31 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">     A32 .-= A31 * A21'</span>
 <span class="Comment">#</span><span class="Comment">     mul!(A32, A31, Transpose(A21), -1.0e00, 1.0e00)</span>
+      BLAS.gemm!( <span class="Constant">'N'</span>, <span class="Constant">'T'</span>, <span class="Statement">-</span><span class="Constant">1.0e+00</span>, A31, A21, <span class="Constant">1.0e+00</span>, A32)
 
-      cholesky_lower_leftlooking_level2!(A22)
+<span class="Comment">#</span><span class="Comment">     cholesky_lower_leftlooking_level2!(A22)</span>
 <span class="Comment">#</span><span class="Comment">     cholesky!(Symmetric(A22,:L))</span>
-<span class="Comment">#</span><span class="Comment">     LAPACK.potrf!( 'L', A22 )</span>
+      LAPACK.potrf!( <span class="Constant">'L'</span>, A22 )
 
-      A32 <span class="Statement">.=</span> A32 <span class="Statement">/</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A22))
+<span class="Comment">#</span><span class="Comment">     A32 .= A32 / Transpose(LowerTriangular(A22))</span>
 <span class="Comment">#</span><span class="Comment">     rdiv!(A32, LowerTriangular(A22)')</span>
-<span class="Comment">#</span><span class="Comment">     BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A22, A32)</span>
+      BLAS.trsm!( <span class="Constant">'R'</span>, <span class="Constant">'L'</span>, <span class="Constant">'T'</span>, <span class="Constant">'N'</span>, <span class="Constant">1.0e+00</span>, A22, A32)
 
     <span class="Statement">end</span>
 
