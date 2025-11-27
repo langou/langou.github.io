@@ -26,44 +26,6 @@ a { color: inherit; }
 <pre id='vimCodeElement'>
   <span class="Statement">using</span> GenericLinearAlgebra
 
-  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_recursive!</span>(A)
-
-    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
-
-    <span class="Statement">if</span> n <span class="Statement">==</span> <span class="Constant">1</span>
-
-        A[<span class="Constant">1</span>,<span class="Constant">1</span>] <span class="Statement">=</span> sqrt(A[<span class="Constant">1</span>,<span class="Constant">1</span>]);
-
-    <span class="Statement">else</span>
-
-        n1 <span class="Statement">=</span> n <span class="Statement">÷</span> <span class="Constant">2</span>
-
-        A11 <span class="Statement">=</span> view(A, <span class="Constant">1</span><span class="Statement">:</span>n1, <span class="Constant">1</span><span class="Statement">:</span>n1)
-        A21 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, <span class="Constant">1</span><span class="Statement">:</span>n1)
-        A22 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n)
-
-        cholesky!(<span class="Type">Symmetric</span>(A11,<span class="Identifier">:L</span>))
-<span class="Comment">#</span><span class="Comment">       LAPACK.potrf!( 'L', A11 )</span>
-<span class="Comment">#</span><span class="Comment">       cholesky_lower_recursive!(A11)</span>
-
-<span class="Comment">#</span><span class="Comment">       # A21 = A21 / LowerTriangular(A11)'  # this is not working because we are using &quot;views&quot;</span>
-        A21 <span class="Statement">.=</span> A21 <span class="Statement">/</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A11))
-<span class="Comment">#</span><span class="Comment">       rdiv!(A21, LowerTriangular(A11)')</span>
-<span class="Comment">#</span><span class="Comment">       BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A11, A21)</span>
-
-<span class="Comment">#</span><span class="Comment">       # A22 = A22 - A21 * A21' # this is not working because we are using &quot;views&quot;</span>
-        A22 <span class="Statement">.=</span> A22 <span class="Statement">-</span> A21 <span class="Statement">*</span> A21<span class="Statement">'</span>
-<span class="Comment">#</span><span class="Comment">       GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)</span>
-<span class="Comment">#</span><span class="Comment">       BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)</span>
-
-        cholesky!(<span class="Type">Symmetric</span>(A22,<span class="Identifier">:L</span>))
-<span class="Comment">#</span><span class="Comment">       LAPACK.potrf!( 'L', A22 )</span>
-<span class="Comment">#</span><span class="Comment">       cholesky_lower_recursive!(A22)</span>
-
-    <span class="Statement">end</span>
-
-  <span class="Statement">end</span>
-
   <span class="Statement">function</span> <span class="Identifier">cholesky_lower_leftlooking_level0!</span>(A)
     n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
     <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
