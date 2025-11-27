@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture1/main_trsm.py.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="python">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; }
+.Comment { color: #0000ff; }
+.Identifier { color: #008b8b; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="PreProc">import</span> time
+<span class="PreProc">import</span> numpy <span class="Statement">as</span> np
+<span class="PreProc">import</span> copy
+
+<span class="Statement">def</span> <span class="Identifier">forward__substitution__scalar</span>( A, b ):
+  n = b.shape[<span class="Constant">0</span>]
+  p = b.shape[<span class="Constant">1</span>]
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n):
+    <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,i):
+      <span class="Statement">for</span> k <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,p):
+        b[i,k] = b[i,k] - A[i,j] * b[j,k]
+    <span class="Statement">for</span> k <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,p):
+      b[i,k] = b[i,k] / A[i,i]
+
+<span class="Statement">def</span> <span class="Identifier">forward__substitution__vector</span>( A, b ):
+  n = b.shape[<span class="Constant">0</span>]
+  k = b.shape[<span class="Constant">1</span>]
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,n):
+    <span class="Statement">for</span> j <span class="Statement">in</span> <span class="Identifier">range</span>(<span class="Constant">0</span>,i):
+      b[i,<span class="Constant">0</span>:k] = b[i,<span class="Constant">0</span>:k] - A[i,j] * b[j,<span class="Constant">0</span>:k]
+    b[i,<span class="Constant">0</span>:k] = b[i,<span class="Constant">0</span>:k] / A[i,i]
+
+<span class="Statement">def</span> <span class="Identifier">forward__substitution__matrix</span>(A: np.ndarray, b: np.ndarray) -&gt; np.ndarray:
+  n = b.shape[<span class="Constant">0</span>]
+  k = b.shape[<span class="Constant">1</span>]
+  <span class="Statement">for</span> i <span class="Statement">in</span> <span class="Identifier">range</span>(n):
+      b[i,<span class="Constant">0</span>:k] = (b[i,<span class="Constant">0</span>:k] - A[i, :i] @ b[:i,<span class="Constant">0</span>:k]) / L[i, i]
+
+<span class="Comment">#############################</span>
+
+n = <span class="Constant">4000</span>
+k = <span class="Constant">200</span>
+
+L = np.tril(np.random.randn(n, n), -<span class="Constant">1</span>)*<span class="Constant">1e-6</span>
+np.fill_diagonal(L, <span class="Constant">1</span>)
+
+b = np.random.randn(n,k)
+
+<span class="Comment">#############################</span>
+
+x = np.copy(b)
+elapsed_time =- time.time()
+forward__substitution__matrix(L, x)
+elapsed_time += time.time()
+
+residual = np.linalg.norm(L @ x - b) / np.linalg.norm(b)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Matrix size: </span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">x</span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>elapsed_time<span class="Special">:.6f}</span><span class="Constant"> seconds</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>n*n*k/elapsed_time*<span class="Constant">1e-9</span><span class="Special">:.3f}</span><span class="Constant"> GFlop/sec</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Residual ||Lx - b||: </span><span class="Special">{</span>residual<span class="Special">:.2e}</span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+
+<span class="Comment">#############################</span>
+
+x = np.copy(b)
+
+elapsed_time =- time.time()
+forward__substitution__vector(L, x)
+elapsed_time += time.time()
+
+residual = np.linalg.norm(L @ x - b)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Matrix size: </span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">x</span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>elapsed_time<span class="Special">:.6f}</span><span class="Constant"> seconds</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>n*n*k/elapsed_time*<span class="Constant">1e-9</span><span class="Special">:.3f}</span><span class="Constant"> GFlop/sec</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Residual ||Lx - b||: </span><span class="Special">{</span>residual<span class="Special">:.2e}</span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+
+<span class="Comment">#############################</span>
+
+x = np.copy(b)
+
+elapsed_time =- time.time()
+forward__substitution__scalar(L, x)
+elapsed_time += time.time()
+
+residual = np.linalg.norm(L @ x - b)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Matrix size: </span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">x</span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>elapsed_time<span class="Special">:.6f}</span><span class="Constant"> seconds</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>n*n*k/elapsed_time*<span class="Constant">1e-9</span><span class="Special">:.3f}</span><span class="Constant"> GFlop/sec</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Residual ||Lx - b||: </span><span class="Special">{</span>residual<span class="Special">:.2e}</span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+
+<span class="Comment">#############################</span>
+
+x = np.copy(b)
+
+elapsed_time =- time.time()
+x = np.linalg.solve(L, b)
+elapsed_time += time.time()
+
+residual = np.linalg.norm(L @ x - b)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Matrix size: </span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">x</span><span class="Special">{</span>n<span class="Special">}</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>elapsed_time<span class="Special">:.6f}</span><span class="Constant"> seconds</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Execution time: </span><span class="Special">{</span>n*n*k/elapsed_time*<span class="Constant">1e-9</span><span class="Special">:.3f}</span><span class="Constant"> GFlop/sec</span><span class="Constant">&quot;</span>)
+<span class="Identifier">print</span>(<span class="Constant">f&quot;</span><span class="Constant">Residual ||Lx - b||: </span><span class="Special">{</span>residual<span class="Special">:.2e}</span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+
+<span class="Comment">#############################</span>
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

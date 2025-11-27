@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture1/main_trsv.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">using</span> Random
+<span class="Statement">using</span> LinearAlgebra
+<span class="Statement">using</span> Printf
+
+rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>(<span class="Constant">2025</span>);
+
+<span class="Comment">#</span><span class="Comment"> Size of the matrix</span>
+n <span class="Statement">=</span> <span class="Constant">9</span>;
+
+<span class="Comment">#</span><span class="Comment"> Lower triangular matrix</span>
+L <span class="Statement">=</span> zeros(<span class="Type">Float64</span>,n,n)
+<span class="Comment">#</span><span class="Comment"> Filling the matrix with random integer entries</span>
+<span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n <span class="Comment">#</span><span class="Comment"> Column j</span>
+    L[j,j] <span class="Statement">=</span> <span class="Constant">1</span> <span class="Comment">#</span><span class="Comment"> Should be non-zero</span>
+    L[j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n,j] <span class="Statement">=</span> rand(rng, <span class="Statement">-</span><span class="Constant">2</span><span class="Statement">:</span><span class="Constant">2</span>, n<span class="Statement">-</span>j)
+    <span class="Comment">#</span><span class="Comment">L[j+1:n,j] = rand(n-j) </span>
+    <span class="Comment">#</span><span class="Comment">L[j+1:n,j] = L[j+1:n,j] + randn(n-j)*1e-15; </span>
+<span class="Statement">end</span>
+display(L[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">6</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">6</span>])
+
+<span class="Comment">#</span><span class="Comment"> Initializing the right-hand side</span>
+xe <span class="Statement">=</span> rand(rng, <span class="Constant">0</span><span class="Statement">:</span><span class="Constant">9</span>, n) <span class="Comment">#</span><span class="Comment"> This will be our solution</span>
+<span class="Comment">#</span><span class="Comment">xe = xe + 1e-15 * randn(n) # This will be our solution</span>
+b <span class="Statement">=</span> L <span class="Statement">*</span> xe
+b<span class="Statement">'</span>
+
+x <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,n)
+
+<span class="Comment">#</span><span class="Comment"> Load our triangular solvers</span>
+include(<span class="Constant">&quot;</span><span class="Constant">../src/trsv.jl</span><span class="Constant">&quot;</span>)
+
+<span class="Comment">#</span><span class="Comment"> x = deepcopy(b)</span>
+x <span class="Statement">.=</span> b
+<span class="PreProc">@time</span> trsv_lnn_level0_ijvariant!(L, x)
+<span class="PreProc">@assert</span> x <span class="Statement">==</span> xe
+
+<span class="Comment">#</span><span class="Comment">x = deepcopy(b)</span>
+x <span class="Statement">.=</span> b
+<span class="PreProc">@time</span> trsv_lnn_level0_jivariant!(L, x)
+<span class="PreProc">@assert</span> x <span class="Statement">==</span> xe
+
+<span class="Comment">#</span><span class="Comment">x = deepcopy(b)</span>
+x <span class="Statement">.=</span> b
+<span class="PreProc">@time</span> trsv_lnn_level0_ijvariant!(L, x)
+<span class="PreProc">@assert</span> x <span class="Statement">==</span> xe
+
+<span class="Comment">#</span><span class="Comment">x = deepcopy(b)</span>
+x <span class="Statement">.=</span> b
+<span class="PreProc">@time</span> trsv_lnn_level0_jivariant!(L, x)
+<span class="PreProc">@assert</span> x <span class="Statement">==</span> xe
+
+<span class="PreProc">@time</span> x <span class="Statement">=</span> <span class="Type">LowerTriangular</span>(L)<span class="Statement">\</span>b
+<span class="PreProc">@time</span> x <span class="Statement">=</span> <span class="Type">LowerTriangular</span>(L)<span class="Statement">\</span>b
+<span class="PreProc">@time</span> x <span class="Statement">=</span> L<span class="Statement">\</span>b
+<span class="PreProc">@assert</span> x <span class="Statement">==</span> xe
+
+<span class="Comment">#</span><span class="Comment">show opnorm(L,Inf)</span>
+<span class="PreProc">@show</span> norm(L<span class="Statement">*</span>x<span class="Statement">-</span>b,<span class="Constant">Inf</span>)<span class="Statement">/</span>(norm(b,<span class="Constant">Inf</span>))
+<span class="PreProc">@show</span> norm(L<span class="Statement">*</span>xe<span class="Statement">-</span>b,<span class="Constant">Inf</span>)<span class="Statement">/</span>(norm(b,<span class="Constant">Inf</span>))
+<span class="Comment">#</span><span class="Comment">@show norm(b,Inf)</span>
+<span class="Comment">#</span><span class="Comment">@show L</span>
+<span class="Comment">#</span><span class="Comment">display(L)</span>
+<span class="Comment">#</span><span class="Comment">display(LowerTriangular(L))</span>
+
+
+<span class="Comment">#</span><span class="Comment">@show x</span>
+<span class="Comment">#</span><span class="Comment">x = deepcopy(b)</span>
+x <span class="Statement">.=</span> b
+<span class="Comment">#</span><span class="Comment">@show x</span>
+<span class="Comment">#</span><span class="Comment">@show xe</span>
+<span class="PreProc">@time</span> BLAS.trsv!(<span class="Constant">'L'</span>,<span class="Constant">'N'</span>,<span class="Constant">'U'</span>,L,x)
+x <span class="Statement">=</span> deepcopy(b)
+<span class="PreProc">@time</span> BLAS.trsv!(<span class="Constant">'L'</span>,<span class="Constant">'N'</span>,<span class="Constant">'U'</span>,L,x)
+<span class="Comment">#</span><span class="Comment">@assert x == xe</span>
+<span class="PreProc">@show</span> norm(L<span class="Statement">*</span>x<span class="Statement">-</span>b,<span class="Constant">Inf</span>)
+<span class="Comment">#</span><span class="Comment">@show x</span>
+
+;
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

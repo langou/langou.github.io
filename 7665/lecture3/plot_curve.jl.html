@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture3/plot_curve.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; }
+.Identifier { color: #008b8b; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">using</span> Plots
+
+
+N <span class="Statement">=</span> zeros(<span class="Type">Int</span>,<span class="Constant">1000</span>)
+complete <span class="Statement">=</span> zeros(<span class="Type">Float64</span>,<span class="Constant">1000</span>)
+partial <span class="Statement">=</span> zeros(<span class="Type">Float64</span>,<span class="Constant">1000</span>)
+
+i<span class="Statement">=</span><span class="Constant">0</span>;
+<span class="Statement">for</span> n <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">:</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">999</span>
+   <span class="Statement">global</span> i <span class="Statement">+=</span> <span class="Constant">1</span>
+   N[i] <span class="Statement">=</span> n
+   complete[i] <span class="Statement">=</span> <span class="Constant">1.5</span> <span class="Statement">*</span> n <span class="Statement">^</span> ( <span class="Constant">3</span><span class="Statement">/</span><span class="Constant">4</span> )
+<span class="Statement">end</span>
+
+i<span class="Statement">=</span><span class="Constant">0</span>;
+<span class="Statement">for</span> n <span class="Statement">=</span> <span class="Constant">0</span><span class="Statement">:</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">999</span>
+   <span class="Statement">global</span> i <span class="Statement">+=</span> <span class="Constant">1</span>
+   N[i] <span class="Statement">=</span> n
+   partial[i] <span class="Statement">=</span> <span class="Constant">2</span><span class="Statement">^</span>n
+<span class="Statement">end</span>
+
+<span class="Statement">function</span> <span class="Identifier">new_plot</span>()
+    plot(xlabel <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">x</span><span class="Constant">&quot;</span>, ylabel <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">f(x)</span><span class="Constant">&quot;</span>,
+        xlims <span class="Statement">=</span> (<span class="Constant">0</span>,<span class="Constant">Inf</span>), ylims <span class="Statement">=</span> (<span class="Statement">-</span><span class="Constant">Inf</span>, <span class="Constant">1</span>))
+<span class="Statement">end</span>
+
+p <span class="Statement">=</span> new_plot()
+plot!(p, x <span class="Statement">-&gt;</span> x<span class="Statement">^</span><span class="Constant">2</span>, <span class="Constant">0</span>, <span class="Constant">1</span>)
+plot!(p, x <span class="Statement">-&gt;</span> x<span class="Statement">^</span><span class="Constant">3</span>, <span class="Constant">0</span>, <span class="Constant">1</span>)
+
+<span class="Comment">#</span><span class="Comment">plot!(p, N, complete, lw=3)</span>
+<span class="Comment">#</span><span class="Comment">plot!(p, N, partial, lw=3)</span>
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

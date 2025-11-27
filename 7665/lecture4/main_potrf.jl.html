@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture4/main_potrf.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Constant { color: #ff00ff; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Identifier { color: #008b8b; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+  <span class="Statement">using</span> LinearAlgebra
+  <span class="Statement">using</span> Printf
+  <span class="Statement">using</span> Random
+  rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+<span class="Comment">#</span><span class="Comment"> BLAS.set_num_threads(8)</span>
+
+  include(<span class="Constant">&quot;</span><span class="Constant">../src/potrf.jl</span><span class="Constant">&quot;</span>)
+
+  n <span class="Statement">=</span> <span class="Constant">4000</span>
+
+  A <span class="Statement">=</span> randn(rng,<span class="Type">Float64</span>,n,n)
+  <span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>n, A[i,i]<span class="Statement">=</span> A[i,i] <span class="Statement">+</span> n; <span class="Statement">end</span>
+  A0 <span class="Statement">=</span> copy(A)
+  x̂ <span class="Statement">=</span> rand(rng,<span class="Type">Float64</span>,n,<span class="Constant">1</span>)
+
+  b <span class="Statement">=</span> <span class="Type">Symmetric</span>(A0,<span class="Identifier">:L</span>) <span class="Statement">*</span> x̂;
+<span class="Comment">#</span><span class="Comment"> b = Array{Float64, 2}(undef, n, 1)</span>
+<span class="Comment">#</span><span class="Comment"> BLAS.symm!( 'L', 'L', 1.0, A, x̂, 0.0, b)</span>
+
+  x <span class="Statement">=</span> <span class="Type">Array</span>{<span class="Type">Float64</span>, <span class="Constant">2</span>}(<span class="Constant">undef</span>, n, <span class="Constant">1</span>)
+
+  x <span class="Statement">.=</span> b
+
+  t <span class="Statement">=-</span> time()
+
+<span class="Comment">#</span><span class="Comment"> A = cholesky(Symmetric(A,:L))</span>
+<span class="Comment">#</span><span class="Comment"> x .= A.L \ x</span>
+<span class="Comment">#</span><span class="Comment"> x .= A.L' \ x</span>
+
+<span class="Comment">#</span><span class="Comment"> LAPACK.potrf!( 'L', A )</span>
+<span class="Comment">#</span><span class="Comment"> BLAS.trsm!( 'L', 'L', 'N', 'N', 1.0, A, x )</span>
+<span class="Comment">#</span><span class="Comment"> BLAS.trsm!( 'L', 'L', 'T', 'N', 1.0, A, x )</span>
+
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_recursive!(A)</span>
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level0!(A)</span>
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level2!(A)</span>
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_leftlooking_level3!(A)</span>
+  cholesky_lower_rightlooking_level3!(A)
+<span class="Comment">#</span><span class="Comment"> cholesky_lower_bordered_level3!(A)</span>
+  x <span class="Statement">.=</span> <span class="Type">LowerTriangular</span>(A) <span class="Statement">\</span> x
+  x <span class="Statement">.=</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A)) <span class="Statement">\</span> x
+
+  t <span class="Statement">+=</span> time()
+  perf <span class="Statement">=</span> <span class="Constant">1.0</span><span class="Statement">/</span><span class="Constant">3.0</span><span class="Statement">*</span>n<span class="Statement">*</span>n<span class="Statement">*</span>n<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,t,perf)
+
+  r <span class="Statement">=</span> copy(b)
+  BLAS.symm!( <span class="Constant">'L'</span>, <span class="Constant">'L'</span>, <span class="Statement">-</span><span class="Constant">1.0</span>, A0, x, <span class="Constant">1.0</span>, r)
+
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">forward error  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,norm(x̂ <span class="Statement">-</span> x,<span class="Constant">1</span>)<span class="Statement">/</span>(norm(x̂,<span class="Constant">1</span>)))
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">backward error = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,norm(r,<span class="Constant">1</span>)<span class="Statement">/</span>(opnorm(<span class="Type">Symmetric</span>(A0,<span class="Identifier">:L</span>),<span class="Constant">1</span>)<span class="Statement">*</span>norm(x,<span class="Constant">1</span>)))
+
+<span class="Comment">#</span><span class="Comment"> we could also check that the upper part of A is the same as the upper part of A0</span>
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

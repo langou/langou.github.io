@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/src/trsv.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; }
+.Comment { color: #0000ff; }
+.Identifier { color: #008b8b; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">function</span> <span class="Identifier">trsv_lnn_level0_jivariant!</span>(A, x)
+<span class="Comment">#</span><span class="Comment">   trsv for { lower, no transpose, non unit } </span>
+<span class="Comment">#</span><span class="Comment">   triangular matrix A</span>
+<span class="Comment">#</span><span class="Comment">   vector x is inout</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">   This is the &quot;column&quot; variant because we stream A by column</span>
+<span class="Comment">#</span><span class="Comment">   This is fast because the row index is the inner loop</span>
+<span class="Comment">#</span>
+    n <span class="Statement">=</span> length(x)
+    <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>n
+        x[j] <span class="Statement">=</span> x[j] <span class="Statement">/</span> A[j,j]
+        <span class="Statement">for</span> i <span class="Statement">=</span> j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n
+            x[i] <span class="Statement">-=</span> A[i,j] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+
+<span class="Statement">function</span> <span class="Identifier">trsv_lnn_level0_ijvariant!</span>(A, x)
+<span class="Comment">#</span><span class="Comment">   trsv for { lower, no transpose, non unit } triangular matrix A</span>
+<span class="Comment">#</span><span class="Comment">   triangular matrix A</span>
+<span class="Comment">#</span><span class="Comment">   vector x is inout</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">   This is the &quot;row&quot; variant because we stream A by row</span>
+<span class="Comment">#</span><span class="Comment">   This is the slow implementation</span>
+<span class="Comment">#</span>
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+        <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>i<span class="Statement">-</span><span class="Constant">1</span>
+            x[i] <span class="Statement">-=</span> A[i,j] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+        x[i] <span class="Statement">=</span> x[i] <span class="Statement">/</span> A[i,i]
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/src/potrf.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; }
+.Identifier { color: #008b8b; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+  <span class="Statement">using</span> GenericLinearAlgebra
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_recursive!</span>(A)
+
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+
+    <span class="Statement">if</span> n <span class="Statement">==</span> <span class="Constant">1</span>
+
+        A[<span class="Constant">1</span>,<span class="Constant">1</span>] <span class="Statement">=</span> sqrt(A[<span class="Constant">1</span>,<span class="Constant">1</span>]);
+
+    <span class="Statement">else</span>
+
+        n1 <span class="Statement">=</span> n <span class="Statement">÷</span> <span class="Constant">2</span>
+
+        A11 <span class="Statement">=</span> view(A, <span class="Constant">1</span><span class="Statement">:</span>n1, <span class="Constant">1</span><span class="Statement">:</span>n1)
+        A21 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, <span class="Constant">1</span><span class="Statement">:</span>n1)
+        A22 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n)
+
+        cholesky!(<span class="Type">Symmetric</span>(A11,<span class="Identifier">:L</span>))
+<span class="Comment">#</span><span class="Comment">       LAPACK.potrf!( 'L', A11 )</span>
+<span class="Comment">#</span><span class="Comment">       cholesky_lower_recursive!(A11)</span>
+
+<span class="Comment">#</span><span class="Comment">       # A21 = A21 / LowerTriangular(A11)'  # this is not working because we are using &quot;views&quot;</span>
+        A21 <span class="Statement">.=</span> A21 <span class="Statement">/</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A11))
+<span class="Comment">#</span><span class="Comment">       rdiv!(A21, LowerTriangular(A11)')</span>
+<span class="Comment">#</span><span class="Comment">       BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A11, A21)</span>
+
+<span class="Comment">#</span><span class="Comment">       # A22 = A22 - A21 * A21' # this is not working because we are using &quot;views&quot;</span>
+        A22 <span class="Statement">.=</span> A22 <span class="Statement">-</span> A21 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">       GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)</span>
+<span class="Comment">#</span><span class="Comment">       BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)</span>
+
+        cholesky!(<span class="Type">Symmetric</span>(A22,<span class="Identifier">:L</span>))
+<span class="Comment">#</span><span class="Comment">       LAPACK.potrf!( 'L', A22 )</span>
+<span class="Comment">#</span><span class="Comment">       cholesky_lower_recursive!(A22)</span>
+
+    <span class="Statement">end</span>
+
+  <span class="Statement">end</span>
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_leftlooking_level0!</span>(A)
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+      <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>
+        <span class="Statement">for</span> i<span class="Statement">=</span>j<span class="Statement">:</span>n
+          A[i,j] <span class="Statement">-=</span> A[i,k] <span class="Statement">*</span> A[j,k]
+        <span class="Statement">end</span>
+      <span class="Statement">end</span>
+      A[j,j] <span class="Statement">=</span> sqrt(A[j,j])
+      <span class="Statement">for</span> i<span class="Statement">=</span>j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n
+        A[i,j] <span class="Statement">/=</span> A[j,j]
+      <span class="Statement">end</span>
+    <span class="Statement">end</span>
+  <span class="Statement">end</span>
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_leftlooking_level2!</span>(A)
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+      A[j<span class="Statement">:</span>n,j<span class="Statement">:</span>j] <span class="Statement">.-=</span> A[j<span class="Statement">:</span>n,<span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>] <span class="Statement">*</span> A[j<span class="Statement">:</span>j,<span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>]'
+      A[j,j] <span class="Statement">=</span> sqrt(A[j,j])
+      A[j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n,j] <span class="Statement">./=</span> A[j,j]
+    <span class="Statement">end</span>
+  <span class="Statement">end</span>
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_leftlooking_level3!</span>(A)
+
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+
+    nb <span class="Statement">=</span> <span class="Constant">64</span>
+
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>nb<span class="Statement">:</span>n
+
+<span class="Comment">#</span><span class="Comment">     k is n+1 when n % nb = 0 and so I3 will be ∅ in that case</span>
+
+      k <span class="Statement">=</span> min( j<span class="Statement">+</span>nb<span class="Statement">-</span><span class="Constant">1</span>, n) <span class="Statement">+</span> <span class="Constant">1</span>
+
+      I1 <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>
+      I2 <span class="Statement">=</span> j<span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+      I3 <span class="Statement">=</span> k<span class="Statement">:</span>n
+
+      A21 <span class="Statement">=</span> view(A,I2,I1)
+      A31 <span class="Statement">=</span> view(A,I3,I1)
+      A22 <span class="Statement">=</span> view(A,I2,I2)
+      A32 <span class="Statement">=</span> view(A,I3,I2)
+
+<span class="Comment">#</span><span class="Comment">     these two steps could be combine in one by adding more views, but that would destroy A22</span>
+
+      A22 <span class="Statement">.-=</span> A21 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">     GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)</span>
+<span class="Comment">#</span><span class="Comment">     BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)</span>
+
+      A32 <span class="Statement">.-=</span> A31 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">     mul!(A32, A31, Transpose(A21), -1.0e00, 1.0e00)</span>
+
+      cholesky_lower_leftlooking_level2!(A22)
+<span class="Comment">#</span><span class="Comment">     cholesky!(Symmetric(A22,:L))</span>
+<span class="Comment">#</span><span class="Comment">     LAPACK.potrf!( 'L', A22 )</span>
+
+      A32 <span class="Statement">.=</span> A32 <span class="Statement">/</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A22))
+<span class="Comment">#</span><span class="Comment">     rdiv!(A32, LowerTriangular(A22)')</span>
+<span class="Comment">#</span><span class="Comment">     BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A22, A32)</span>
+
+    <span class="Statement">end</span>
+
+  <span class="Statement">end</span>
+
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_rightlooking_level3!</span>(A)
+
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+
+    nb <span class="Statement">=</span> <span class="Constant">64</span>
+
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>nb<span class="Statement">:</span>n
+
+      k <span class="Statement">=</span> min( j<span class="Statement">+</span>nb<span class="Statement">-</span><span class="Constant">1</span>, n) <span class="Statement">+</span> <span class="Constant">1</span>
+
+      I1 <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>
+      I2 <span class="Statement">=</span> j<span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+      I3 <span class="Statement">=</span> k<span class="Statement">:</span>n
+
+      A22 <span class="Statement">=</span> view(A,I2,I2)
+      A32 <span class="Statement">=</span> view(A,I3,I2)
+      A33 <span class="Statement">=</span> view(A,I3,I3)
+
+      cholesky_lower_leftlooking_level2!(A22)
+<span class="Comment">#</span><span class="Comment">     cholesky!(Symmetric(A22,:L))</span>
+<span class="Comment">#</span><span class="Comment">     LAPACK.potrf!( 'L', A22 )</span>
+
+<span class="Comment">#</span><span class="Comment">     A32 .= A32 / Transpose(LowerTriangular(A22))</span>
+<span class="Comment">#</span><span class="Comment">     rdiv!(A32, LowerTriangular(A22)')</span>
+      BLAS.trsm!( <span class="Constant">'R'</span>, <span class="Constant">'L'</span>, <span class="Constant">'T'</span>, <span class="Constant">'N'</span>, <span class="Constant">1.0e+00</span>, A22, A32)
+
+<span class="Comment">#</span><span class="Comment">     A33 .= A33 - A32 * A32'</span>
+<span class="Comment">#</span><span class="Comment">     GenericLinearAlgebra.rankUpdate!(Hermitian(A33, :L), A32, -1)</span>
+      BLAS.syrk!( <span class="Constant">'L'</span>, <span class="Constant">'N'</span>, <span class="Statement">-</span><span class="Constant">1.0e+00</span>, A32, <span class="Constant">1.0e+00</span>, A33)
+
+    <span class="Statement">end</span>
+
+  <span class="Statement">end</span>
+
+  <span class="Statement">function</span> <span class="Identifier">cholesky_lower_bordered_level3!</span>(A)
+
+    n <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+
+    nb <span class="Statement">=</span> <span class="Constant">11</span>
+
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>nb<span class="Statement">:</span>n
+
+      k <span class="Statement">=</span> min( j<span class="Statement">+</span>nb<span class="Statement">-</span><span class="Constant">1</span>, n) <span class="Statement">+</span> <span class="Constant">1</span>
+
+      I1 <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>j<span class="Statement">-</span><span class="Constant">1</span>
+      I2 <span class="Statement">=</span> j<span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+
+      A11 <span class="Statement">=</span> view(A,I1,I1)
+      A21 <span class="Statement">=</span> view(A,I2,I1)
+      A22 <span class="Statement">=</span> view(A,I2,I2)
+
+      A21 <span class="Statement">.=</span> A21 <span class="Statement">/</span> <span class="Type">Transpose</span>(<span class="Type">LowerTriangular</span>(A11))
+<span class="Comment">#</span><span class="Comment">     rdiv!(A21, LowerTriangular(A11)')</span>
+<span class="Comment">#</span><span class="Comment">     BLAS.trsm!( 'R', 'L', 'T', 'N', 1.0e+00, A11, A21)</span>
+
+      A22 <span class="Statement">.=</span> A22 <span class="Statement">-</span> A21 <span class="Statement">*</span> A21<span class="Statement">'</span>
+<span class="Comment">#</span><span class="Comment">     GenericLinearAlgebra.rankUpdate!(Hermitian(A22, :L), A21, -1)</span>
+<span class="Comment">#</span><span class="Comment">     BLAS.syrk!( 'L', 'N', -1.0e+00, A21, 1.0e+00, A22)</span>
+
+<span class="Comment">#</span><span class="Comment">     cholesky_lower_leftlooking_level2!(A22)</span>
+      cholesky!(<span class="Type">Symmetric</span>(A22,<span class="Identifier">:L</span>))
+<span class="Comment">#</span><span class="Comment">     LAPACK.potrf!( 'L', A22 )</span>
+
+    <span class="Statement">end</span>
+
+  <span class="Statement">end</span>
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture1/main_trsm.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+  <span class="Statement">using</span> Random
+  <span class="Statement">using</span> LinearAlgebra
+  <span class="Statement">using</span> Printf
+
+  include(<span class="Constant">&quot;</span><span class="Constant">../src/trsm.jl</span><span class="Constant">&quot;</span>)
+
+  rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>(<span class="Constant">2025</span>);
+
+  n <span class="Statement">=</span> <span class="Constant">4000</span>;
+  k <span class="Statement">=</span> <span class="Constant">200</span>;
+
+  A <span class="Statement">=</span> zeros(<span class="Type">Float64</span>,n,n)
+  <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+    A[j,j] <span class="Statement">=</span> <span class="Constant">1</span>
+    A[j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n,j] <span class="Statement">=</span> rand(rng, <span class="Statement">-</span><span class="Constant">2</span><span class="Statement">:</span><span class="Constant">2</span>, n<span class="Statement">-</span>j)
+  <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment"> display(A[1:6,1:6])</span>
+
+  x̂ <span class="Statement">=</span> rand(rng, <span class="Constant">0</span><span class="Statement">:</span><span class="Constant">9</span>, (n,k))
+  b <span class="Statement">=</span> A <span class="Statement">*</span> x̂
+  x <span class="Statement">=</span> deepcopy(b)
+
+<span class="Comment">#</span><span class="Comment"> preload some functions before timings</span>
+
+  trsm_llnn!(A[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>], x[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>])
+  trsm_llnn_recursive!(A[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>], x[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>])
+  x <span class="Statement">=</span> <span class="Type">LowerTriangular</span>(A[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>])<span class="Statement">\</span>x[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>]
+  x <span class="Statement">=</span> A[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>]<span class="Statement">\</span>x[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>]
+  BLAS.trsm!(<span class="Constant">'L'</span>,<span class="Constant">'L'</span>,<span class="Constant">'N'</span>,<span class="Constant">'U'</span>,<span class="Constant">1.0e+00</span>,A[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>],x[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>,<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">2</span>])
+
+<span class="Comment">#</span><span class="Comment"> start timings here  </span>
+
+  x <span class="Statement">=</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,(n,k))
+
+  x <span class="Statement">.=</span> b
+  t <span class="Statement">=-</span> time()
+  trsm_llnn!(A, x)
+  t <span class="Statement">+=</span> time()
+  <span class="PreProc">@assert</span> x <span class="Statement">==</span> x̂
+  perf <span class="Statement">=</span> n<span class="Statement">*</span>n<span class="Statement">*</span>k<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, k = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,k,t,perf)
+
+  t <span class="Statement">=-</span> time()
+  x <span class="Statement">=</span> A <span class="Statement">\</span> b
+  t <span class="Statement">+=</span> time()
+  <span class="PreProc">@assert</span> x <span class="Statement">==</span> x̂
+  perf <span class="Statement">=</span> n<span class="Statement">*</span>n<span class="Statement">*</span>k<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, k = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,k,t,perf)
+
+  t <span class="Statement">=-</span> time()
+  x <span class="Statement">=</span> UnitLowerTriangular(A) <span class="Statement">\</span> b
+  t <span class="Statement">+=</span> time()
+  <span class="PreProc">@assert</span> x <span class="Statement">==</span> x̂
+  perf <span class="Statement">=</span> n<span class="Statement">*</span>n<span class="Statement">*</span>k<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, k = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,k,t,perf)
+
+  x <span class="Statement">.=</span> b
+  t <span class="Statement">=-</span> time()
+  BLAS.trsm!(<span class="Constant">'L'</span>,<span class="Constant">'L'</span>,<span class="Constant">'N'</span>,<span class="Constant">'U'</span>,<span class="Constant">1.0e+00</span>,A,x)
+  t <span class="Statement">+=</span> time()
+  <span class="PreProc">@assert</span> x <span class="Statement">==</span> x̂
+  perf <span class="Statement">=</span> n<span class="Statement">*</span>n<span class="Statement">*</span>k<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, k = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,k,t,perf)
+
+  x <span class="Statement">.=</span> b
+  t <span class="Statement">=-</span> time()
+  trsm_llnn_recursive!(A, x)
+  t <span class="Statement">+=</span> time()
+  <span class="PreProc">@assert</span> x <span class="Statement">==</span> x̂
+  perf <span class="Statement">=</span> n<span class="Statement">*</span>n<span class="Statement">*</span>k<span class="Statement">/</span>t<span class="Statement">*</span><span class="Constant">1e-9</span>
+  <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">n = </span><span class="Special">%5d</span><span class="Constant">, k = </span><span class="Special">%5d</span><span class="Constant">, time = </span><span class="Special">%8.4f</span><span class="Constant"> (sec), perf = </span><span class="Special">%6.2f</span><span class="Constant"> (GFlops/sec)</span><span class="Special">\n</span><span class="Constant">&quot;</span>,n,k,t,perf)
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

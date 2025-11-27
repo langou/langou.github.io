@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/src/trsm.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; }
+.Comment { color: #0000ff; }
+.Identifier { color: #008b8b; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+<span class="Statement">function</span> <span class="Identifier">trsm_llnn!</span>(A, x)
+
+<span class="Comment">#</span><span class="Comment">   trsm for { left, lower, no transpose, non unit } triangular matrix A</span>
+<span class="Comment">#</span><span class="Comment">   this is the variant that streams along the columns of A</span>
+
+    n,k <span class="Statement">=</span> size(x)
+    <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>n
+        x[j,<span class="Constant">1</span><span class="Statement">:</span>k] <span class="Statement">=</span> x[j,<span class="Constant">1</span><span class="Statement">:</span>k] <span class="Statement">/</span> A[j,j]
+        <span class="Statement">for</span> i <span class="Statement">=</span> j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n
+            x[i,<span class="Constant">1</span><span class="Statement">:</span>k] <span class="Statement">-=</span> A[i,j] <span class="Statement">*</span> x[j,<span class="Constant">1</span><span class="Statement">:</span>k]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+
+
+<span class="Statement">function</span> <span class="Identifier">trsm_llnn_recursive!</span>(A, x)
+
+<span class="Comment">#</span><span class="Comment">   trsm for { left, lower, no transpose, non unit } triangular matrix A</span>
+<span class="Comment">#</span><span class="Comment">   this is the recursive variant, we recurse on the dimension of A</span>
+
+<span class="Comment">#</span><span class="Comment">   we stop the recursion at n=1 because this is good enough, we could try to</span>
+<span class="Comment">#</span><span class="Comment">   see if we can improve performance by stopping the recursion earlier and</span>
+<span class="Comment">#</span><span class="Comment">   backing up on a non-recursive version</span>
+
+    n,k <span class="Statement">=</span> size(x)
+
+    <span class="Statement">if</span> n <span class="Statement">==</span> <span class="Constant">1</span>
+
+        x[<span class="Constant">1</span>,<span class="Constant">1</span><span class="Statement">:</span>k] <span class="Statement">=</span> x[<span class="Constant">1</span>,<span class="Constant">1</span><span class="Statement">:</span>k] <span class="Statement">/</span> A[<span class="Constant">1</span>,<span class="Constant">1</span>]
+
+    <span class="Statement">else</span>
+
+        n1 <span class="Statement">=</span> n <span class="Statement">÷</span> <span class="Constant">2</span>
+
+        A11 <span class="Statement">=</span> view(A, <span class="Constant">1</span><span class="Statement">:</span>n1, <span class="Constant">1</span><span class="Statement">:</span>n1)
+        A21 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, <span class="Constant">1</span><span class="Statement">:</span>n1)
+        A22 <span class="Statement">=</span> view(A, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n)
+
+        x1 <span class="Statement">=</span> view(x, <span class="Constant">1</span><span class="Statement">:</span>n1, <span class="Constant">1</span><span class="Statement">:</span>k)
+        x2 <span class="Statement">=</span> view(x, n1<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n, <span class="Constant">1</span><span class="Statement">:</span>k)
+
+        trsm_llnn_recursive!(A11, x1)
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">       # this uses &quot;broadcast&quot;, this makes copy of copies of copy, etc</span>
+<span class="Comment">#</span><span class="Comment">       x[n1+1:n, 1:k] = x[n1+1:n, 1:k] - A[n1+1:n, 1:n1] * x[1:n1, 1:k]</span>
+<span class="Comment">#</span><span class="Comment">       x[n1+1:n, 1:k] -= A[n1+1:n, 1:n1] * x[1:n1, 1:k]</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">       # a little better</span>
+<span class="Comment">#</span><span class="Comment">       x[n1+1:n, 1:k] .= x[n1+1:n, 1:k] - A[n1+1:n, 1:n1] * x[1:n1, 1:k]</span>
+<span class="Comment">#</span><span class="Comment">       x[n1+1:n, 1:k] .-= A[n1+1:n, 1:n1] * x[1:n1, 1:k]</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">       # a little better using views, (still need to put A21*x1 somewhere)</span>
+<span class="Comment">#</span><span class="Comment">       x2 .= x2 - A21 * x1</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">       BLAS.gemm!( 'N', 'N', -1.0, A21, x1, 1.0, x2 )</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">       # mul!() uses multiple dispatch, the way to go, can call cublas, dense, sparse, </span>
+<span class="Comment">#</span><span class="Comment">       # other ones to know: rdiv! ldiv! etc.</span>
+        mul!( x2, A21, x1, <span class="Statement">-</span><span class="Constant">1.0</span>, <span class="Constant">1.0</span> )
+<span class="Comment">#</span>
+        trsm_llnn_recursive!(A22, x2)
+
+    <span class="Statement">end</span>
+
+<span class="Statement">end</span>
+
+
+
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

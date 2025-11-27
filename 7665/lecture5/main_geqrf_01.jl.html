@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture5/main_geqrf_01.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+   <span class="Statement">using</span> LinearAlgebra
+   <span class="Statement">using</span> Printf
+   <span class="Statement">using</span> Random
+   rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+   m <span class="Statement">=</span> <span class="Constant">10</span>; n <span class="Statement">=</span> <span class="Constant">7</span>; A <span class="Statement">=</span> randn(rng,<span class="Type">Float64</span>,m,n)
+   Q, R <span class="Statement">=</span> qr(A)
+   Q <span class="Statement">=</span> <span class="Type">Matrix</span>(Q)
+
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">|| I - Qᴴ Q ||₁             = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+      opnorm( I(n) <span class="Statement">-</span> Q<span class="Statement">'</span> <span class="Statement">*</span> Q, <span class="Constant">1</span> ) )
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">|| A - Q * R ||₁ / || A ||₁ = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+      opnorm( A <span class="Statement">-</span> Q <span class="Statement">*</span> <span class="Type">UpperTriangular</span>(R), <span class="Constant">1</span>) <span class="Statement">/</span> opnorm(A,<span class="Constant">1</span>))
+
+
+<span class="Comment">#</span><span class="Comment"> To retrieve the “full” Q factor, an m×m orthogonal matrix, use F.Q*I or collect(F.Q)</span>
+
+   F <span class="Statement">=</span> qr(A)
+   Q <span class="Statement">=</span> collect(F.Q)
+   R <span class="Statement">=</span> [R;zeros(m<span class="Statement">-</span>n,n)]
+
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">|| I - Qᴴ Q ||₁             = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+      opnorm( I(n) <span class="Statement">-</span> Q<span class="Statement">'</span> <span class="Statement">*</span> Q, <span class="Constant">1</span> ) )
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">|| A - Q * R ||₁ / || A ||₁ = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>,
+      opnorm( A <span class="Statement">-</span> Q <span class="Statement">*</span> <span class="Type">UpperTriangular</span>(R), <span class="Constant">1</span>) <span class="Statement">/</span> opnorm(A,<span class="Constant">1</span>))
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture5/main_geqrf_03.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="default">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Constant { color: #ff00ff; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Identifier { color: #008b8b; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+   <span class="Statement">using</span> LinearAlgebra
+   <span class="Statement">using</span> Printf
+   <span class="Statement">using</span> Random
+   rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+   <span class="Statement">function</span> <span class="Identifier">house</span>(x)
+      <span class="Constant">&quot;&quot;&quot;</span><span class="Constant">Computes the Householder transformation for input vector x</span><span class="Constant">&quot;&quot;&quot;</span>
+      sigma <span class="Statement">=</span> dot(x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>],x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>])
+      v <span class="Statement">=</span> copy(x)
+
+      <span class="Statement">if</span> sigma <span class="Statement">==</span> <span class="Constant">0</span>
+          beta <span class="Statement">=</span> <span class="Constant">0</span>
+          <span class="Statement">return</span> beta, v
+      <span class="Statement">end</span>
+
+      sq <span class="Statement">=</span> sqrt(x[<span class="Constant">1</span>]<span class="Statement">^</span><span class="Constant">2</span> <span class="Statement">+</span> sigma)
+      <span class="Statement">if</span> x[<span class="Constant">1</span>] <span class="Statement">&gt;</span> <span class="Constant">0</span>
+          v[<span class="Constant">1</span>] <span class="Statement">+=</span> sq
+      <span class="Statement">else</span>
+          v[<span class="Constant">1</span>] <span class="Statement">-=</span> sq
+      <span class="Statement">end</span>
+
+      beta <span class="Statement">=</span> <span class="Constant">2.0</span> <span class="Statement">/</span> (v[<span class="Constant">1</span>]<span class="Statement">^</span><span class="Constant">2</span> <span class="Statement">+</span> sigma)
+
+      <span class="Statement">return</span> beta, v
+   <span class="Statement">end</span>
+
+   <span class="Statement">function</span> <span class="Identifier">geqrf!</span>(A)
+      m <span class="Statement">=</span> size(A,<span class="Constant">1</span>)
+      n <span class="Statement">=</span> size(A,<span class="Constant">2</span>)
+      vA <span class="Statement">=</span> zeros(n)
+      kend <span class="Statement">=</span> (m <span class="Statement">&gt;</span> n <span class="Statement">?</span> n <span class="Statement">:</span> m<span class="Statement">-</span><span class="Constant">1</span>)
+      <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>kend
+          beta, v <span class="Statement">=</span> house(A[k<span class="Statement">:</span><span class="Constant">end</span>,k])
+          <span class="Statement">for</span> j<span class="Statement">=</span>k<span class="Statement">:</span>n
+              <span class="Comment">#</span><span class="Comment"> vA = beta * v^T * A</span>
+              vA[j] <span class="Statement">=</span> <span class="Constant">0.0</span>
+              <span class="Statement">for</span> i<span class="Statement">=</span>k<span class="Statement">:</span>m
+                  vA[j] <span class="Statement">+=</span> v[i<span class="Statement">-</span>k<span class="Statement">+</span><span class="Constant">1</span>] <span class="Statement">*</span> A[i,j]
+              <span class="Statement">end</span>
+              vA[j] <span class="Statement">*=</span> beta
+          <span class="Statement">end</span>
+          <span class="Comment">#</span><span class="Comment"> A - beta v (v^T A)</span>
+          <span class="Statement">for</span> j<span class="Statement">=</span>k<span class="Statement">:</span>n, i<span class="Statement">=</span>k<span class="Statement">:</span>m
+              A[i,j] <span class="Statement">-=</span> v[i<span class="Statement">-</span>k<span class="Statement">+</span><span class="Constant">1</span>] <span class="Statement">*</span> vA[j]
+          <span class="Statement">end</span>
+          A[k<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">end</span>,k] <span class="Statement">=</span> v[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>]
+          <span class="Comment">#</span><span class="Comment"> Saving v in the lower triangular part of A.</span>
+          <span class="Comment">#</span><span class="Comment"> This was not done here but one can always</span>
+          <span class="Comment">#</span><span class="Comment"> divide v by v[1] such that v[1] = 1 is always true.</span>
+          <span class="Comment">#</span><span class="Comment"> In that case, v[1] does not need to be stored.</span>
+      <span class="Statement">end</span>
+      <span class="Comment">#</span><span class="Comment"> Lower triangular part of A: sequence of v vectors</span>
+      <span class="Comment">#</span><span class="Comment"> Upper triangular part: factor R</span>
+   <span class="Statement">end</span>
+
+   <span class="Comment">#</span><span class="Comment"> Testing QR factorization using Householder transformations</span>
+   n <span class="Statement">=</span> <span class="Constant">4</span>
+
+   <span class="Comment">#</span><span class="Comment"> Building an orthogonal matrix Q</span>
+   Q <span class="Statement">=</span> zeros(n,n)
+   <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">0</span><span class="Statement">:</span>n<span class="Statement">-</span><span class="Constant">1</span>, i<span class="Statement">=</span><span class="Constant">0</span><span class="Statement">:</span>n<span class="Statement">-</span><span class="Constant">1</span>
+      Q[i<span class="Statement">+</span><span class="Constant">1</span>,j<span class="Statement">+</span><span class="Constant">1</span>] <span class="Statement">=</span> cos(<span class="Constant">π</span><span class="Statement">*</span>(<span class="Constant">2</span>i<span class="Statement">+</span><span class="Constant">1</span>)<span class="Statement">*</span>j<span class="Statement">/</span><span class="Constant">2</span>n)
+   <span class="Statement">end</span>
+   <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+      Q[<span class="Statement">:</span>,j] <span class="Statement">/=</span> norm(Q[<span class="Statement">:</span>,j])
+   <span class="Statement">end</span>
+
+   <span class="Comment">#</span><span class="Comment"> Initializing an upper triangular matrix R</span>
+   R <span class="Statement">=</span> triu(<span class="Type">Float64</span>[ i<span class="Statement">/</span>j <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n, j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n ])
+
+   <span class="Comment">#</span><span class="Comment"> Matrix A</span>
+   A <span class="Statement">=</span> Q<span class="Statement">*</span>R
+
+   geqrf!(A)
+
+   <span class="PreProc">@show</span> R,triu(A)
+
+<span class="Comment">#</span><span class="Comment">  @printf(&quot;|| I - Qᴴ Q ||₁             = %6.2e\n&quot;,</span>
+<span class="Comment">#</span><span class="Comment">     opnorm( I(n) - Q' * Q, 1 ) )</span>
+<span class="Comment">#</span><span class="Comment">  @printf(&quot;|| A - Q * R ||₁ / || A ||₁ = %6.2e\n&quot;,</span>
+<span class="Comment">#</span><span class="Comment">     opnorm( A - Q * UpperTriangular(R), 1) / opnorm(A,1))</span>
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->
