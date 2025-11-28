@@ -23,6 +23,7 @@ function trsv_lnn_level0_ijvariant!(A, x)
 #   This is the "row" variant because we stream A by row
 #   This is the slow implementation
 #
+    n = length(x)
     for i=1:n
         for j = 1:i-1
             x[i] -= A[i,j] * x[j]

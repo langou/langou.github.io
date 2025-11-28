@@ -48,6 +48,7 @@ a { color: inherit; }
 <span class="Comment">#</span><span class="Comment">   This is the &quot;row&quot; variant because we stream A by row</span>
 <span class="Comment">#</span><span class="Comment">   This is the slow implementation</span>
 <span class="Comment">#</span>
+    n <span class="Statement">=</span> length(x)
     <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
         <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>i<span class="Statement">-</span><span class="Constant">1</span>
             x[i] <span class="Statement">-=</span> A[i,j] <span class="Statement">*</span> x[j]
