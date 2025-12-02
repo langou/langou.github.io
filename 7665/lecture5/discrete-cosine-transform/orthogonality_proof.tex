@@ -1,0 +1,90 @@
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+
+\title{Proof of Orthogonality of Matrix $Q$}
+\author{}
+\date{}
+\maketitle
+
+\section*{Matrix Definition}
+
+The entries of the matrix $Q$ are defined as:
+\[
+Q[i+1, j+1] = \cos\left(\frac{\pi (2i+1) j}{2n}\right).
+\]
+
+Using Euler's formula, $\cos(x) = \text{Re}(e^{ix})$, this can be rewritten as:
+\[
+Q[i+1, j+1] = \text{Re}\left(e^{i \frac{\pi (2i+1) j}{2n}}\right).
+\]
+
+\section*{Inner Product of Two Columns}
+
+To check orthogonality, compute the inner product of two columns $Q[:, j]$ and $Q[:, k]$:
+\[
+\mathbf{q}_j^T \mathbf{q}_k = \sum_{i=0}^{n-1} Q[i+1, j+1] Q[i+1, k+1].
+\]
+
+Substituting $Q[i+1, j+1] = \text{Re}\left(e^{i \frac{\pi (2i+1) j}{2n}}\right)$ and $Q[i+1, k+1] = \text{Re}\left(e^{i \frac{\pi (2i+1) k}{2n}}\right)$, the inner product becomes:
+\[
+\mathbf{q}_j^T \mathbf{q}_k = \sum_{i=0}^{n-1} \text{Re}\left(e^{i \frac{\pi (2i+1) j}{2n}}\right) \text{Re}\left(e^{i \frac{\pi (2i+1) k}{2n}}\right).
+\]
+
+Using the identity $\text{Re}(a) \text{Re}(b) = \frac{\text{Re}(ab) + \text{Re}(a\overline{b})}{2}$, this becomes:
+\[
+\mathbf{q}_j^T \mathbf{q}_k = \frac{1}{2} \sum_{i=0}^{n-1} \left(\text{Re}\left(e^{i \frac{\pi (2i+1) (j+k)}{2n}}\right) + \text{Re}\left(e^{i \frac{\pi (2i+1) (j-k)}{2n}}\right)\right).
+\]
+
+\section*{Simplification Using Geometric Series}
+
+Consider a general term of the form:
+\[
+S = \sum_{i=0}^{n-1} e^{i \frac{\pi (2i+1) m}{2n}},
+\]
+where $m = j+k$ or $m = j-k$. This is a geometric series with common ratio:
+\[
+r = e^{i \frac{\pi m}{2n}}.
+\]
+
+The sum of a finite geometric series is:
+\[
+S = \frac{1 - r^n}{1 - r},
+\]
+where $r^n = e^{i \frac{\pi m n}{2n}} = e^{i \frac{\pi m}{2}}$.
+
+\subsection*{Case 1: $m \neq 0$ (when $j \neq k$)}
+
+For $m \neq 0$, the numerator $1 - r^n$ simplifies to $0$ because $e^{i \frac{\pi m}{2}}$ completes a full rotation for integer $m$. Thus:
+\[
+S = 0.
+\]
+
+\subsection*{Case 2: $m = 0$ (when $j = k$)}
+
+For $m = 0$, $r = 1$, and the series becomes:
+\[
+S = \sum_{i=0}^{n-1} 1 = n.
+\]
+
+\section*{Orthogonality Condition}
+
+From the above:
+\begin{itemize}
+    \item When $j \neq k$, the inner product $\mathbf{q}_j^T \mathbf{q}_k = 0$ (orthogonal columns).
+    \item When $j = k$, the inner product $\mathbf{q}_j^T \mathbf{q}_j = n$, which means the columns are scaled but consistent.
+\end{itemize}
+
+\section*{Normalization}
+
+After normalizing each column (dividing by $\sqrt{n}$), the matrix $Q$ becomes orthonormal:
+\[
+Q^T Q = I.
+\]
+
+Thus, $Q$ is an orthogonal matrix.
+
+\end{document}

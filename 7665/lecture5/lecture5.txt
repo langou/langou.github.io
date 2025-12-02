@@ -1,5 +1,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Homework 1 bien reçu
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Homework 2 --> dû pour mardi prochain
+
+Doit on changer le deadline? Peut être que 7:59am les mardi matin n'est pas optimal
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Higham “What is” articles
 https://nhigham.com/index-of-what-is-articles/
 https://nhigham.com/2022/04/28/what-is-a-permutation-matrix/
@@ -10,11 +20,6 @@ https://nhigham.com/2020/07/21/what-is-a-symmetric-positive-definite-matrix/
 https://nhigham.com/2020/08/11/what-is-a-cholesky-factorization/
 https://nhigham.com/2020/09/15/what-is-a-householder-matrix/
 https://nhigham.com/2020/11/10/what-is-a-qr-factorization/
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- ● For Homework #1: Cholesky: do not forget to start with a SPD matrix!
- ● Also, I could share the lapack codes if desired.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -68,11 +73,10 @@ QQᴴ is not QᴴQ
 
 QR factorization
 
-(---) Definition (3 things)
-
-(---) two types: thin and full
-
-(---) two cases: m ≥ n and m ≤ n
+(---) Definition 
+	(---) 3 properties
+        (---) two types: reduced and full
+        (---) two cases: m ≥ n and m ≤ n
 
 🧮 main_geqrf_01.jl
 
@@ -101,20 +105,63 @@ we will say "essentially unique"
 🧮 homework02_01.jl
 
  ❓ why: Q = Matrix(Q)
+ ❓ why: F.Q*I or collect(F.Q)
 
  🔜 what is the condition number of min \| A x - b \|_2 ?
- 🔜 stability of algorithm?
+ 🔜 stability of algorithms?
 
 (---) Application for finding minimum norm solution
 
 🧮 homework02_02.jl
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+elementary Householder reflector
+
+
+(---) build larfg!()
+(---) start with projection, build elementary Householder reflector, construct v
+(---) in ℝ, two reflectors, which one do we pick?
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+🧮 main_geqrf_02.jl
+🧮 main_geqrf_03.jl
+
+   ( I - v * τ * v' ) * x
+     = x - v * τ * v' * x
+
+( parentheses matter, order of operation matters )
+
+Discrete Fourier Transform II, DCT II
+
+🧮 main_geqrf_04.jl (with LAPACK)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+cost
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LARFGP
+Parlett's trick
+
+   📑 James W. Demmel, Mark Hoemmen, Yozo Hida, and E. Jason Riedy
+      Nonnegative Diagonals and High Performance on Low-Profile Matrices from Householder QR
+      SIAM Journal on Scientific Computing
+      Vol. 31, Iss. 4 (2009)
+      https://doi.org/10.1137/080725763
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 random thoughts:
 (---) some variants: QR, LQ, QL and RQ
 
 ⚙️  LAPACK ⚙️  geqrf
-⚙️  LAPACK ⚙️  orgqr
-⚙️  LAPACK ⚙️  ormqr
+⚙️  LAPACK ⚙️  orgqr, ungqr
+⚙️  LAPACK ⚙️  ormqr, unmqr
 
 ⚙️  LAPACK ⚙️  gels
 
@@ -125,16 +172,7 @@ random thoughts:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   ( I - v * τ * v' ) * x
-     = x - v * τ * v' * x
-
-( parenthesis matter )
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  ❓ lots of possible choices for the vector v and τ
+  ❓ lots of possible choices for the vector v and τ in particular in ℂ
 
      👉 having ones on the diagonal of V makes sense since we have specialized kernels for handling triangular matrices
 
@@ -153,9 +191,8 @@ random thoughts:
 
 Blocking with WY 
 
-
-
-QR with pivoting, low rank factorization
+QR with pivoting
+low rank factorization
 randomized algorithm
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

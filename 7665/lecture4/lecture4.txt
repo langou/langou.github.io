@@ -297,6 +297,14 @@ convention: always a lower times a upper. (We could have chosen the reverse from
 🧐 random topic
 
   ● in right looking say, what is the NB that reduces the amount of I/O?
+    compute the I/O for all these variants
+
+📑 Sivan Toledo. Locality of Reference in LU Decomposition with Partial Pivoting.
+SIAM Journal on Matrix Analysis and Applications, Vol. 18, Iss. 4 (1997)
+https://doi.org/10.1137/S0895479896297744
+
+  ● compute the "critical path" for all these variants
+
   ● tiled algorithms and out-of-order scheduling with runtimes
 
 ===================================================================
@@ -326,7 +334,8 @@ Randomized Complete Pivoting for Solving Symmetric Indefinite Linear Systems
 SIAM Journal on Matrix Analysis and Applications, Vol. 39, Iss. 4 (2018)
 https://doi.org/10.1137/17M1150013
 
-📑 C. Ashcraft, R. Grimes, and J. Lewis, Accurate symmetric indefinite linear equation solvers, SIAM J. Matrix Analysis and Applications, 20 (1998), pp. 513–561.
+📑 C. Ashcraft, R. Grimes, and J. Lewis.
+Accurate symmetric indefinite linear equation solvers, SIAM J. Matrix Analysis and Applications, 20 (1998), pp. 513–561.
 
 ===================================================================
 
@@ -363,14 +372,30 @@ https://doi.org/10.1137/24M1699048
 ===================================================================
 ❓ which variant is better?
 
+  ● in bordered, the 𝒪(n³) is done in TRSM
+    in left, the 𝒪(n³) is done in GEMM
+    in right, the 𝒪(n³) is done in SYRK
+    in recursive, the 𝒪(n³) is done in TRSM (50%) and SYRK (50%)
+    the shapes of these BLAS calls matter as well, recursive has the best "square-ish" shape
+
   ● bordered? 👉 to know whether A is SPD or not
 
   ● left? 👉 the least amount of write which is good for out of core computation
 
-  ● right? 👉 highly parallelizable, we can prove that with a parallel BLAS, critical path
+  ● right? 👉 highly parallelizable, we can prove that with a parallel BLAS, critical path is as good as no "BLAS" bulk synchonism
     good for multicore computing using multi-threaded BLAS
 
   ● recursive? 👉 cache oblivious
+
+For the comment on "shape", think about nb=1, then you are back in level-2 BLAS. nb=2 is not much better, etc.
+see 
+
+📑 Hussam Al Daas, Grey Ballard, Laura Grigori, Suraj Kumar, and Kathryn Rouse.
+2022. Brief Announcement: Tight Memory-Independent Parallel Matrix
+Multiplication Communication Lower Bounds. In Proceedings of the 34th ACM
+Symposium on Parallelism in Algorithms and Architectures (SPAA '22).
+Association for Computing Machinery, New York, NY, USA, 445–448.
+https://doi.org/10.1145/3490148.3538552
 
 ===================================================================
 

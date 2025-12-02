@@ -3,16 +3,39 @@
    using Random
    rng = MersenneTwister()
 
-   m = 10; n = 1; x = randn(rng,Float64,m,n)
+   function house(x)
+      """Computes the Householder transformation for input vector x"""
+      sigma = dot(x[2:end],x[2:end])
+      v = copy(x)
 
-   beta, v = house(x)
+      if sigma == 0
+          beta = 0
+          return beta, v
+      end
 
-n = length(x)
-y = zeros(n); y[1] = norm(x)
-Px = x - beta * dot(v,x) * v
-if Px[1] < 0
-    Px = -Px
-end
-@show Px
-@show y
-@show norm(Px - y)
+      sq = sqrt(x[1]^2 + sigma)
+      if x[1] > 0
+          v[1] += sq
+      else
+          v[1] -= sq
+      end
+
+      beta = 2.0 / (v[1]^2 + sigma)
+
+      return beta, v
+   end
+
+   m = 10; x = randn(rng,Float64,m,1)
+
+   τ, v = house(x)
+
+   n = length(x)
+   y = zeros(n); y[1] = norm(x)
+   Px = x - v * τ * v' * x
+   if Px[1] < 0
+      Px = -Px
+   end
+
+   @show Px
+   @show y
+   @show norm(Px - y)
