@@ -1,0 +1,114 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Condition Number of least squares problems
+
+📚 Trefethen and Bau, lecture 18, page 129
+📚 Golub and van Loan #4, Section 5.3.6 page 265
+
+Be careful because the η of Trefeten and Bau is not the νₗₛfrom Golub and van Loan.
+
+📑 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+with linear system of equations:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+( A + ΔA ) ( x + δx ) = ( b + δb )
+
+  ⇒ δx ≈ A⁻¹ ( δb - ΔA x )
+  ⇒ || δx || / || x || ≲ || A⁻¹ || || A || ( || ΔA || / || A || ) + 
+                         + || A⁻¹ || || A || ( || Ax || / ( || A || . || x || ) ) ( || δb || / || b || )
+
+with κ = || A⁻¹ || || A || 
+with η = ( || A || . || x || ) / || Ax || 
+so that  1 ≤ η ≤ κ  
+
+we have 
+
+|| δx || / || x ||  ≲ κ ( || ΔA || / || A || ) +  ( κ / η ) * ( || δb || / || b || )
+
+We note that when 
+for x = wₘᵢₙ so that A wₘᵢₙ= uₘᵢₙσₘᵢₙthen η = κ and so this is well-conditioned with respect to perturbation in b.
+for x = wₘₐₓ so that A wₘₐₓ = uₘₐₓ σₘₐₓ then η = 1 and so this is the worse conditioned with respect to perturbation in b.
+
+This is analogous with b ← Ax (computing b, given A and x) where 
+the well condition problem is when x is parallel to wₘₐₓ, and the worse conditioned is when x is parallel to wₘᵢₙ.
+
+📈 try this in julia
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+with linear least squares
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+( A + ΔA )ᵀ ( A + ΔA ) ( x + δx ) = ( A + ΔA )ᵀ ( b + δb )
+  ⇒  ΔAᵀAx + AᵀΔAx + (AᵀA)δx ≈ ΔAᵀb + Aᵀδb      [ at the first order ]
+  ⇒  δx ≈ (AᵀA)⁻¹Aᵀ( δb - ΔAx ) + (AᵀA)⁻¹ΔAᵀb   
+  ⇒ || δx || ≲ || δb || / σₘᵢₙ + || ΔA || . || x || / σₘᵢₙ + || ΔA || . || b || / σₘᵢₙ²
+
+
+with κ = || A⁻¹ || || A || 
+with η = ( || A || . || x || ) / || Ax || so that  1 ≤ η ≤ κ 
+with θ such that cos(θ) = || Ax || / || b || or sin(θ) = || r || / || b || or tan(θ) = || r || / || Ax ||
+so that a good fit means 
+
+  ⇒ || δx || / || x || ≲ 
+
+          ( || δb || / || b || ) . ( || b || / || Ax ||) . (|| Ax || / || A || . || x || ) . ( || A ||  / σₘᵢₙ )
+      ⇒   ( || δb || / || b || ) . ( 1 / cos(θ) ) . ( 1 / η ) . κ
+
+        + || ΔA || / σₘᵢₙ
+      ⇒ + ( || ΔA || / || A || ) κ
+
+        + ( || ΔA || / || A || )  . ( || b || / || Ax || ) . ( || Ax || /  ||A|| . ||x|| ) . ( || A ||² / σₘᵢₙ² )
+      ⇒ + ( || ΔA || / || A || )  . ( 1 / cos(θ) )         . ( 1 / η )                     . κ²  
+
+
+  ⇒ || δx || / || x || ≲ 
+                        ( || δb || / || b || ) . κ / ( η cos(θ) )
+                      + ( || ΔA || / || A || ) . ( κ + κ² / ( η cos(θ) ) )
+
+❓ We note that Trefethen and Bau have κ² tan(θ) / η instead κ² / ( η cos(θ) )
+❓ We note that Golub and van Loan #4 have κ² tan(θ) / η instead κ² / ( η cos(θ) )
+
+📈 try this in julia
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+with linear least squares
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We now want to study the sensitivity of y = Ax (or y = Pb). We get
+
+  y + δy = A ( x + δx ) so that δy = A δx so that
+
+  ⇒  δy = A δx ≈ A (AᵀA)⁻¹Aᵀ( δb - ΔAx ) + A (AᵀA)⁻¹ΔAᵀb   
+
+  ⇒ || δy || / || y || ≲ 
+
+          ( || δb || / || b || ) . ( || b || / || Ax ||)
+      ⇒   ( || δb || / || b || ) . ( 1 / cos(θ) )
+
+        + ( || ΔA || / || A || ) . ( ||A|| . ||x|| / || Ax || )
+      ⇒ + ( || ΔA || / || A || ) . η
+
+        + ( || ΔA || / || A || )  . ( || b || / || Ax || ) . ( || A || / σₘᵢₙ )
+      ⇒ + ( || ΔA || / || A || )  . ( 1 / cos(θ) )         . κ  
+
+
+  ⇒ || δy || / || y || ≲ 
+                        ( || δb || / || b || ) . ( 1 / cos(θ) )
+                      + ( || ΔA || / || A || ) . ( η + κ / cos(θ) )
+
+❓ We note that Trefethen and Bau have ( η + κ / cos(θ) ) instead ( η + κ / cos(θ) )
+❓ We note that Golub and van Loan #4 do not have the same bound as well. Argh!
+
+📈 try this in julia
+
+
+
+
+
+
+
+
+ 
+
