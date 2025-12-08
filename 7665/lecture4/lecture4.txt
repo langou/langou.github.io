@@ -1,6 +1,12 @@
 
 ===================================================================
 
+https://nhigham.com/2020/07/21/what-is-a-symmetric-positive-definite-matrix/
+https://nhigham.com/2020/08/11/what-is-a-cholesky-factorization/
+https://nhigham.com/2021/10/28/what-is-a-blocked-algorithm/
+
+===================================================================
+
 regarder lecture01 sur TRSV / TRSM
 
   time python

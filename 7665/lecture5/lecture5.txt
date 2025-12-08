@@ -12,14 +12,9 @@ Doit on changer le deadline? Peut être que 7:59am les mardi matin n'est pas opt
 
 Higham “What is” articles
 https://nhigham.com/index-of-what-is-articles/
-https://nhigham.com/2022/04/28/what-is-a-permutation-matrix/
-https://nhigham.com/2020/07/14/what-is-the-growth-factor-for-gaussian-elimination/
-https://nhigham.com/2020/08/04/what-is-numerical-stability/
-https://nhigham.com/2020/03/25/what-is-backward-error/
-https://nhigham.com/2020/07/21/what-is-a-symmetric-positive-definite-matrix/
-https://nhigham.com/2020/08/11/what-is-a-cholesky-factorization/
-https://nhigham.com/2020/09/15/what-is-a-householder-matrix/
+https://nhigham.com/2020/04/07/what-is-an-orthogonal-matrix/
 https://nhigham.com/2020/11/10/what-is-a-qr-factorization/
+https://nhigham.com/2020/09/15/what-is-a-householder-matrix/
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -122,7 +117,7 @@ elementary Householder reflector
 (---) build larfg!()
 (---) start with projection, build elementary Householder reflector, construct v
 (---) in ℝ, two reflectors, which one do we pick?
-
+(---) where is Q?
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -135,12 +130,33 @@ elementary Householder reflector
 ( parentheses matter, order of operation matters )
 
 Discrete Fourier Transform II, DCT II
+see: 
 
 🧮 main_geqrf_04.jl (with LAPACK)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+show julia QR and then what is F.Q (it is an object)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 cost
+
+Comparison with an LU factorization to solve Ax = b
+why? 
+	Loop around A - v * τ * ( v' * A )
+	As opposed to loop around A - l * u'
+Also, it seems that we will have issues to get to Level3 BLAS
+with this repeated ( I - v * τ * v' ) * x
+
+
+Getting Q: 
+4mnk - 2 (m+k) n^2 + 4/3 n^3
+case k=n: 
+	2mn^2 - 2/3 n^3
+case k=m:
+	4m^2n - 4 mn^2 + 4/3n^3
+	case m ≫ n => 4 m^2 n
+	case m = n => 4/3 n^3
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -155,9 +171,10 @@ Parlett's trick
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 random thoughts:
 (---) some variants: QR, LQ, QL and RQ
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ⚙️  LAPACK ⚙️  geqrf
 ⚙️  LAPACK ⚙️  orgqr, ungqr

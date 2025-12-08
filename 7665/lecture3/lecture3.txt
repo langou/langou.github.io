@@ -105,6 +105,13 @@ review homework01
 
 ===================================================================
 
+https://nhigham.com/2020/08/04/what-is-numerical-stability/
+https://nhigham.com/2020/03/25/what-is-backward-error/
+https://nhigham.com/2020/03/19/what-is-a-condition-number/
+https://nhigham.com/2020/06/23/what-is-a-frechet-derivative/
+
+===================================================================
+
 condition number, backward stability and forward stability
 
 solve Ax = b, get y, how good y is?

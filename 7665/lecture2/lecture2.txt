@@ -10,6 +10,12 @@ python :: https://github.com/EricDarve/NLA/
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+https://nhigham.com/2022/04/28/what-is-a-permutation-matrix/
+https://nhigham.com/2020/07/14/what-is-the-growth-factor-for-gaussian-elimination/
+https://nhigham.com/2022/04/28/what-is-a-permutation-matrix/
+https://nhigham.com/2021/04/20/what-is-an-lu-factorization/
+https://nhigham.com/2023/06/01/what-is-the-schur-complement-of-a-matrix/
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   in homework1 what is missing is some kind of performance stuff
@@ -130,9 +136,11 @@ to do Qx we need to do
   (--) difference with LAPACK permutation vector and the julia/matlab one
 
   ❓ cons and pros of the LAPACK permutation vector vs the julia/matlab one?
-     👉 the LAPACK permutation vector is easy to invert, this is useful for complete pivoting
-     🧐 check the claim above and write a code
-     👉 mainly historical reasons
+     👉 the LAPACK permutation vector is essentially a product of pairwise permutation and there are some advantages to this
+          👉 the LAPACK permutation vector enables to do the permutation in-place!!!!
+          👉 the LAPACK permutation vector is easy to invert, this is useful for complete pivoting
+     🧐 check the claim above and write a code, compare both approaches
+     👉 some historical reasons
      🧐 Permutations: is it easier to get signature with the Lapack representation? Or with the Matlab one? Or same? 
      🧐 Create some routines to go from one representation to the other?
 
@@ -163,6 +171,8 @@ random comments:
 (*) open question
 
   🔎 given an n-by-n matrix A with random entries (pick your favorite distribution), what is E( ρ(A) )?
+     for no pivoting? for pivoting? 
+     FUN FACT: parallel pivoting  (= pairwise pivoting) is less stable than no pivoting!
 
 We know worst-case for partial pivoting but we also know that it works "not too bad".
 
