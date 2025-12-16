@@ -1,0 +1,75 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{amssymb}
+
+\begin{document}
+
+\begin{center}
+{\Large \bf Weekly assignment \#4 }
+\end{center}
+
+\small
+
+\begin{enumerate}
+
+\item 
+(julia only)
+Take a random $6$-by-$6$ matrix $A$. 
+\begin{verbatim}
+   n = 6
+   A = rand(rng, n, n)
+\end{verbatim}
+We compute a Hessenberg reduction of $A$ with
+\begin{verbatim}
+   H = copy(A)
+   H, tau = LAPACK.gehrd!(H)
+   Q = tril(H,-2) 
+   Q = Q[2:n,1:n-1]
+   LAPACK.orgqr!(Q,tau)
+   Q = [ 1 zeros(1,n-1); zeros(n-1,1) Q]
+   H = triu(H,-1)
+## check that
+   @show opnorm( Q*H*Q'-A, 1) / opnorm( A, 1)
+   @show opnorm( Q*Q' - I(n), 1)
+\end{verbatim}
+
+Let $q_1$ defined as
+$$
+   q1 = \left(\begin{array}{cccccc} 0.3 & 0.4 & 0.5 & -0.5 & -0.4 & -0.3\end{array}\right)^T.
+$$
+Observe that $\|q_1\|_2 = 1$.
+\begin{verbatim}
+   q1 = [ 0.3 0.4 0.5 -0.5 -0.4 -0.3]' 
+   @show norm(q1)
+\end{verbatim}
+
+\underline{Question:} Reduce $A$ to Hessenberg form such that the first column of the $Q$ factor is $q_1$.
+
+You can first write a code for $A$ assuming that $A$ is Hessenberg but your final code needs to be for a general matrix $A$.
+
+\item 
+
+We consider $A$ real Hessenberg. We construct $B = A^2 + 4 A - 3 I$. Then perform
+the QR factorization of $B$ such that $Q,R = \textmd{qr}(B)$.  Finally
+construct $C = Q^T A Q$. Give two explanations of why $C$ is Hessenberg.  One
+explanation is based on using $\mathbb{C}$. The other explanation is based on
+looking at structure and staying in real arithmetic.
+
+\item {\em Exact shift for pair of complex conjugate eigenvalue.}
+
+We consider $A$ real Hessenberg with a complex conjugate eigenvalue pair $\frac14 \pm i \frac12$.
+So $\frac14 \pm i \frac12$ are two eigenvalues of $A$.
+We compute 
+$B = A^2 - \frac{1}{2} A + \frac{5}{16} I.$ Then $Q,R = \textmd{qr}(B)$. Then $C = Q^T A Q$.
+Note that $\frac14 \pm i \frac12$ are roots of the polynomial $x^2 - \frac{1}{2} x + \frac{5}{16}.$
+
+\underline{Question:} What is the structure of the $C$? (From question 2, we know it is Hessenberg, but can we say more if we do an exact shift?)
+
+
+\end{enumerate}
+
+
+
+
+
+
+\end{document}

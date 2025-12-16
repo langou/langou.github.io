@@ -1,221 +1,137 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Givens.
+(*) explain fundamental subspace of a matrix with SVD
 
-Cost of Givens.
+pseudo-inverse
 
-derive that G^T
+(*) review homework3
 
-explain the "avoid unnecessary overflow"
-
-Givens vs Householder
-
-(*) first the discussion is not really about Givens vs Householder
-but more { 2x2 Householder or 2x2 Givens } vs { Householder }
-
-(*) second Givens to eliminate a column that keep on using the first element
-from top to bottom is "the same" as { Householder }. 
-
-(*) a good example to see difference is exercise Problem 21 in Darve and Wooters
-
-(*) Look at the structure of a product of Givens (tridiagonal) 
-as opposed to Householder (dense)
-then see that (tridiagonal) * (triangular) is (Hessenberg)
-then see that (tridiagonal) * (diagonal) is (tridiagonal)
-
-==> if structure on what we will apply to might want to use Givens (or 2x2 Householder)
-==> if no structure on what we will apply to, we want to use Househodler: 
-less FLOPS, more vectorization
-
-(*) some more comments with parallelization
-
-==> example with Homework 2 question 5
-==> example with Tikhonv bidiagonalization algorithm
-
-Fast Givens
-
-
+(*) show lecturez/lecturez.txt on condition number of linear least squares
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Explain gram-Schmidt
-Explain CGS and MGS
-Show some implementations
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Homework is CholQR
-Go over it slightly though
+Eigenvalue computation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Presentation of the players
+(*) SEP, NEP, SVD
+Explain the three fundamental decompositions
+
+Compute the full decomposition. A is dense.
+
+For NEP, explain Schur. Why Schur and not A = X Λ X⁻¹? (Or A = X J X⁻¹?)
+
+Intrisic difficulty for NEP. (Diagonalization does not exist.)
+Difference with SEP and SVD. This is why we go to Orthogonal Schur form.
+Explain that the set of diagonalizable matrices is dense in the set of all matrices
+
+A = X Λ X⁻¹    
+	A X = X Λ
+
+A = X Λ Yᴴ  (where Yᴴ = X⁻¹ and so that Yᴴ X = I)
+
+A  = Y⁻ᴴ Λ Yᴴ 
+	Yᴴ A  = Λ Yᴴ 
+	X⁻¹ A = Λ X⁻¹    
+
+Aᵀ = Y⁻¹ Λ Y  (where we conjugate Λ but complex-conjugate, so kind of the same)
+Aᵀ = Xᴴ Λ X⁻ᴴ  
+	⚠️  Aᵀ Xᴴ = Xᴴ Λ ⚠️ 
+
+Note: other variants 
+(**) compute a few of the eigenvalues, extremal, interior
+(**) A is sparse (or data sparse)
+(**) notably hamiltonian matrix
+(**) notably generalized eigenvalue problem Ax = λ Bx
+(**) notably polynomial eigenvalue problem (M λ²+ C λ + K) x = 0
+(**) GSVD (Generalized SVD), CS Decomposition
+(**) product eigenvalue problem
+(**) 𝓞(n²) algorithm for companion matrices
+
+Unicity? 
+	Av = λv, for a given λ, is v unique?
+	Then look at decompositions.
+
+Specifity of ℝ for NEP.
+	λ = a ± i b       x = u ± i v
+	Look at invariant subspace of dimension 2 spanned by [u,v] in ℝⁿ
+	=> [u,v] span the same invariant space in ℂⁿ as [u ± i v]
+
+Why work in ℝ and not in ℂ?
+(**) One multiplication in ℂ is four multiplication in ℝ 
+(**) size of  
+(**) stability, structure of the problem (complex conjugate eigenvalues)
+
+Reordering of the Schur form for NEP
+
+Standard form for NEP is
+	[ a c; d a ]
+( we would prefer [ a b; -b a ] with b > 0 but not stable )
+See homework problem #3.
+
+❓ How many eigenvalues of a random matrix are real?
+Alan Edelman, Eric Kostlan, Michael Shub
+How Many Eigenvalues of a Random Matrix are Real?
+Journal of the American Mathematical Society, Vol. 7, No. 1 (Jan., 1994), pp. 247-267 (21 pages)
+https://doi.org/10.2307/2152729
+
+No "direct" computation but algorithms that converge quadratically or cubically
+        (**) Abel-Ruffini theorem, n ≥ 5
+
+Bonjour!
+
+Le théorème d'Abel-Ruffini affirme qu'il n'existe pas de formule générale par radicaux, i.e. avec les quatres opérations, les puissances entières et les racines n-ièmes. Mais on peut trouver des formules exactes en utilisant d'autres formes.
+
+Cet article donne une solution générale sous forme de série en utilisant les nombres de Catalan.
+https://www.tandfonline.com/doi/full/10.1080/00029890.2025.2460966
+
+Bonne journée,
+Clément
+
+	(**) explain what linear, quadratic or cubic convergence mean
+	(**) det( A - λ I ) is not a good method
+	(**) explain how matlab compute roots of polynomial
+[ companion matrix ]
+[   0 1 0 . . . . . 0        ]
+[   0 0 1 . . . . . 0        ]
+[                            ]
+[                0  1        ]
+[ -a0 -a1 -a2 . . . -a_{n-1} ]
+
+p(x) = x^n + a_{n-1} x^{n-1} + . . . + a1 x + a0
+
+Two-sided transformations
+
+High level for algorithms:
+(1) go to condensed form
+(2) iterative algorithm
+(3) optionally reorder and/or compute eigenvectors (NEP)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-FLOPS QR
-comparison Gram Schmidt, Normal Equations (CholQR), Householder
-(*) m ≫ n, m = n, m ≥n
-(*) do we need Q? which Q do we need (full or reduced)?
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A = X Λ Yᴴ 
 
-Remarkable results for Householder
-there exists an exactly Q s.t. A + E = QR where R is computed R and E is small
-how crazy is that?
+Rayleigh quotient: definition. Why?
 
-Even more crazy: true for MGS as well
+❓ What is a good shift for Inverse Iteration? Do you see a problem with it?
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Discussion:
-(*) cost, performance
-(*) stability
-(*) do you need the full Q? If yes, how would you do for Gram-Schmidt?
-(*) A-inner product
+ ⚙️  include("Power_Iteration.jl")
+ ⚙️  include("Inverse_Iteration.jl")
+ ⚙️  include("Inverse_Iteration_BigFloat.jl")
+ ⚙️  include("Rayleigh_Quotient.jl")  -- picture with sphere
+ ⚙️  include("Rayleigh_Quotient_BigFloat.jl")
 
-n my mind: 
-show some biblio about CholQR2 and the reorthogonalizaton fro Gram-Schmidt
+ ⚙️  include("Orthogonal_Iteration.jl")
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+explain convergence of Rayleigh Quotient Iteration
 
-SVD: 
-give the SVD decomposition and explain the four fundamental of the SVD
-explain how it relates to QR factorization. 
-Explain how it relates with UTV.
-Explain how it relates with CUR.
-Speak about low rank and such.
+[ example symmetric matrices ]
+1e-1 for v => 1e-2 for lambda
+so (1e-1 for v) * (1e-2 for lambda) => (1e-3) for v
+1e-3 for v => 1e-6 for lambda
+so (1e-3 for v) * (1e-6 for lambda) => (1e-9) for v
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Least Squares
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Justification with || b - Ax || and then two proofs with QR to end up with
-x = R \ ( Q^T b )
-
-Justification of normal equations
-either see GVL-4 p.260, top of section 2.3.1
-
-Or get the gradient of "phi"
-Two ways to get the gradient: multi-variate calculus or small perturbation
-
-small perturbation
-(b-A(x+h))^T * (b-A(x+h)) 
-= b^Tb - x^TA^TAx +h^T A^T A x - h^T A^T A b - b^T A^T A h +x^T A^T A h - h^TA^TAh
-= (b^Tb - x^TA^TAx) - h^T ( - A^T b - 2 A^T A x ) + h^TA^TAh
-Second term is gradient, third term is 1/2 of Hessian
+But do explain (and with some code) that for shift and invert when mu is close to lambda we have:
+so (1e-3 for v) * (1e-7 for lambda) => (1e-10) for v [ for example ]
 
 
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Augmented Least Squares
-( I  A )(r) = (b)
-( A' 0 )(x)   (0)
-
-justification: this is another way to write 
-is simply another way of writing the normal equations, A^T Ax = A^Tb.
-
-( I  A )(r) = (b)
-( A' 0 )(x)   (0)
-==> r + Ax = b   ==> r = b - Ax
-==> A'r = 0      ==> A^T ( b - Ax ) = 0
-
-This does not help with rank deficiency of A
-
-The eigenvalues of (the symmetric matrix)
-( 0  A )
-( A' 0 )
-are  ±σᵢ and 0's, so in short the matrix is m+n and we have
-n +σᵢ, n -σᵢ, and m-n 0.
-
-The eigenvalues of (the symmetric matrix)
-( I  A )
-( A' 0 )
-
-Specifically, if σᵢ are the singular values of A, the
-eigenvalues \(\lambda \) of \(M\) are the roots of the equation \(\lambda
-^{2}-\lambda -σᵢ^{2}=0\) for each σᵢ, along with
-additional eigenvalues of 1 and potentially -1 or 0, depending on matrix
-dimensions. 
-
-
-
-SVD approach: why does it work? 
-normal equation approach: why does it work? 
-
-Question from Aurélien about small singular values:
-explain that this is really a problem, they blow up any noise
-this touches to the fact that pseudoinverse is not continuous
-
-I completely bailed out on this one and say “we do exact arithmetic right now, so assume 0 or not 0, you remove the 0”.
-I should have added that there is an essential difficulty here. 
-If you want to start removing 1e-14, and keep 1e-10 say, note that what you insert in the formula is a 0 for 1e-14 and 1e+10 for 1e-10.
-This is a very difficult task to know what to keep and what to remove, where the threshold is. 
-There is a lots of literature on this and this called “regularization”. 
-
-Question from Inès about 
-x + null(A) and so we want x ∈ null(A)
-
-For Ax = b or min || b - Ax ||
-We understand that, if x is a solution, then x or any x + null(A) is a solution.
-If null(A) = {0}, then we recover that the solution is unique.
-to get the solution of minimum norm, we want to "remove" the component of x on null(A) 
-as follows. 
-x = x_{null(A)⟂} + x_{null(A)}
-then 
-|| x_{null(A)⟂} || is a solution and it is the solution of minimum 2-norm.
-
-For min || b - Ax ||, we want b-Ax ⟂ A.
-
-try to understadn the picture of Darve for Least Square and 1-norm comment
-and relate to the picture from matlab webpage for minimum norm:
-https://www.mathworks.com/help/matlab/ref/lsqminnorm.html
-
-See homework problem 2.
-
-Fair enough. I mean that if you take a solution x such that A x = b then we can decompose x on Null(A) and Null(A⟂) so we have the decomposition
-x = x_{null(A)⟂} + x_{null(A)}
-And so _the_ minimum norm solution is x_{null(A)⟂}, so we remove what "remove Null(A) from x”. 
-I agree that I did not mathematically explained this well. So thanks to Inès. That was fair. 
-So this shows that x ∈ null(A)⟂
-But we know that null(A)⟂ is Range(Aᵀ) so the minimum norm solution is such Ax = b and x ∈ Range(Aᵀ).
-So x = Aᵀ y for some y. So we want AAᵀ y = b, we assumed invertibility so y = ( AAᵀ )⁻¹b so x = A ( AAᵀ )⁻¹ b
-That’s one way to get the minimum norm solution. (We can call it “normal equation” method.)
-
-
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-minimum norm problem
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Generalizing the problem
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-QR will not work, one need SVD or COD
-
-Also, 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-pseudo inverse in all this
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-recap various formulas
-
-random thoughts:
-A\b for minimum norm in Matlab vs Julia (Matlab needs lsqminnorm)
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Condition number of Least Squares
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-I still do not get the same results as Trefethen LOL
-But I think I get the same one as 
-Also, do some experiments to show that the bound is tight
-This is delayed to after the break
-
-Question: 
-(*) what would be a condition number for the LS problem? (the definition)
-(*) what would be a backward error for the LS problem? (the definition)
-(*) what would be a stability result for a LS problem algorithm? (the definition)
-
+❓ 

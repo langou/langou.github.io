@@ -1,0 +1,162 @@
+
+ ⚙️  include("Power_Iteration.jl")
+ ⚙️  include("Inverse_Iteration.jl")
+ ⚙️  include("Inverse_Iteration_BigFloat.jl")
+ ⚙️  include("Rayleigh_Quotient_BigFloat.jl")
+
+ ⚙️  include("Rayleigh_Quotient.jl")  -- picture with sphere
+ ⚙️  include("Rayleigh_Quotient_nonsymmetric.jl")
+
+    observe orthogonality of eigenvec in symm case
+    observe that Rayleigh quotient is lambda (1, 1/2, 1/4) 
+    observe that Rayleigh quotient has zero gradient in symm case, 
+    and the gradient is not zero in non-symm case.
+
+ ⚙️  include("Orthogonal_Iteration.jl")
+
+ ⚙️  include("Schur_Iteration.jl")
+
+    increase number of iterations to 200
+    also comment so that the eigenvalues are not all real and see what happens
+
+ ⚙️  include("QR_Iteration.jl")
+
+ ⚙️  include("QR_hwk_matrix_data.h5")
+
+ ⚙️  include("QR_iteration.mp4")
+ ⚙️  include("QR_iteration_unsym.mp4")
+
+We say Hessenberg reduction, and not Hessenberg factorization.
+Part of the "two-sided" operation, as opposed to "one-sided"
+
+
+The cost of Hessenberg reduction is 10/3 n^3
+10/3 n^3 = 4/3 n^3 + 6/3 n^3
+The 4/3 n^3 is a QR factorization on the left
+Then 6/3 to apply from the right. The difference is that we do not have the zero
+So 4/3 + 4/3 + 2/3
+
+Then tridiagonal reduction is 4/3 n^3 because we really are just doing
+save the 2/3 n^3 becuase of the 0, so we only need 8/3 n^3
+and since the matrix is symmetric, we only compute half of it so 4/3 n^3
+(It ends up being same as QR but because it is two "QR", one on the left and one on the right, and / 2 because of symmmetry. So we are not just doing a QR on the
+left, 
+
+
+     📑 quote paper for reduction to condensed form with block and Level 3 BLAS from Hammarling
+     📑 quote successive band reduction
+     📑 SYTRD will need a new BLAS kernel
+
+
+wo mistakes in my email of last evening.
+
+For the second part, 
+
+(1) I forgot to tell you what H was and the sentence "Initializing with T = A and Q = I,” was not correct. (Bad copy paste on my end.) H is the Hessenberg factor of the Hessenberg reduction of A, and Q is initialized to the Q factor of the Hessenberg reduction (not to I), so what you need to do initialize Q and H is simply:
+  Q, H = hessenberg(A)
+And that’s it.
+You can check that after this:
+  @printf("|| I - Q Qᵀ ||₁              = %6.2e\n",norm(I - Q*Q',1)) 
+  @printf("|| A - Q H Qᵀ ||₁ / || A ||₁ = %6.2e\n",norm(A - Q*H*Q',1)/opnorm(A,1)) 
+returns small numbers. And then H is Hessenberg. 
+
+(2) "So it should do something like 1e-1, 1e-2, 1e-4, 1e-8, 1e-16 for the element H_{n-1,n}.”
+I meant H_{n,n-1} !!!! (Oops!)
+
+Here is a piece of code to get you started on Exercise #1, part b:
+
+  using LinearAlgebra
+  using Printf
+  using Random
+
+  n = 8
+
+  A = let Λ, X
+    Λ = diagm(0 => Float64[i for i=1:n])
+    X = rand(n,n)
+    X * Λ / X
+  end
+
+  Q, H = hessenberg(A)
+
+  @printf("|| I - Q Qᵀ ||₁              = %6.2e\n",norm(I - Q*Q',1)) 
+  @printf("|| A - Q H Qᵀ ||₁ / || A ||₁ = %6.2e\n",norm(A - Q*H*Q',1)/opnorm(A,1)) 
+  @printf("| h_{n,n-1} |                = %6.2e\n",abs(H[n,n-1])) 
+
+Now the question is to please run a few steps of "Hessenberg QR algorithm with shift":
+    W, R = qr(H - μ * I)  
+    H = R * W + μ * I  
+    Q = Q * W
+Where μ is picked as H[n,n]
+
+And observe that | h_{n,n-1} | converges quadratically to zero.
+So something like 1e-1, 1e-2, 1e-4, 1e-8, 1e-16.
+
+[ Note that  | h_{n,n-1} | converging quadratically to zero implies that h_{n,n} converges quadratically to an eigenvalue. ]
+
+You can also check that at each step of "Hessenberg QR algorithm with shift” we have I - Q * Q^T = 0 and A = Q H Q ^T. And that H stays Hessenberg. 
+
+Please note that for part (b) we take a matrix A with real eigenvalues. And then we work on its Hessenberg part.
+
+For part(a), A is “random” with complex or real eigenvalues. You should not take A with only real eigenvalues. I want you to think about what it means to converge to real (quasi) Schur form when A has complex eigenvalues. So for part (a), we need A  with complex or real eigenvalues.
+
+For part(a) you can either do the QR algorithm on A. So you start with A and Q = I. Or you can do the QR algorithm on the Hessenberg reduction of A. Then you would start with Q, H = hessenberg(A). Either method should give a similar answer. As you feel. You can do both if you want.
+
+For part b, we need to focus on matrices with only real eigenvalues. This is because when we do the shift we want to do what is called a “single shift” and single shift only works for real eigenvalues. We will see how to do “double shift” for complex eigenvalue. Right now we only know “single shift” so we take A with n real eigenvalues. 
+
+For part b, for fun, you can start from a symmetric matrix A. (That would automatically give you the real eigenvalues.) And then you would see that H (Hessenberg form) is not only Hessenbery but also symmetric tridiagonal. And you would observe that the code converges cubically. (Instead of quadratically for nonsymmetric.)
+
+(The question (b) is to this for nonsymmetric matrices, so if you try “for fun” to have a symmetric matrix, that’s fine, but this is not the question.)
+
+
+
+(*) show that for block that convergence is as say lambda4/lambda3 but also as lambda2/lambda1
+and it is actually both for the off diagonal terms. 
+
+ ⚙️  include("QR_Iteration_1.jl")
+ ⚙️  include("QR_Iteration_2.jl")
+ ⚙️  include("QR_Iteration_3.jl")
+
+Note that all this will not be super interesting since we will work with Hessenberg matrices and so these "blocks" do not exist any longer
+
+(*) explain that we do not understand why if there is a gap between lambda{n} and lambda{n-1}
+we shuld converge to lambda_n
+and this explains teh A^{-1} interpretation
+
+Story:
+we have three "vector methods": power, shift and invert, RQI
+we do the orthogonalziation iteraton:
+	explain why, explain speed of convergence
+	show side by side power and orthogonalization iteration 
+	normaiizatin is QR, rayleigh ritz is a block, and converges to a quasi triangule
+Now let us go crazy and do k=n
+Oh I can do QR RQ and that's QR algorithm and that works fine 
+Oh my QR - RQ is awesme for Hessenberg matrices. We keep Hessneberg! O(n^2)
+interpretation qith orthogonal iteration: theory and we want Q, power method
+interpretation qith QR algorithm: we want T, we are greedy, we want T right away, put back Q^t etc.
+what happens for lambda_n? => interpretation by row . . oh my!!! we convegre linearly to lambda_{n} too
+and so teh rows now goes to zero!!!! interpretaon wit QR algorithm
+great so now we can do shoft and invert!!!!
+note that as eigenvalue converges, we will deflate
+We are actually done for symmetric 
+and now we want double shift, and we need a new tool which is implicate shift Q
+
+
+
+
+=======================================================================
+
+ ⚙️  include("QR_Iteration_With_Shift.jl")
+
+ ⚙️  include("hessenberg_unicity__hessenberg_to_hessenberg.jl")
+ ⚙️  include("hessenberg_unicity.jl")
+
+ ⚙️  include("implicitQ_around_nonsym.jl")
+ ⚙️  include("implicitQ_around_sym.jl")
+ ⚙️  include("implicitQ_demo_double.jl")
+ ⚙️  include("implicitQ_demo_single.jl")
+
+ ⚙️  include("try_exactshift_doubleshift.jl")
+ ⚙️  include("try_exactshift_oneshift.jl")
+
+ ⚙️  include("test_larfg.jl")

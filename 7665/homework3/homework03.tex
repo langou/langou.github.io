@@ -1,0 +1,91 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{amssymb}
+
+
+\begin{document}
+
+\begin{center}
+{\Large \bf Winter 25-26 :: CR 04 :: Weekly assignment \#3 }
+{due Tu. 12/16/25, 11:59pm, by email,  }
+\end{center}
+
+\small
+
+\begin{enumerate}
+
+\item 
+(julia only)
+Take a random nonsymmetric $n$-by-$n$ matrix $A$ with real eigenvalues and computes an associated Hessenberg
+reduction with
+\begin{verbatim}
+n = 10
+X = randn(n, n)
+Lambda = randn(n)
+A = ( X * Diagonal(Lambda) ) / X
+H = triu(LAPACK.gehrd!(A)[1],-1)
+\end{verbatim}
+(Note: At this point, it might be a good idea to check that the eigenvalues of $A$ and the eigenvalues of $H$ are the same.)
+
+\begin{enumerate}
+
+\item Write a QR algorithm without shift on $H$ that is $\mathcal{O}(n^2)$ per
+iteration. Run the algorithm to completion. (That is to convergence to ``Schur
+form''.) Your algorithm needs to compute $Q$ and $T$ such that $A = QTQ^T$, $T$
+is triangular, and $Q$ is orthogonal.
+
+\item Now use shifted QR iteration to obtain quadratic convergence.  Use either
+the Rayleigh Quotient shift or the Wilkinson shift. (Please implement both
+shifts.) Only work on finding one eigenvalue (the lowest rightmost eigenvalue).
+Do not run the QR algorithm pass the convergence of the lowest rightmost
+eigenvalue. Display (or plot) information to show the quadratic convergence.
+
+\end{enumerate}
+
+\item 
+(tex + julia)
+Let $A$ be a $n$-by-$n$  nonsymmetric matrix. 
+Compute the gradient of the Rayleigh quotient of $A$ at any vector $x$ in $\mathbb{R}^n$.
+Compute the gradient of the Rayleigh quotient of $A$ at an eigenvector $x$ of $A$.
+(Is the gradient zero or not? If it is not zero, what it is?)
+Give your derivation in LaTeX. 
+Verify in Julia your formula by doing a Taylor expansion and verifying that your gradient 
+gives an approximation of an eigenvalue at the first order. 
+(Note: two methods: either do a Taylor approximation or use Calculus.)
+
+\item
+(tex + julia)
+(GVL - P.7.4.6)
+Suppose
+$$ A = \left(\begin{array}{cc} w & x \\ y &z \end{array}\right)$$ is a real matrix having $\lambda \pm i \mu$, where $\mu$ is nonzero.
+Give an algorithm that stably determines $c = \cos(\theta)$ and $s = \sin(\theta)$ such that
+$$ \left(\begin{array}{cc} c & s \\ -s &c \end{array}\right)^T
+\left(\begin{array}{cc} w & x \\ y &z \end{array}\right)
+\left(\begin{array}{cc} c & s \\ -s &c \end{array}\right) = 
+\left(\begin{array}{cc} \lambda & \alpha \\ \beta &\lambda \end{array}\right)
+$$ where $\alpha \beta =-\mu^2.$
+Verify your work in Julia by proposing an implementation of the computation of $c$ and $s$ given an $A$.
+Note that the values of $\alpha$ and $\beta$ are also an output of your computation.
+All we know is that $\alpha \beta =-\mu^2.$
+Also do not worry too much about the ``stably'' in the question.
+
+\item 
+(tex)
+(GVL - P.7.4.9)
+Show that if $C$ is a companion matrix with distinct eigenvalues $\lambda_1$, $\ldots$, $\lambda_n$, 
+then $V C V^{-1} = \textmd{diag}(\lambda_1,\ldots,\lambda_n)$ where
+$$ V = \left(\begin{array}{cccc} 
+1 & \lambda_1 & \ldots & \lambda_1^{n-1} \\ 
+1 & \lambda_2 & \ldots & \lambda_2^{n-1} \\ 
+\vdots & \vdots & \ddots & \vdots \\ 
+1 & \lambda_n & \ldots & \lambda_n^{n-1} \\
+\end{array}\right)
+$$
+
+\end{enumerate}
+
+
+
+
+
+
+\end{document}

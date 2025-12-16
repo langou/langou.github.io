@@ -1,0 +1,12 @@
+(**) move the larfg from the Chap5 repo to the repo on QR !!!!
+(**) better explain convergence of "orthogonal iteration"
+     show what happens when +1,+1, and +1,-1, etc. explain that 
+     we converge to a linear combination of q1 and q2 and that's not an eigenvector
+     (or do we bounce in the space?) I think we converge to a linear combination.
+
+(**) demonstrate theorem on page 165 to show tthat the convergence rate in orthogonal iteration
+     for each eignevector is ( l_i+1 / l_i )^k
+
+What is the speed of convergense of Schur????
+
+Answer the question on page 165: why do we need r=n to come up with a recurrence?

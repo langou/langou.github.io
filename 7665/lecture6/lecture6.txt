@@ -53,6 +53,30 @@ comparison Gram Schmidt, Normal Equations (CholQR), Householder
 (*) m ≫ n, m = n, m ≥n
 (*) do we need Q? which Q do we need (full or reduced)?
 
+m >= n 
+   -------------------------------------------------------
+   | compacy repres        |  Q and R
+----------------------------------------------------------
+HH | 2 m n^2 - (2/3) n^3   |  2 x ( 2 m n^2 - (2/3) n^3 )
+GS | 2 m n^2               |  2 m n^2
+----------------------------------------------------------
+
+m >> n 
+   -------------------------------------------------------
+   | compacy repres        |  Q and R
+----------------------------------------------------------
+HH | 2 m n^2               |  4 m n^2
+GS | 2 m n^2               |  2 m n^2
+----------------------------------------------------------
+
+m = n 
+   -------------------------------------------------------
+   | compacy repres        |  Q and R
+----------------------------------------------------------
+HH | (4/3) n^3             |  (8/3) n^3
+GS | 2 m n^2               |  2 m n^2
+----------------------------------------------------------
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Remarkable results for Householder
@@ -75,7 +99,8 @@ show some biblio about CholQR2 and the reorthogonalizaton fro Gram-Schmidt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SVD: 
-give the SVD decomposition and explain the four fundamental of the SVD
+give the SVD decomposition and explain the four fundamental spaces of the SVD
+(null(A) - range(A) - etc.)
 explain how it relates to QR factorization. 
 Explain how it relates with UTV.
 Explain how it relates with CUR.
@@ -185,7 +210,6 @@ That’s one way to get the minimum norm solution. (We can call it “normal equ
 
 
 
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 minimum norm problem
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -193,18 +217,26 @@ minimum norm problem
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Generalizing the problem
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We are now looking for THE minimum norm least squares solution
+
 QR will not work, one need SVD or COD
 
-Also, 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pseudo inverse in all this
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 recap various formulas
 
+why we like pseudo-inverse: existence and unicity
+a least squares problem has a solution, 
+and if this solution is not unique, then
+we can have unicity with minimum norm solution
+
 random thoughts:
 A\b for minimum norm in Matlab vs Julia (Matlab needs lsqminnorm)
 
+Explain the pictures in Darve and Wooters, and also the one on lsqminnorm page of mathworks
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Condition number of Least Squares
