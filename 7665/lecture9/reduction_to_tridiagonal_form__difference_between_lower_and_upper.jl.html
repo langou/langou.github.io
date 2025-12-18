@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture9/reduction_to_tridiagonal_form__difference_between_lower_and_upper.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+   <span class="Statement">using</span> LinearAlgebra
+
+   n <span class="Statement">=</span> <span class="Constant">8</span>
+   Λ <span class="Statement">=</span> diagm(<span class="Constant">0</span> <span class="Statement">=&gt;</span> <span class="Type">Float32</span>[i <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n])
+   X <span class="Statement">=</span> rand(rng, n, n)
+   X,_ <span class="Statement">=</span> qr(X)
+
+   A <span class="Statement">=</span> X <span class="Statement">*</span> Λ <span class="Statement">*</span> X<span class="Statement">'</span>;
+
+   A <span class="Statement">=</span> A<span class="Statement">'</span>;
+
+   A_L <span class="Statement">=</span> <span class="Type">Symmetric</span>( A, <span class="Identifier">:L</span>)
+   _, T_L <span class="Statement">=</span> hessenberg(A_L)
+
+   A_U <span class="Statement">=</span> <span class="Type">Symmetric</span>( A )
+   _, T_U <span class="Statement">=</span> hessenberg(A_U)
+
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">T_L = </span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+   display(T_L)
+
+   <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">T_U = </span><span class="Special">\n</span><span class="Constant">&quot;</span>)
+   display(T_U)
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

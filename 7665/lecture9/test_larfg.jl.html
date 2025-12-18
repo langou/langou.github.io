@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture9/test_larfg.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.PreProc { color: #6a0dad; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> Printf
+    <span class="Statement">using</span> Random
+    rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+    <span class="Statement">function</span> <span class="Identifier">larfg!</span>(x)
+        <span class="Constant">&quot;&quot;&quot;</span><span class="Constant">Computes the Householder transformation for input vector x</span><span class="Constant">&quot;&quot;&quot;</span>
+
+        σ <span class="Statement">=</span> dot(x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>],x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>])
+
+        <span class="Statement">if</span> σ <span class="Statement">==</span> <span class="Constant">0</span>
+            τ <span class="Statement">=</span> <span class="Constant">0</span>
+            <span class="Statement">return</span> τ
+        <span class="Statement">end</span>
+
+        β <span class="Statement">=</span> sqrt(x[<span class="Constant">1</span>]<span class="Statement">^</span><span class="Constant">2</span> <span class="Statement">+</span> σ)
+
+        <span class="Statement">if</span> x[<span class="Constant">1</span>] <span class="Statement">&gt;</span> <span class="Constant">0</span>
+            x[<span class="Constant">1</span>] <span class="Statement">=</span> x[<span class="Constant">1</span>] <span class="Statement">+</span> β
+            x₁ <span class="Statement">=</span> <span class="Statement">-</span>β
+        <span class="Statement">else</span>
+            x[<span class="Constant">1</span>] <span class="Statement">=</span> x[<span class="Constant">1</span>] <span class="Statement">-</span> β
+            x₁ <span class="Statement">=</span> <span class="Statement">+</span>β
+        <span class="Statement">end</span>
+
+        x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>] <span class="Statement">=</span> x[<span class="Constant">2</span><span class="Statement">:</span><span class="Constant">end</span>] <span class="Statement">/</span> x[<span class="Constant">1</span>]
+
+        τ <span class="Statement">=</span> <span class="Constant">2.0</span> <span class="Statement">/</span> (<span class="Constant">1.0</span> <span class="Statement">+</span> σ <span class="Statement">/</span> x[<span class="Constant">1</span>]<span class="Statement">^</span><span class="Constant">2</span>)
+
+        x[<span class="Constant">1</span>] <span class="Statement">=</span> x₁
+
+        <span class="Statement">return</span> τ
+
+    <span class="Statement">end</span>
+
+    n <span class="Statement">=</span> <span class="Constant">6</span>
+    x <span class="Statement">=</span> randn(rng, n)
+    v <span class="Statement">=</span> copy(x)
+    τ <span class="Statement">=</span> larfg!(v)
+
+    r <span class="Statement">=</span> zeros(<span class="Type">Float64</span>,n)
+    r[<span class="Constant">1</span>] <span class="Statement">=</span> v[<span class="Constant">1</span>]
+    v[<span class="Constant">1</span>] <span class="Statement">=</span> <span class="Constant">1.0</span>
+    <span class="PreProc">@show</span> x
+    <span class="PreProc">@show</span> v, τ
+    <span class="PreProc">@show</span> norm( (I(n) <span class="Statement">-</span> v <span class="Statement">*</span> τ <span class="Statement">*</span> v<span class="Statement">'</span> ) <span class="Statement">*</span> x <span class="Statement">-</span> r )
+    <span class="PreProc">@show</span> norm( (I(n) <span class="Statement">-</span> v <span class="Statement">*</span> τ <span class="Statement">*</span> v<span class="Statement">'</span> ) <span class="Statement">*</span> (I(n) <span class="Statement">-</span> v <span class="Statement">*</span> τ <span class="Statement">*</span> v<span class="Statement">'</span> ) <span class="Statement">-</span> I(n) )
+;
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

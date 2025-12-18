@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture9/implicitQ_demo_single.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+   <span class="Statement">using</span> LinearAlgebra
+   <span class="Statement">using</span> Printf
+   <span class="Statement">using</span> Random
+   rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+<span class="Comment">#</span><span class="Comment">  the goal is to show that implicit single shift work</span>
+<span class="Comment">#</span><span class="Comment">  we are not claiming that this is a good shift!</span>
+
+   n <span class="Statement">=</span> <span class="Constant">8</span>
+<span class="Comment">#</span><span class="Comment">  Λ = diagm(0 =&gt; Float32[2.0^(-i) for i=0:n-1])</span>
+   Λ <span class="Statement">=</span> diagm(<span class="Constant">0</span> <span class="Statement">=&gt;</span> <span class="Type">Float32</span>[i<span class="Statement">+</span><span class="Constant">1</span> <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n])
+<span class="Comment">#</span><span class="Comment">  Λ[n-1:n,n-1:n] = 0.25*[1. 2;-2 1]</span>
+   X <span class="Statement">=</span> rand(rng, n, n)
+   A <span class="Statement">=</span> X <span class="Statement">*</span> Λ <span class="Statement">/</span> X
+   A0 <span class="Statement">=</span> copy(A)
+   A0, tau <span class="Statement">=</span> LAPACK.gehrd!(A0)
+   A0 <span class="Statement">=</span> triu(A0,<span class="Statement">-</span><span class="Constant">1</span>)
+
+<span class="Comment">#</span><span class="Comment">  display(A0)</span>
+
+<span class="Comment">#</span><span class="Comment"># step of Schur iteration step (no implicit Q)</span>
+   B <span class="Statement">=</span> A0 <span class="Statement">+</span> <span class="Constant">2.0</span> <span class="Statement">*</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(I,n,n)
+   Q,R <span class="Statement">=</span> qr(B)
+<span class="Comment">#</span><span class="Comment">  A1 = Q' * A0 * Q</span>
+   A1 <span class="Statement">=</span> triu(Q<span class="Statement">'</span> <span class="Statement">*</span> A0 <span class="Statement">*</span> Q,<span class="Statement">-</span><span class="Constant">1</span>)
+   display(A1)
+
+<span class="Comment">#</span><span class="Comment"># step of QR iteration without implicit Q </span>
+   A2 <span class="Statement">=</span> copy(A0)
+   Q,R <span class="Statement">=</span> qr(A2 <span class="Statement">+</span> <span class="Constant">2.0</span> <span class="Statement">*</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(I,n,n))
+   A2 <span class="Statement">=</span> R<span class="Statement">*</span>Q <span class="Statement">-</span> <span class="Constant">2.0</span> <span class="Statement">*</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(I,n,n)
+   display(A2)
+
+<span class="Comment">#</span><span class="Comment"># step of QR iteration with implicit Q </span>
+   A3 <span class="Statement">=</span> copy(A0)
+   B <span class="Statement">=</span> A3 <span class="Statement">+</span> <span class="Constant">2.0</span> <span class="Statement">*</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(I,n,n)
+   b <span class="Statement">=</span> B[<span class="Constant">1</span><span class="Statement">:</span>n,<span class="Constant">1</span>]
+   F <span class="Statement">=</span> qr(b)
+   Q <span class="Statement">=</span> collect(F.Q)
+   A3 <span class="Statement">=</span> Q<span class="Statement">*</span>A3<span class="Statement">*</span>Q<span class="Statement">'</span>
+   A3, tau <span class="Statement">=</span> LAPACK.gehrd!(A3)
+   A3 <span class="Statement">=</span> triu(A3,<span class="Statement">-</span><span class="Constant">1</span>)
+   display(A3)
+
+;
+
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

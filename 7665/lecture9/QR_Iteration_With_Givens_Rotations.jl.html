@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture9/QR_Iteration_With_Givens_Rotations.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">using</span> Printf
+<span class="Statement">using</span> Random
+<span class="Statement">using</span> LinearAlgebra
+rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>(<span class="Constant">18</span>);
+
+include(<span class="Constant">&quot;</span><span class="Constant">/Users/langou/Documents/repositories/darve__numerical_linear_algebra_with_julia.git/src/gees.jl</span><span class="Constant">&quot;</span>)
+
+n <span class="Statement">=</span> <span class="Constant">4</span>
+
+Λ <span class="Statement">=</span> diagm(<span class="Constant">0</span> <span class="Statement">=&gt;</span> <span class="Type">Float32</span>[<span class="Constant">2.0</span><span class="Statement">^</span>(<span class="Statement">-</span>i) <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">0</span><span class="Statement">:</span>n<span class="Statement">-</span><span class="Constant">1</span>]);
+<span class="Comment">#</span><span class="Comment">Λ = zeros(n,n); Λ[1:n-2,1:n-2] = diagm(0 =&gt; Float32[2.0^(-i) for i=0:n-3]); Λ[n-1:n,n-1:n] = [0 1; -1 0]</span>
+
+X <span class="Statement">=</span> rand(rng, n, n)
+
+<span class="Comment">#</span><span class="Comment"> Λ = diagm(Float32[2.0^(-i) for i=0:n-1])</span>
+<span class="Comment">#</span><span class="Comment"> A = Λ</span>
+<span class="Comment">#</span><span class="Comment"> X, = qr(rand(rng, n, n))</span>
+
+A <span class="Statement">=</span> X <span class="Statement">*</span> Λ <span class="Statement">/</span> X
+
+println(<span class="Constant">&quot;</span><span class="Constant">Matrix A</span><span class="Constant">&quot;</span>)
+pretty_print(A)
+Λ <span class="Statement">=</span> eigenvalue_sorted(A)
+
+<span class="Comment">#</span><span class="Comment"> Applying Householder reflections to make matrix A upper Hessenberg</span>
+gehrd!(A)
+A0 <span class="Statement">=</span> copy(A)
+<span class="Comment">#</span><span class="Comment">display( triu(A0,-1) )</span>
+
+<span class="Comment">#</span><span class="Comment"> Checking that A is upper Hessenberg now</span>
+println(<span class="Constant">&quot;</span><span class="Constant">Norm for lower part of matrix = </span><span class="Constant">&quot;</span>,norm(tril(A,<span class="Statement">-</span><span class="Constant">2</span>)))
+println(<span class="Constant">&quot;</span><span class="Constant">Matrix A</span><span class="Constant">&quot;</span>)
+display(A)
+
+<span class="Comment">#</span><span class="Comment"> Checking that the eigenvalues are the same</span>
+D <span class="Statement">=</span> eigenvalue_sorted(A)
+println(norm(D<span class="Statement">-</span>Λ))
+
+<span class="Comment">#</span><span class="Comment"> Sequential version of QR iteration using Givens rotations</span>
+<span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">10</span>
+givens_QR_iteration_s!(A)
+display(A)
+<span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment"> QR iteration with bulge chasing</span>
+<span class="Comment">#</span><span class="Comment">A = copy(A0)</span>
+<span class="Comment">#</span><span class="Comment">for i=1:100</span>
+<span class="Comment">#</span><span class="Comment">givens_QR_iteration!(A)</span>
+<span class="Comment">#</span><span class="Comment">display(A)</span>
+<span class="Comment">#</span><span class="Comment">end</span>
+<span class="Comment">#</span><span class="Comment">;</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

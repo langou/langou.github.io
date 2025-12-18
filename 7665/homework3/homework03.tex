@@ -5,8 +5,8 @@
 \begin{document}
 
 \begin{center}
-{\Large \bf Winter 25-26 :: CR 04 :: Weekly assignment \#3 }
-{due Tu. 12/16/25, 11:59pm, by email,  }
+{\Large \bf Numerical Linear Algebra }\\
+{\Large \bf Weekly assignment \#3 }
 \end{center}
 
 \small
@@ -71,16 +71,30 @@ Also do not worry too much about the ``stably'' in the question.
 \item 
 (tex)
 (GVL - P.7.4.9)
-Show that if $C$ is a companion matrix with distinct eigenvalues $\lambda_1$, $\ldots$, $\lambda_n$, 
-then $V C V^{-1} = \textmd{diag}(\lambda_1,\ldots,\lambda_n)$ where
+Let 
+$$x^n + a_{n-1} x^{n-1} + a_{n-2} x^{n-2} + \ldots + a_{2} x^{2} + a_{1} x + a_0 $$
+be a polynomial of degree $n$ with $n$ distinct roots $\lambda_1$, $\ldots$, $\lambda_n$.
+Let 
+$C$ be the associated companion matrix
+$$\left(\begin{array}{rrrrrrr}
+ 0 &   &   &       &   & -a_0     \\
+ 1 & 0 &   &       &   & -a_1     \\
+   & 1 & 0 &       &   & -a_2     \\
+   &   & 1 &\ddots &   & \vdots   \\
+   &   &   &\ddots & 0 & -a_{n-2} \\
+   &   &   &       & 1 & -a_{n-1} \\
+\end{array}\right).$$
+Let 
 $$ V = \left(\begin{array}{cccc} 
 1 & \lambda_1 & \ldots & \lambda_1^{n-1} \\ 
 1 & \lambda_2 & \ldots & \lambda_2^{n-1} \\ 
 \vdots & \vdots & \ddots & \vdots \\ 
 1 & \lambda_n & \ldots & \lambda_n^{n-1} \\
-\end{array}\right)
+\end{array}\right).
 $$
-
+Show that
+$$V C V^{-1} = \textmd{diag}(\lambda_1,\ldots,\lambda_n).$$
+(This means that the rows of $V$ are a basis of left eigenvectors of $C$.)
 \end{enumerate}
 
 

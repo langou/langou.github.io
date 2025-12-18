@@ -90,6 +90,8 @@ Clément
 	(**) explain what linear, quadratic or cubic convergence mean
 	(**) det( A - λ I ) is not a good method
 	(**) explain how matlab compute roots of polynomial
+
+
 [ companion matrix ]
 [   0 1 0 . . . . . 0        ]
 [   0 0 1 . . . . . 0        ]
@@ -98,6 +100,23 @@ Clément
 [ -a0 -a1 -a2 . . . -a_{n-1} ]
 
 p(x) = x^n + a_{n-1} x^{n-1} + . . . + a1 x + a0
+
+[ be careful the one above is the one as defined by Darve and Wooters, there are a few variations   ]
+[ the one of Darve and Wooters is nice because the eigenvectors are nice but it is lower Hessenberg ]
+[ and we prefer upper Hessenberg in general, it is really not a big deal, just be careful which     ]
+[ definition is in place  ]
+
+A lots of definition of what a Companion matrix is:
+Wikipedia + Trefethen and Bau
+https://en.wikipedia.org/wiki/Companion_matrix
+Nick Higham uses a different version
+https://nhigham.com/2021/03/23/what-is-a-companion-matrix/
+
+See question #4 of Homework #3 which is also in GVL
+We want to prove something like
+V C V^{-1} = D. 
+So V C = D V so the rows of V are left eigenvectors for C
+
 
 Two-sided transformations
 

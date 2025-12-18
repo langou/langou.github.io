@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecture9/QR_algorithm__convergence__non_symmetric_case__double_shift__complex_pair.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+   <span class="Statement">using</span> LinearAlgebra
+   <span class="Statement">using</span> Printf
+   <span class="Statement">using</span> Random
+   rng <span class="Statement">=</span> <span class="Type">MersenneTwister</span>()
+
+   n <span class="Statement">=</span> <span class="Constant">8</span>
+<span class="Comment">#</span><span class="Comment">  Λ = diagm(0 =&gt; Float32[2.0^(-i) for i=0:n-1])</span>
+   Λ <span class="Statement">=</span> diagm(<span class="Constant">0</span> <span class="Statement">=&gt;</span> <span class="Type">Float32</span>[i <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n])
+   Λ[n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n,n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n] <span class="Statement">=</span> <span class="Constant">0.25</span><span class="Statement">*</span>[<span class="Constant">1.</span> <span class="Constant">2</span>;<span class="Statement">-</span><span class="Constant">2</span> <span class="Constant">1</span>]
+   X <span class="Statement">=</span> rand(rng, n, n)
+   A <span class="Statement">=</span> X <span class="Statement">*</span> Λ <span class="Statement">/</span> X
+   A0 <span class="Statement">=</span> copy(A)
+   A0, tau <span class="Statement">=</span> LAPACK.gehrd!(A0)
+   A0 <span class="Statement">=</span> triu(A0,<span class="Statement">-</span><span class="Constant">1</span>)
+
+<span class="Comment">#</span><span class="Comment">  here we do 10 step of QR algorithm to &quot;prep&quot; the lower 2x2 block to be our complex conjugate pair</span>
+<span class="Comment">#</span><span class="Comment">  we could have done the experiment with a :</span>
+   A1 <span class="Statement">=</span> copy(A0)
+   <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">10</span>
+   <span class="Statement">global</span> A1, Q, R
+   Q,R <span class="Statement">=</span> qr(A1)
+   A1 <span class="Statement">=</span> R<span class="Statement">*</span>Q
+   <span class="Statement">end</span>
+
+<span class="Statement">function</span> <span class="Identifier">double_shift_st</span>(A)
+    a <span class="Statement">=</span> A[<span class="Constant">1</span>,<span class="Constant">1</span>]
+    b <span class="Statement">=</span> A[<span class="Constant">1</span>,<span class="Constant">2</span>]
+    c <span class="Statement">=</span> A[<span class="Constant">2</span>,<span class="Constant">1</span>]
+    d <span class="Statement">=</span> A[<span class="Constant">2</span>,<span class="Constant">2</span>]
+    s <span class="Statement">=</span> a<span class="Statement">+</span>d       <span class="Comment">#</span><span class="Comment"> sum</span>
+    t <span class="Statement">=</span> a<span class="Statement">*</span>d <span class="Statement">-</span> b<span class="Statement">*</span>c <span class="Comment">#</span><span class="Comment"> product</span>
+    <span class="Statement">return</span> s,t
+<span class="Statement">end</span>
+
+  display(A1)
+  display(eigvals(A1[n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n,n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n]))
+
+   A2 <span class="Statement">=</span> copy(A1)
+   <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">3</span>
+      <span class="Statement">global</span> A2, Q, R, B, s, t, b, F, tau
+      s,t <span class="Statement">=</span> double_shift_st(A2[n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n,n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n])
+
+<span class="Comment">#</span><span class="Comment">#    step of Schur iteration step (no implicit Q)</span>
+<span class="Comment">#</span><span class="Comment">     B = A2^2 - s * A2 + t * Matrix{Float64}(I,n,n)</span>
+<span class="Comment">#</span><span class="Comment">     Q,R = qr(B)</span>
+<span class="Comment">#</span><span class="Comment">     A2 = triu(Q' * A2 * Q,-1)</span>
+
+<span class="Comment">#</span><span class="Comment">#    step of QR iteration with implicit Q </span>
+      B <span class="Statement">=</span> A2<span class="Statement">^</span><span class="Constant">2</span> <span class="Statement">-</span> s <span class="Statement">*</span> A2 <span class="Statement">+</span> t <span class="Statement">*</span> <span class="Type">Matrix</span>{<span class="Type">Float64</span>}(I,n,n)
+      b <span class="Statement">=</span> B[<span class="Constant">1</span><span class="Statement">:</span>n,<span class="Constant">1</span>]
+      F <span class="Statement">=</span> qr(b)
+      Q <span class="Statement">=</span> collect(F.Q)
+      A2 <span class="Statement">=</span> Q<span class="Statement">*</span>A2<span class="Statement">*</span>Q<span class="Statement">'</span>
+      A2, tau <span class="Statement">=</span> LAPACK.gehrd!(A2)
+      A2 <span class="Statement">=</span> triu(A2,<span class="Statement">-</span><span class="Constant">1</span>)
+
+      display(A2)
+      display(eigvals(A2[n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n,n<span class="Statement">-</span><span class="Constant">1</span><span class="Statement">:</span>n]))
+   <span class="Statement">end</span>
+
+;
+
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

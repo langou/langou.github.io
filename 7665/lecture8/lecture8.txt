@@ -14,6 +14,16 @@
 
  ⚙️  include("Orthogonal_Iteration.jl")
 
+
+Explain that what we care are invariant subspace and explain what an invariant subspace is:
+
+	A = Q [ T11 T12; 0 T22] Q^T
+
+And then eigenvalues of A are the eigenvalues of T11 and eigenvalues of T22
+
+1x1 invariant subspace will correspond to real eigenvalues
+2x2 invariant subspace will correspond to complex conjugate eigenvalues
+
  ⚙️  include("Schur_Iteration.jl")
 
     increase number of iterations to 200
@@ -42,6 +52,7 @@ and since the matrix is symmetric, we only compute half of it so 4/3 n^3
 (It ends up being same as QR but because it is two "QR", one on the left and one on the right, and / 2 because of symmmetry. So we are not just doing a QR on the
 left, 
 
+  Q, H = hessenberg(A)
 
      📑 quote paper for reduction to condensed form with block and Level 3 BLAS from Hammarling
      📑 quote successive band reduction
@@ -143,20 +154,5 @@ and now we want double shift, and we need a new tool which is implicate shift Q
 
 
 
+     📑 reorder the Schur form
 
-=======================================================================
-
- ⚙️  include("QR_Iteration_With_Shift.jl")
-
- ⚙️  include("hessenberg_unicity__hessenberg_to_hessenberg.jl")
- ⚙️  include("hessenberg_unicity.jl")
-
- ⚙️  include("implicitQ_around_nonsym.jl")
- ⚙️  include("implicitQ_around_sym.jl")
- ⚙️  include("implicitQ_demo_double.jl")
- ⚙️  include("implicitQ_demo_single.jl")
-
- ⚙️  include("try_exactshift_doubleshift.jl")
- ⚙️  include("try_exactshift_oneshift.jl")
-
- ⚙️  include("test_larfg.jl")
