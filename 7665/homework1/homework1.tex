@@ -1,0 +1,75 @@
+\documentclass[11pt,letterpaper]{article}
+\begin{document}
+
+\begin{center}
+{\Large \bf Numerical Linear Algebra }\\
+{\Large \bf Weekly assignment \#1 }
+\end{center}
+
+\begin{enumerate}
+
+\item
+Write a Julia code that creates a random 500x500 system of linear
+equations. Solve it using the built-in LU with partial pivoting factorization, 
+\texttt{L, U, p = lu(A)}.
+Check that the backward error is small.
+Report the performance in GFlop/sec.
+
+You can do neither do
+\texttt{F = lu(A); x = F \ b} nor 
+\texttt{x = A \ b}. You need to directly use the factors L, U and the permutation vector p.
+
+
+\item
+Write a Julia code that creates a random 500x500 
+symmetric positive definite system of linear
+equations. Solve it using the built-in Cholesky factorization, 
+\texttt{L = cholesky(A).L}.
+Check that the backward error is small.
+Report the performance in GFlop/sec.
+
+You can do neither do
+\texttt{F = cholesky(A); x = F \ b} nor 
+\texttt{x = A \ b}. You need to directly use the factor L.
+
+
+
+\item
+Write a Julia code for a recursive Cholesky factorization.
+Check that the backward error is small.
+Report the performance in GFlop/sec.
+
+\item
+Write a Julia code that creates a random 500x500
+nonsymmetric system of linear
+equations with prescribed condition number $\kappa$.
+Check that 
+(1) 
+$\textmd{backward error} \approx \textmd{machine precision}$
+and that
+(2)
+$  \textmd{forward error} \approx \textmd{condition number} \times \textmd{backward error}. $
+
+\item
+Write a Julia code that performs LU with complete pivoting.
+Write the test code that goes with it.
+
+\item
+Using the already written codes in the textbook compare the 
+backward error for a random 500x500 nonsymmetric system of linear
+equations for 
+LU with no pivoting, 
+LU with partial pivoting, 
+LU with rook pivoting and 
+LU with complete pivoting.
+
+\end{enumerate}
+
+
+
+\end{document}
+
+
+
+
+\end{document}
