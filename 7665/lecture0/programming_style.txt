@@ -1,0 +1,80 @@
+kappas = [1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]
+outputs = [ question4_2(κ).bwd_error for κ in kappas ]
+
+@printf("Median time in seconds over %d runs\n", n_runs)
+@printf("%8.4f\n", median([ out.time for out in outputs ]))
+@printf("Mean backward error over %d runs\n", n_runs)
+@printf("%6.2e\n", mean([ out.bwd_error for out in outputs ]))
+@printf("Mean norm of x over %d runs\n", n_runs)
+@printf("%6.2e\n", mean([ out.bonus for out in outputs ]))
+print("\n”);
+
+question5()# Warm up the code
+outputs = []
+n_runs = 10
+for i in 1:n_runs
+    out = question5()
+    push!(outputs, out)
+end
+
+
+using Printf
+using Random
+using LinearAlgebra
+using Statistics
+
+struct FactorizationOutput
+    time::Float64
+    bwd_error::Float64
+    bonus::Float64
+end
+
+
+## Question 1
+print("=== Question 1 ===\n")
+function question1()
+    m = 10; n = 7;
+    # Using uniform distributions
+    A = randn(rng,Float64,m,n);
+    b = randn(rng,Float64,m,1);
+    # Maybe assert that the matrix is somehow invertible?
+    # We will assume so with high probability
+    A_copy = deepcopy(A)
+
+    # Start a timer
+    t1 = time()
+
+    Q, R = qr(A_copy)
+    Q = Q[:,1:n] # Restrict
+    # (QR) x = b <-> x = R \ (Q' * b)
+    x = R \ (Q' * b)
+
+    # Stop timer
+    t = time() - t1
+
+    FactorizationOutput(
+        # Time
+        t,
+        # Backward error
+        norm(Q*Q'*b - A*x, Inf) / (opnorm(A, Inf) * norm(x, Inf)),
+        # Bonus UNUSED HERE
+        0
+    )
+end
+
+
+question1()# Warm up the code
+outputs = []
+n_runs = 10
+for i in 1:n_runs
+    out = question1()
+    push!(outputs, out)
+end
+@printf("Median time in seconds over %d runs\n", n_runs)
+@printf("%8.4f\n", median([ out.time for out in outputs ]))
+@printf("Mean backward error over %d runs\n", n_runs)
+@printf("%6.2e\n", mean([ out.bwd_error for out in outputs ]))
+print("\n");
+
+
+

@@ -2,6 +2,25 @@
 
 Givens.
 
+Nice implementation in Julia:
+https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.givens
+https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.Givens
+
+for k = m-1:-1:1
+    # Create Givens rotation to zero out w[k+1] using w[k]
+    G, r = givens(w[k], w[k+1], k, k+1)
+
+    # Apply G to w
+    w[k] = r
+    w[k+1] = 0
+    
+    # Apply G to R
+    lmul!(G, R)
+    
+    # Apply G' to Q
+    rmul!(Q, G')
+end
+
 Cost of Givens.
 
 derive that G^T
