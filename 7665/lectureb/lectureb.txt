@@ -1,0 +1,46 @@
+
+~~ Lecture B ~~
+
+https://docs.julialang.org/en/v1/stdlib/SparseArrays/
+
+https://github.com/JuliaSparse/SparseArrays.jl/blob/main/src/sparsematrix.jl
+
+explain mutable struct vs struct
+	in short "mutable" is more convenient when developing code, it can be safely removed and probably should
+	if not mutable, then all values such as m, n, and the pointers rowptr, colval and nzval cannot be changed
+	however the values inside the array of these pointers can be changed
+	if mutable the m, n, pointers, of the struct, all this can be changed. 
+
+https://math.nist.gov/MatrixMarket/
+
+⚙️  Sparse_Matrix_Demo.jl
+⚙️  Sparse.jl
+
+The graph of a triangular (sparse or not) matrix is a DAG.  A directed acyclic
+graph (DAG) is a type of graph in which nodes are linked by one-way connections
+that do not form any cycles.
+
+https://math.stackexchange.com/questions/4017697/how-to-proof-that-adjacency-matrices-of-dag-can-be-permuted-to-triangular-matric
+
+Because the graph is a DAG, there exists a topological ordering on the
+vertices. After relabelling the vertices with this ordering, we have labelled
+vertices 𝑣1,𝑣2,⋯,𝑣𝑛 such that if 𝑣𝑖𝑣𝑗 is a directed edge, then 𝑖<𝑗.  Now,
+entry 𝐴𝑖𝑗 of the adjacency matrix is nonzero when there is an edge from 𝑣𝑖 to
+𝑣𝑗. We want to show that 𝐴 is an (upper) triangular matrix. Formally, this
+means its entries below the main diagonal are zero. Moreover, entries 𝐴𝑖𝑗 below
+the main diagonal are precisely the elements with 𝑖>𝑗. 
+
+⚙️  trtrs_jl.jl
+⚙️  Lower_Triangular_Solve.jl
+
+brew install graphviz
+dot -Tpng A.dot > A.png
+
+Look at 
+dot -Tpdf reach_example.dot > reach_example.pdf
+for 6x6 
+
+⚙️  Reach.jl
+⚙️  ReachSolve.jl
+⚙️  ReachSolve_MatrixMarket.jl
+

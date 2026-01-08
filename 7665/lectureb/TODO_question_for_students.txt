@@ -1,0 +1,7 @@
+
+(*) Given a matrix in CSR (or CSC) format check that the matrix is lower triangular?
+
+(*) Given a lower triangular matrix in CSR (or CSC) format check that the matrix is not structurally rank-deficient?
+(i.e. For all i = 1 to n, the diagonal entry Aii is stored in the CSC (or CSR) representation of A.)
+
+(*) écrire un script qui va faire des .dot à partir des .mtx
