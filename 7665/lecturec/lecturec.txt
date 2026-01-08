@@ -1,0 +1,9 @@
+
+~~ Lecture C ~~
+
+Timothy A. Davis. 2005. Algorithm 849: A concise sparse Cholesky factorization package. ACM Trans. Math. Softw. 31, 4 (December 2005), 587–591. https://doi.org/10.1145/1114268.1114277
+https://www.researchgate.net/profile/Tim-Davis-5/publication/252694378_User_Guide_for_LDL_a_concise_sparse_Cholesky_package/links/551b1e0b0cf2fdce843882fa/User-Guide-for-LDL-a-concise-sparse-Cholesky-package.pdf
+
+explain why a topological order for triangular solve is enough.
+
+Write a Cholesky code that is enough based on 9.4.1
