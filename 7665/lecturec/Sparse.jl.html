@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecturec/Sparse.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">mutable struct</span> <span class="Type">SparseMatrixCSR</span>
+    m<span class="Statement">::</span><span class="Type">Int</span> <span class="Comment">#</span><span class="Comment"> Number of rows</span>
+    n<span class="Statement">::</span><span class="Type">Int</span> <span class="Comment">#</span><span class="Comment"> Number of columns</span>
+    rowptr<span class="Statement">::</span><span class="Type">Vector</span>{<span class="Type">Int</span>} <span class="Comment">#</span><span class="Comment"> Starting index for each row</span>
+    colval<span class="Statement">::</span><span class="Type">Vector</span>{<span class="Type">Int</span>} <span class="Comment">#</span><span class="Comment"> Column indices</span>
+    nzval<span class="Statement">::</span><span class="Type">Vector</span>{<span class="Type">Float64</span>} <span class="Comment">#</span><span class="Comment"> Matrix entries</span>
+<span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment"> Convert a CSC matrix to CSR format</span>
+<span class="Comment">#</span><span class="Comment"> CSC = compressed sparse column</span>
+<span class="Comment">#</span><span class="Comment"> CSR = compressed sparse row</span>
+<span class="Statement">function</span> <span class="Identifier">SparseMatrixCSR</span>(A_CSC<span class="Statement">::</span><span class="Type">SparseMatrixCSC</span>)
+    m <span class="Statement">=</span> A_CSC.m
+    n <span class="Statement">=</span> A_CSC.n
+
+    <span class="Comment">#</span><span class="Comment"> Counting the number of entries in each row</span>
+    rowptr <span class="Statement">=</span> zeros(<span class="Type">Int</span>,m<span class="Statement">+</span><span class="Constant">1</span>)
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.n
+        <span class="Statement">for</span> k<span class="Statement">=</span>A_CSC.colptr[j]<span class="Identifier">:A_CSC</span>.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            rowptr[A_CSC.rowval[k]] <span class="Statement">+=</span> <span class="Constant">1</span>
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+
+    <span class="Comment">#</span><span class="Comment"> Beginning index for each row</span>
+    rowptr <span class="Statement">=</span> cumsum(rowptr) <span class="Statement">.+</span> <span class="Constant">1</span>
+    rowptr <span class="Statement">=</span> vcat([<span class="Constant">1</span>],rowptr[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">end</span><span class="Statement">-</span><span class="Constant">1</span>])
+
+    colval <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Int</span>}(<span class="Constant">undef</span>,rowptr[<span class="Constant">end</span>]<span class="Statement">-</span><span class="Constant">1</span>)
+    nzval <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,rowptr[<span class="Constant">end</span>]<span class="Statement">-</span><span class="Constant">1</span>)
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.n
+        <span class="Statement">for</span> k<span class="Statement">=</span>A_CSC.colptr[j]<span class="Identifier">:A_CSC</span>.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            i <span class="Statement">=</span> A_CSC.rowval[k]
+            k_CSR <span class="Statement">=</span> rowptr[i]
+            colval[k_CSR] <span class="Statement">=</span> j
+            nzval[k_CSR]  <span class="Statement">=</span> A_CSC.nzval[k]
+            rowptr[i] <span class="Statement">+=</span> <span class="Constant">1</span>
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+    <span class="Comment">#</span><span class="Comment"> Reset to correct value</span>
+    rowptr <span class="Statement">=</span> vcat([<span class="Constant">1</span>],rowptr[<span class="Constant">1</span><span class="Statement">:</span><span class="Constant">end</span><span class="Statement">-</span><span class="Constant">1</span>])
+
+    <span class="Statement">return</span> SparseMatrixCSR(m,n,rowptr,colval,nzval)
+<span class="Statement">end</span>
+
+<span class="Constant">&quot;&quot;&quot;</span><span class="Constant">Multiplication operator for a sparse matrix A and a dense vector x</span><span class="Constant">&quot;&quot;&quot;</span>
+<span class="Statement">function</span> Base.<span class="Identifier">:*</span>(A<span class="Statement">::</span><span class="Type">SparseMatrixCSR</span>, x<span class="Statement">::</span><span class="Type">Array</span>{<span class="Type">Float64</span>,<span class="Constant">1</span>})
+    <span class="Comment">#</span><span class="Comment"> y = A * x</span>
+    y <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,A.m)
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A.m
+        y[i] <span class="Statement">=</span> <span class="Constant">0.0</span>
+        <span class="Statement">for</span> k<span class="Statement">=</span>A.rowptr[i]<span class="Identifier">:A</span>.rowptr[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            y[i] <span class="Statement">+=</span> A.nzval[k] <span class="Statement">*</span> x[A.colval[k]]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+    <span class="Statement">return</span> y
+<span class="Statement">end</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

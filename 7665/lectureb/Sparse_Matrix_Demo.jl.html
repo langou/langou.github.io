@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lectureb/Sparse_Matrix_Demo.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Identifier { color: #008787; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> SparseArrays
+    <span class="Statement">using</span> MatrixMarket
+    <span class="Statement">using</span> Printf
+
+    file_name <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">MatrixMarket/bp__1000.mtx</span><span class="Constant">&quot;</span>
+
+<span class="Comment">#</span><span class="Comment">   file_name = &quot;MatrixMarket/trefethen_150.mtx&quot;</span>
+<span class="Comment">#</span><span class="Comment">   The entries are zero everywhere except for the prime numbers</span>
+<span class="Comment">#</span><span class="Comment">   2, 3, 5, 7, ..., 863 along the main diagonal.</span>
+<span class="Comment">#</span><span class="Comment">   Then, we add the number 1 in all the positions A[i,j] with</span>
+<span class="Comment">#</span><span class="Comment">   |i-j| = 1, 2, 4, 8, ..., 128.</span>
+
+<span class="Comment">#</span><span class="Comment">   Load the matrix using the matrix market format (this is an optional step).</span>
+<span class="Comment">#</span><span class="Comment">   Information data for the matrix</span>
+<span class="Comment">#</span><span class="Comment">   we set infoonly = true</span>
+    rows, cols, entries, mat_format, field, symm <span class="Statement">=</span> MatrixMarket.mmread(file_name,<span class="Constant">true</span>)
+
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of rows    = </span><span class="Constant">&quot;</span>, rows)
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of columns = </span><span class="Constant">&quot;</span>, cols)
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of entries = </span><span class="Constant">&quot;</span>, entries)
+
+<span class="Comment">#</span><span class="Comment">   Read the matrix data</span>
+    Amm <span class="Statement">=</span> MatrixMarket.mmread(file_name)
+    <span class="PreProc">@show</span> typeof(Amm)
+    <span class="PreProc">@show</span> fieldnames(typeof(Amm))
+
+<span class="Comment">#</span><span class="Comment">## Display Amm using julia</span>
+<span class="Comment">#</span><span class="Comment">   Amm</span>
+
+<span class="Comment">#</span><span class="Comment">## Needs to be executed on its own</span>
+<span class="Comment">#</span><span class="Comment">   using UnicodePlots</span>
+<span class="Comment">#</span><span class="Comment">   UnicodePlots.spy(Amm)</span>
+
+<span class="Comment">#</span><span class="Comment">## Needs to be executed on its own</span>
+<span class="Comment">#</span><span class="Comment">   using Plots</span>
+<span class="Comment">#</span><span class="Comment">   Plots.spy(Amm)</span>
+
+<span class="Comment">#</span><span class="Comment">## Plot the matrix</span>
+<span class="Comment">#</span><span class="Comment">   pyplot()</span>
+<span class="Comment">#</span><span class="Comment">   n = Amm.m # Size of matrix</span>
+<span class="Comment">#</span><span class="Comment">   plot(Plots.spy(Amm), xaxis=((0,n+1), 1:20:n), yaxis=((0,n+1), 1:20:n), markersize = 5, clims = (1,2))</span>
+
+    include(<span class="Constant">&quot;</span><span class="Constant">Sparse.jl</span><span class="Constant">&quot;</span>);
+
+<span class="Comment">#</span><span class="Comment">   Currently, the matrix uses the CSC format (column format).</span>
+<span class="Comment">#</span><span class="Comment">   This is often the default, but for this class CSR will be much easier.</span>
+    A <span class="Statement">=</span> SparseMatrixCSR(Amm)
+
+<span class="Comment">#</span><span class="Comment">   println(&quot;Matrix A&quot;); println(A)</span>
+    println(<span class="Constant">&quot;</span><span class="Constant">Indices of the non-zero entries in the 1st row </span><span class="Constant">&quot;</span>, A.colval[A.rowptr[<span class="Constant">1</span>]<span class="Identifier">:A</span>.rowptr[<span class="Constant">2</span>]<span class="Statement">-</span><span class="Constant">1</span>])
+    println(<span class="Constant">&quot;</span><span class="Constant">Non-zero entries in the first row              </span><span class="Constant">&quot;</span>, A.nzval[A.rowptr[<span class="Constant">1</span>]<span class="Identifier">:A</span>.rowptr[<span class="Constant">2</span>]<span class="Statement">-</span><span class="Constant">1</span>])
+
+<span class="Comment">#</span><span class="Comment">   Matrix-vector product using the CSR format</span>
+    x <span class="Statement">=</span> rand(<span class="Type">Float64</span>,A.n)
+    y <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,A.m)
+
+<span class="Comment">#</span><span class="Comment">   At the end: y = A * x</span>
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A.m
+        y[i] <span class="Statement">=</span> <span class="Constant">0.0</span>
+        <span class="Statement">for</span> k<span class="Statement">=</span>A.rowptr[i]<span class="Identifier">:A</span>.rowptr[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            y[i] <span class="Statement">+=</span> A.nzval[k] <span class="Statement">*</span> x[A.colval[k]]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">   println(&quot;Error should be equal to 0: &quot;, norm(y - Amm * x))</span>
+<span class="Comment">#</span><span class="Comment">   norm(y - Amm * x) == 0 ? &quot;PASS&quot; : &quot;FAIL&quot;</span>
+
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || y - Amm * x ||_1 / || Amm ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(y <span class="Statement">-</span> Amm <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> norm(Amm,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+;
+
+<span class="Comment">#</span><span class="Comment">   check that the overloading of * for our CSR format works too</span>
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || A*x - Amm * x ||_1 / || Amm ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(A<span class="Statement">*</span>x <span class="Statement">-</span> Amm <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> norm(Amm,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+<span class="Comment">#</span><span class="Comment">   Note that &quot;norm(Amm,1)&quot; because Amm is in the julia-supported CSC format</span>
+<span class="Comment">#</span><span class="Comment">   for example &quot;norm(A,1)&quot; would not work. We would have to overload norm(.,1) </span>
+<span class="Comment">#</span><span class="Comment">   for our CSR format. </span>
+<span class="Comment">#</span><span class="Comment">   Similarly lu() supported for CSC, triu(), etc.</span>
+
+;
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

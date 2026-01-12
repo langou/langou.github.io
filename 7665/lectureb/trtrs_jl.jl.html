@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lectureb/trtrs_jl.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+.Identifier { color: #008787; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Statement">function</span> <span class="Identifier">trtrsRow</span>(L, x) <span class="Comment">#</span><span class="Comment"> This is the slow implementation</span>
+    n <span class="Statement">=</span> length(x)
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+        <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>i<span class="Statement">-</span><span class="Constant">1</span>
+            x[i] <span class="Statement">-=</span> L[i,j] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+        x[i] <span class="Statement">=</span> x[i] <span class="Statement">/</span> L[i,i]
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+
+<span class="Statement">function</span> <span class="Identifier">trtrs</span>(L, x)
+    n <span class="Statement">=</span> length(x)
+    <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>n
+        x[j] <span class="Statement">=</span> x[j] <span class="Statement">/</span> L[j,j]
+        <span class="Statement">for</span> i <span class="Statement">=</span> j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>n
+            x[i] <span class="Statement">-=</span> L[i,j] <span class="Statement">*</span> x[j]
+            <span class="Comment">#</span><span class="Comment"> This is fast because the row index is the inner loop</span>
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

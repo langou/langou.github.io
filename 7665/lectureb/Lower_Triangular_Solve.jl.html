@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lectureb/Lower_Triangular_Solve.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Comment { color: #0000ff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Identifier { color: #008787; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> SparseArrays
+    <span class="Statement">using</span> Plots
+    <span class="Statement">using</span> Random
+    <span class="Statement">using</span> MatrixMarket
+    <span class="Statement">using</span> UnicodePlots
+    <span class="Statement">using</span> Printf
+
+
+    file_name <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">MatrixMarket/bp__1000.mtx</span><span class="Constant">&quot;</span>
+<span class="Comment">#</span><span class="Comment">   BP 1000: Original Harwell sparse matrix test collection</span>
+<span class="Comment">#</span><span class="Comment">   Simplex method basis matrix</span>
+
+<span class="Comment">#</span><span class="Comment">   file_name = &quot;MatrixMarket/trefethen_150.mtx&quot;</span>
+<span class="Comment">#</span><span class="Comment">   The entries are zero everywhere except for the prime numbers</span>
+<span class="Comment">#</span><span class="Comment">   2, 3, 5, 7, ..., 863 along the main diagonal.</span>
+<span class="Comment">#</span><span class="Comment">   Then, we add the number 1 in all the positions A[i,j] with</span>
+<span class="Comment">#</span><span class="Comment">   |i-j| = 1, 2, 4, 8, ..., 128.</span>
+
+<span class="Comment">#</span><span class="Comment">   Load the matrix using the matrix market format (this is an optional step).</span>
+<span class="Comment">#</span><span class="Comment">   Information data for the matrix</span>
+    println(file_name)
+    <span class="PreProc">@show</span> MatrixMarket.mmread(file_name,<span class="Constant">true</span>)
+    rows, cols, entries, mat_format, field, symm <span class="Statement">=</span> MatrixMarket.mmread(file_name,<span class="Constant">true</span>)
+
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of rows    = </span><span class="Constant">&quot;</span>, rows)
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of columns = </span><span class="Constant">&quot;</span>, cols)
+    println(<span class="Constant">&quot;</span><span class="Constant">Number of entries = </span><span class="Constant">&quot;</span>, entries)
+
+<span class="Comment">#</span><span class="Comment">   Read the matrix data</span>
+    Amm <span class="Statement">=</span> MatrixMarket.mmread(file_name)
+
+<span class="Comment">#</span><span class="Comment">   Keep only the lower triangular part</span>
+    Lmm <span class="Statement">=</span> tril(Amm)
+
+<span class="Comment">#</span><span class="Comment">   Add nonzero entries on the diagonal</span>
+    Lf <span class="Statement">=</span> <span class="Type">Matrix</span>(Lmm)
+    <span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>size(Lmm)[<span class="Constant">1</span>]
+        Lf[i,i] <span class="Statement">=</span> <span class="Constant">1.</span> <span class="Statement">+</span> randn()
+    <span class="Statement">end</span>
+    Lmm <span class="Statement">=</span> sparse(Lf)
+
+    display(Lmm)
+
+    include(<span class="Constant">&quot;</span><span class="Constant">Sparse.jl</span><span class="Constant">&quot;</span>)
+
+    L <span class="Statement">=</span> SparseMatrixCSR(Lmm);
+
+<span class="Comment">#</span><span class="Comment">   Matrix-vector product using the CSR format</span>
+    Random.seed!(<span class="Constant">2026</span>)
+    b <span class="Statement">=</span> <span class="Type">Float64</span>[ rand(<span class="Statement">-</span><span class="Constant">9</span><span class="Statement">:</span><span class="Constant">9</span>) <span class="Statement">for</span> _<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>L.n ]
+    b <span class="Statement">=</span> L<span class="Statement">*</span>b
+
+    x <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Float64</span>}(<span class="Constant">undef</span>,L.m)
+
+<span class="Comment">#</span><span class="Comment">## This is the row version of triangular solve using CSR format for L</span>
+<span class="Comment">#</span><span class="Comment">   Solving: L x = b</span>
+<span class="Comment">#</span><span class="Comment">   L is lower triangular</span>
+    x <span class="Statement">.=</span> b
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>L.m
+        <span class="Statement">for</span> k<span class="Statement">=</span>L.rowptr[i]<span class="Identifier">:L</span>.rowptr[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">2</span>
+            x[i] <span class="Statement">-=</span> L.nzval[k] <span class="Statement">*</span> x[L.colval[k]]
+        <span class="Statement">end</span>
+        x[i] <span class="Statement">/=</span> L.nzval[L.rowptr[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>]
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment"> Note: possible checks</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">        we could check that </span>
+<span class="Comment">#</span><span class="Comment">            L.colval[ [L.rowptr[i+1]-1] ] == i</span>
+<span class="Comment">#</span><span class="Comment">        here we are assuming it and so we are assuming that L.nzval[L.rowptr[i+1]-1] is Aii</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">        we could check that </span>
+<span class="Comment">#</span><span class="Comment">            L.nzval[L.rowptr[i+1]-1] is not 0</span>
+<span class="Comment">#</span><span class="Comment">        before dividing</span>
+<span class="Comment">#</span>
+    <span class="Statement">end</span>
+
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check CSR row variant of TRSV           :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+<span class="Comment">#</span><span class="Comment">   println(&quot;Error should be equal to 0: &quot;, norm(b - L * x))</span>
+<span class="Comment">#</span><span class="Comment">   @show norm(b - L * x) == 0 ? &quot;PASS&quot; : &quot;FAIL&quot;</span>
+
+
+<span class="Comment">#</span><span class="Comment">## This is the col version of triangular solve using CSC format for L</span>
+<span class="Comment">#</span><span class="Comment">   Solving: L x = b</span>
+<span class="Comment">#</span><span class="Comment">   L is lower triangular</span>
+
+    x <span class="Statement">.=</span> b
+    <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>Lmm.m
+        x[j] <span class="Statement">=</span> x[j] <span class="Statement">/</span> Lmm.nzval[Lmm.colptr[j]]
+        <span class="Statement">for</span> k<span class="Statement">=</span>Lmm.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>Lmm.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            x[Lmm.rowval[k]] <span class="Statement">-=</span> Lmm.nzval[k] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check CSC col variant of TRSV           :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+<span class="Comment">#</span><span class="Comment">   println(&quot;Error should be equal to 0: &quot;, norm(b - L * x))</span>
+<span class="Comment">#</span><span class="Comment">   @show norm(b - L * x) == 0 ? &quot;PASS&quot; : &quot;FAIL&quot;</span>
+
+<span class="Comment">#</span><span class="Comment">################################ Julien from here on</span>
+
+    Lf <span class="Statement">=</span> <span class="Type">Matrix</span>(Lmm)
+
+    x <span class="Statement">=</span> Lmm <span class="Statement">\</span> b
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check </span><span class="Special">\\</span><span class="Constant"> of julia for CSC                :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+    x <span class="Statement">=</span> Lf <span class="Statement">\</span> b
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check </span><span class="Special">\\</span><span class="Constant"> of julia for dense              :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+    include(<span class="Constant">&quot;</span><span class="Constant">trtrs_jl.jl</span><span class="Constant">&quot;</span>)
+
+    x <span class="Statement">.=</span> b
+    trtrsRow(Lf, x)
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check homemade trtrsRow for dense-dense :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+    x <span class="Statement">.=</span> b
+    trtrs(Lf, x)
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check homemade trtrs    for dense-dense :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+;
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

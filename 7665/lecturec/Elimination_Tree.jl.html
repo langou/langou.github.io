@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lecturec/Elimination_Tree.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+    <span class="Statement">using</span> MatrixMarket
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> SparseArrays
+    <span class="Statement">using</span> Plots
+    <span class="Statement">using</span> Printf
+
+<span class="Comment">#</span><span class="Comment">   file_name = &quot;MatrixMarket/bp__1000.mtx&quot;</span>
+<span class="Comment">#</span><span class="Comment">   L = MatrixMarket.mmread(file_name)</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.colptr[L.n+1]-1 L.nzval[i] = randn() end</span>
+<span class="Comment">#</span><span class="Comment">   L = tril(L)</span>
+<span class="Comment">#</span><span class="Comment">   Lf = Matrix(L)</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.n Lf[i,i] = L.n + randn() end</span>
+<span class="Comment">#</span><span class="Comment">   L = sparse(Lf)</span>
+<span class="Comment">#</span><span class="Comment">   A_CSC = L</span>
+<span class="Comment">#</span><span class="Comment">## BP 1000: Original Harwell sparse matrix test collection</span>
+<span class="Comment">#</span><span class="Comment">## Simplex method basis matrix</span>
+
+<span class="Comment">#</span><span class="Comment">   n = 100</span>
+<span class="Comment">#</span><span class="Comment">   d = 0.1       # Note: L will be about half as sparse since L will be the lower part</span>
+<span class="Comment">#</span><span class="Comment">   d = 5.0  / n  # Note: L will be about half as sparse since L will be the lower part</span>
+<span class="Comment">#</span><span class="Comment">   L = sparse( Matrix( tril(sprandn(Float64,n,n,d)) + Diagonal(randn(Float64,n)+sqrt(n)*ones(Float64,n)) ) )</span>
+<span class="Comment">#</span><span class="Comment">   A_CSC = L</span>
+
+
+<span class="Comment">#</span><span class="Comment">## Read the matrix data</span>
+    file_name <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">example_A.mtx</span><span class="Constant">&quot;</span>
+    A_CSC <span class="Statement">=</span> <span class="Type">SparseMatrixCSC</span>{<span class="Type">Float64</span>,<span class="Type">Int64</span>}( MatrixMarket.mmread(file_name) )
+
+<span class="Comment">#</span><span class="Comment">## Graph representing the nonzero entries in A </span>
+<span class="Comment">#</span><span class="Comment">## dot -Tpdf A.dot &gt; A.pdf</span>
+    open(<span class="Constant">&quot;</span><span class="Constant">A.dot</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;</span><span class="Constant">w</span><span class="Constant">&quot;</span>) <span class="Statement">do</span> f
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">digraph G {</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.m
+            <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> i
+        <span class="Statement">end</span>
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.m
+            <span class="Statement">for</span> k<span class="Statement">=</span>A_CSC.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+               i <span class="Statement">=</span> A_CSC.rowval[k]
+               <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> -&gt; </span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> j i
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">label=</span><span class="Special">\&quot;</span><span class="Constant">Graph representing the nonzero entries in A</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">labelloc=</span><span class="Special">\&quot;</span><span class="Constant">t</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">}</span><span class="Constant">&quot;</span>
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">   A is symmetric; we only read the lower triangular part</span>
+    <span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>A_CSC.m A_CSC[i,i] <span class="Statement">=</span> <span class="Constant">10.0</span> <span class="Statement">end</span>
+    A <span class="Statement">=</span> <span class="Type">Matrix</span>(A_CSC)
+    A <span class="Statement">=</span> A <span class="Statement">+</span> A<span class="Statement">'</span>
+    A_CSC <span class="Statement">=</span> <span class="Type">SparseMatrixCSC</span>(A)
+
+<span class="Comment">#</span><span class="Comment">## cheat by using dense Cholesky</span>
+    A <span class="Statement">=</span> <span class="Type">Matrix</span>(A_CSC)
+    C <span class="Statement">=</span> cholesky(A).L
+    C_CSC_dense <span class="Statement">=</span> <span class="Type">SparseMatrixCSC</span>(C)
+    display( C_CSC_dense )
+
+<span class="Comment">#</span><span class="Comment">## Graph representing the nonzero entries in L </span>
+<span class="Comment">#</span><span class="Comment">## dot -Tpdf C_CSC_dense.dot &gt; C_CSC_dense.pdf</span>
+    open(<span class="Constant">&quot;</span><span class="Constant">C_CSC_dense.dot</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;</span><span class="Constant">w</span><span class="Constant">&quot;</span>) <span class="Statement">do</span> f
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">digraph G {</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>C_CSC_dense.m
+            <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> i
+        <span class="Statement">end</span>
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>C_CSC_dense.m
+            <span class="Statement">for</span> k<span class="Statement">=</span>C_CSC_dense.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>C_CSC_dense.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+               i <span class="Statement">=</span> C_CSC_dense.rowval[k]
+               <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> -&gt; </span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> j i
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">label=</span><span class="Special">\&quot;</span><span class="Constant">Graph representing the nonzero entries in C_CSC_dense</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">labelloc=</span><span class="Special">\&quot;</span><span class="Constant">t</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">}</span><span class="Constant">&quot;</span>
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">## cheat by using sparse Cholesky (CHOLMOD)</span>
+    C<span class="Statement">=</span>cholesky(A_CSC, perm<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A_CSC.m)  <span class="Comment">#</span><span class="Comment"> I am not sure this'll work all the time, but cholmod seems to listen to the user-defined permutation in this case</span>
+    C_CSC_cholmode <span class="Statement">=</span> sparse(C.L)
+    display( C_CSC_cholmode )
+
+<span class="Comment">#</span><span class="Comment">## only keep the lower part of A from now on</span>
+    A_CSC <span class="Statement">=</span> tril(A_CSC)
+
+    include(<span class="Constant">&quot;</span><span class="Constant">Sparse.jl</span><span class="Constant">&quot;</span>)
+    A <span class="Statement">=</span> SparseMatrixCSR(A_CSC)
+    n <span class="Statement">=</span> A.m <span class="Comment">#</span><span class="Comment"> Size of matrix</span>
+
+    display(A_CSC)
+
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+<span class="Constant">&quot;&quot;&quot;</span><span class="Constant">Function that calculates the elimination tree given a CSR structure</span><span class="Constant">&quot;&quot;&quot;</span>
+    <span class="Statement">function</span> <span class="Identifier">etree</span>(rowptr<span class="Statement">::</span><span class="Type">Vector</span>{<span class="Type">Int</span>}, colval<span class="Statement">::</span><span class="Type">Vector</span>{<span class="Type">Int</span>})
+        n <span class="Statement">=</span> length(rowptr) <span class="Statement">-</span> <span class="Constant">1</span>
+        parent   <span class="Statement">=</span> fill(<span class="Statement">-</span><span class="Constant">1</span>,n) <span class="Comment">#</span><span class="Comment"> e-tree information</span>
+        ancestor <span class="Statement">=</span> fill(<span class="Statement">-</span><span class="Constant">1</span>,n) <span class="Comment">#</span><span class="Comment"> ancestor information to reduce the running time</span>
+
+        <span class="Comment">#</span><span class="Comment"> We compute the elimination tree</span>
+        <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+            parent[i]   <span class="Statement">=</span> <span class="Statement">-</span><span class="Constant">1</span> <span class="Comment">#</span><span class="Comment"> Initialize to -1</span>
+            ancestor[i] <span class="Statement">=</span> <span class="Statement">-</span><span class="Constant">1</span>
+
+            <span class="Statement">for</span> p <span class="Statement">=</span> rowptr[i]<span class="Identifier">:rowptr</span>[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+                j <span class="Statement">=</span> colval[p] <span class="Comment">#</span><span class="Comment"> column index</span>
+                <span class="Comment">#</span><span class="Comment"> Traverse row i and stop before the diagonal</span>
+                <span class="Statement">while</span> j <span class="Statement">!=</span> <span class="Statement">-</span><span class="Constant">1</span> <span class="Statement">&amp;&amp;</span> j <span class="Statement">&lt;</span> i
+                    jnext <span class="Statement">=</span> ancestor[j] <span class="Comment">#</span><span class="Comment"> Search for the root</span>
+                    ancestor[j] <span class="Statement">=</span> i   <span class="Comment">#</span><span class="Comment"> Update ancestor for efficiency</span>
+                    <span class="Statement">if</span> jnext <span class="Statement">==</span> <span class="Statement">-</span><span class="Constant">1</span>    <span class="Comment">#</span><span class="Comment"> We have found a root</span>
+                        parent[j] <span class="Statement">=</span> i <span class="Comment">#</span><span class="Comment"> Connect to i</span>
+                    <span class="Statement">end</span>
+                    j <span class="Statement">=</span> jnext
+                <span class="Statement">end</span>
+            <span class="Statement">end</span>
+            <span class="PreProc">@show</span> i
+            <span class="PreProc">@show</span> parent
+            <span class="PreProc">@show</span> ancestor
+        <span class="Statement">end</span>
+        <span class="Statement">return</span> parent
+    <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+    <span class="Statement">function</span> <span class="Identifier">row_sparsity</span>(rowptr, colval, parent, i)
+        n <span class="Statement">=</span> length(rowptr) <span class="Statement">-</span> <span class="Constant">1</span>
+        s <span class="Statement">=</span> <span class="Type">Vector</span>{<span class="Type">Int64</span>}(<span class="Constant">undef</span>,n)
+        w  <span class="Statement">=</span> fill(<span class="Constant">false</span>,n) <span class="Comment">#</span><span class="Comment"> Used to mark points as visited</span>
+        w[i] <span class="Statement">=</span> <span class="Constant">true</span>
+        len <span class="Statement">=</span> <span class="Constant">1</span>
+
+        <span class="Statement">for</span> p <span class="Statement">=</span> rowptr[i]<span class="Identifier">:rowptr</span>[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            j <span class="Statement">=</span> colval[p] <span class="Comment">#</span><span class="Comment"> column index</span>
+            <span class="Comment">#</span><span class="Comment"> Traverse row i and stop before the diagonal</span>
+            <span class="Statement">while</span> <span class="Statement">!</span>w[j] <span class="Statement">&amp;&amp;</span> j <span class="Statement">&lt;</span> i <span class="Comment">#</span><span class="Comment"> Stop when marked node is found</span>
+                s[len] <span class="Statement">=</span> j  <span class="Comment">#</span><span class="Comment"> Add column j to row i</span>
+                w[j] <span class="Statement">=</span> <span class="Constant">true</span> <span class="Comment">#</span><span class="Comment"> Mark node j</span>
+                len <span class="Statement">+=</span> <span class="Constant">1</span>
+                j <span class="Statement">=</span> parent[j] <span class="Comment">#</span><span class="Comment"> Move to parent in e-tree</span>
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+
+        len <span class="Statement">-=</span> <span class="Constant">1</span>
+        <span class="Statement">return</span> s[<span class="Constant">1</span><span class="Statement">:</span>len]
+    <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+<span class="Comment">#</span><span class="Comment">   Compute the elimination tree</span>
+    parent_tree <span class="Statement">=</span> etree(A.rowptr, A.colval)
+
+    <span class="PreProc">@show</span> parent_tree
+
+<span class="Comment">#</span><span class="Comment"> We write the elimination tree to a DOT file.</span>
+<span class="Comment">#</span><span class="Comment"> Use Graphviz to see the graph of the tree.</span>
+<span class="Comment">#</span><span class="Comment"> Open the file &quot;etree.dot&quot; using Graphviz.</span>
+<span class="Comment">#</span><span class="Comment"> <a href="http://www.graphviz.org/">http://www.graphviz.org/</a></span>
+<span class="Comment">#</span><span class="Comment"> Command line:</span>
+<span class="Comment">#</span><span class="Comment"> xdot, or</span>
+<span class="Comment">#</span><span class="Comment"> dot -Tpdf etree.dot &gt; etree.pdf</span>
+<span class="Comment">#</span>
+    n <span class="Statement">=</span> A.m <span class="Comment">#</span><span class="Comment"> Size of matrix</span>
+    open(<span class="Constant">&quot;</span><span class="Constant">etree.dot</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;</span><span class="Constant">w</span><span class="Constant">&quot;</span>) <span class="Statement">do</span> f
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">digraph G {</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>n
+            <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> k
+            <span class="Statement">if</span> parent_tree[k] <span class="Statement">!=</span> <span class="Statement">-</span><span class="Constant">1</span>
+                <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> -&gt; </span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> k parent_tree[k]
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">label=</span><span class="Special">\&quot;</span><span class="Constant">Elimination tree of A</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">labelloc=</span><span class="Special">\&quot;</span><span class="Constant">t</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">}</span><span class="Constant">&quot;</span>
+    <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+
+n <span class="Statement">=</span> A.m <span class="Comment">#</span><span class="Comment"> Size of matrix</span>
+
+<span class="Comment">#</span><span class="Comment"> Select the index of the row subtree</span>
+
+k <span class="Statement">=</span> <span class="Constant">10</span>
+k <span class="Statement">=</span> <span class="Constant">8</span>
+<span class="PreProc">@assert</span> k<span class="Statement">&gt;=</span><span class="Constant">1</span>
+<span class="PreProc">@assert</span> k<span class="Statement">&lt;=</span>n
+
+<span class="Comment">#</span><span class="Comment"> Compute the row sparsity pattern</span>
+s <span class="Statement">=</span> row_sparsity(A.rowptr, A.colval, parent_tree, k)
+
+<span class="Comment">#</span><span class="Comment"> We write the row sub-tree to a DOT file.</span>
+<span class="Comment">#</span><span class="Comment"> Use Graphviz to see the graph of the row sub-tree.</span>
+<span class="Comment">#</span><span class="Comment"> Open the file &quot;row_subtree.dot&quot;.</span>
+<span class="Comment">#</span><span class="Comment"> dot -Tpdf row_subtree.dot &gt; row_subtree.pdf</span>
+
+open(<span class="Constant">&quot;</span><span class="Constant">row_subtree.dot</span><span class="Constant">&quot;</span>, <span class="Constant">&quot;</span><span class="Constant">w</span><span class="Constant">&quot;</span>) <span class="Statement">do</span> f
+    <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">digraph G {</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+    <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant">; </span><span class="Special">\n</span><span class="Constant">&quot;</span> k
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>length(s)
+        <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Special">%d</span><span class="Constant"> -&gt; </span><span class="Special">%d</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> s[i] parent_tree[s[i]]
+    <span class="Statement">end</span>
+    <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">label=</span><span class="Special">\&quot;</span><span class="Constant">Row sub-tree of node </span><span class="Special">%d</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span> k
+    <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">labelloc=</span><span class="Special">\&quot;</span><span class="Constant">t</span><span class="Special">\&quot;</span><span class="Constant">;</span><span class="Special">\n</span><span class="Constant">&quot;</span>
+    <span class="PreProc">@printf</span> f <span class="Constant">&quot;</span><span class="Constant">}</span><span class="Constant">&quot;</span>
+<span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+<span class="Comment">#</span><span class="Comment"> factorization dense</span>
+
+    C <span class="Statement">=</span> tril(<span class="Type">Matrix</span>(A_CSC))
+
+    <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A.m
+
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+
+            C[k,j] <span class="Statement">=</span> C[k,j] <span class="Statement">/</span> C[j,j]
+
+            <span class="Statement">for</span> i<span class="Statement">=</span>j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>k
+
+                C[k,i] <span class="Statement">=</span> C[k,i] <span class="Statement">-</span> C[i,j] <span class="Statement">*</span> C[k,j]
+
+            <span class="Statement">end</span>
+
+        <span class="Statement">end</span>
+
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+
+            C[k,k] <span class="Statement">=</span> C[k,k] <span class="Statement">-</span> C[j,k] <span class="Statement">*</span> C[j,k]
+
+        <span class="Statement">end</span>
+
+        C[k,k] <span class="Statement">=</span> sqrt( C[k,k] )
+
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+<span class="Comment">#</span><span class="Comment"> factorization using &quot;row_sparsity&quot;</span>
+
+    C <span class="Statement">=</span> tril(<span class="Type">Matrix</span>(A_CSC))
+
+    <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A.m
+
+        <span class="Statement">global</span> s
+
+<span class="Comment">#</span><span class="Comment">       je ne comprend pas vraiment pourquoi le sort( ) est nécessaire ici</span>
+<span class="Comment">#</span><span class="Comment">       mais bon, ça marche avec le sort et ça ne marche pas sans</span>
+        s <span class="Statement">=</span> sort( row_sparsity(A.rowptr, A.colval, parent_tree, k) )
+
+<span class="Comment">#</span><span class="Comment">       for j=1:k-1</span>
+<span class="Comment">#</span><span class="Comment">       for j=s</span>
+        <span class="Statement">for</span> jj<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>size(s)[<span class="Constant">1</span>]
+
+            C[k,s[jj]] <span class="Statement">=</span> C[k,s[jj]] <span class="Statement">/</span> C[s[jj],s[jj]]
+
+<span class="Comment">#</span><span class="Comment">           for i=j+1:k</span>
+<span class="Comment">#</span><span class="Comment">           for i=s[jj]+1:k</span>
+            <span class="Statement">for</span> ii<span class="Statement">=</span>jj<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>size(s)[<span class="Constant">1</span>]
+
+<span class="Comment">#</span><span class="Comment">               C[k,i] = C[k,i] - C[i,s[jj]] * C[k,s[jj]]</span>
+                C[k,s[ii]] <span class="Statement">=</span> C[k,s[ii]] <span class="Statement">-</span> C[s[ii],s[jj]] <span class="Statement">*</span> C[k,s[jj]]
+
+            <span class="Statement">end</span>
+            C[k,k] <span class="Statement">=</span> C[k,k] <span class="Statement">-</span> C[k,s[jj]] <span class="Statement">*</span> C[k,s[jj]]
+
+        <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">       for j=1:k-1</span>
+        <span class="Statement">for</span> j<span class="Statement">=</span>s
+
+            C[k,k] <span class="Statement">=</span> C[k,k] <span class="Statement">-</span> C[j,k] <span class="Statement">*</span> C[j,k]
+
+        <span class="Statement">end</span>
+
+        C[k,k] <span class="Statement">=</span> sqrt( C[k,k] )
+
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">##############################################################################</span>
+<span class="Comment">#</span><span class="Comment"> factorization dense</span>
+
+    C_CSR <span class="Statement">=</span> SparseMatrixCSR(C_CSC_dense)
+    C_CSR.nzval <span class="Statement">=</span> zeros(C_CSR.nzval.size[<span class="Constant">1</span>])
+
+    A_CSR <span class="Statement">=</span> SparseMatrixCSR(A_CSC)
+
+<span class="Comment">#</span><span class="Comment">## copy A in C</span>
+    l <span class="Statement">=</span> <span class="Constant">1</span>
+    <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>C_CSR.m
+        <span class="Statement">for</span> k<span class="Statement">=</span>C_CSR.rowptr[j]<span class="Identifier">:C_CSR</span>.rowptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            <span class="Statement">global</span> l
+            <span class="Statement">if</span> ( C_CSR.colval[k] <span class="Statement">==</span> A_CSR.colval[l] )
+                C_CSR.nzval[k] <span class="Statement">=</span> A_CSR.nzval[l]
+                l <span class="Statement">=</span> l<span class="Statement">+</span><span class="Constant">1</span>
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+
+    <span class="Statement">for</span> k<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>A.m
+
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+
+            C[k,j] <span class="Statement">=</span> C[k,j] <span class="Statement">/</span> C[j,j]
+
+            <span class="Statement">for</span> i<span class="Statement">=</span>j<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>k
+
+<span class="Comment">#</span><span class="Comment">               the question is how to access C[i,j] since we store the matrix by row</span>
+<span class="Comment">#</span><span class="Comment">               I am not sure how to access C[i,j]</span>
+<span class="Comment">#</span><span class="Comment">               note that when we did the triangular solve for sparse matrices, then</span>
+<span class="Comment">#</span><span class="Comment">               C was stored in CSC. Now we have C stored in CSR, so what?</span>
+                C[k,i] <span class="Statement">=</span> C[k,i] <span class="Statement">-</span> C[i,j] <span class="Statement">*</span> C[k,j]
+
+<span class="Comment">#</span><span class="Comment">               maybe this Cholesky is not the good variant to use for Cholesky</span>
+<span class="Comment">#</span><span class="Comment">               we would like a variant that only does row access or column access</span>
+<span class="Comment">#</span><span class="Comment">               this variant seems to need row and column access</span>
+
+            <span class="Statement">end</span>
+
+        <span class="Statement">end</span>
+
+        <span class="Statement">for</span> j<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>k<span class="Statement">-</span><span class="Constant">1</span>
+
+            C[k,k] <span class="Statement">=</span> C[k,k] <span class="Statement">-</span> C[j,k] <span class="Statement">*</span> C[j,k]
+
+        <span class="Statement">end</span>
+
+        C[k,k] <span class="Statement">=</span> sqrt( C[k,k] )
+
+    <span class="Statement">end</span>
+
+
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

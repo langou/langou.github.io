@@ -27,7 +27,7 @@
     A_CSC = SparseMatrixCSC{Float64,Int64}( MatrixMarket.mmread(file_name) )
 
 ### Graph representing the nonzero entries in A 
-### dot -Tpng A.dot > A.png
+### dot -Tpdf A.dot > A.pdf
     open("A.dot", "w") do f
         @printf f "digraph G {\n"
         for i=1:A_CSC.m
@@ -57,7 +57,7 @@
     display( C_CSC_dense )
 
 ### Graph representing the nonzero entries in L 
-### dot -Tpng C_CSC_dense.dot > C_CSC_dense.png
+### dot -Tpdf C_CSC_dense.dot > C_CSC_dense.pdf
     open("C_CSC_dense.dot", "w") do f
         @printf f "digraph G {\n"
         for i=1:C_CSC_dense.m
@@ -82,28 +82,11 @@
 ### only keep the lower part of A from now on
     A_CSC = tril(A_CSC)
 
-#   using Plots
-#   Plots.spy(sparse(C.L))
-
     include("Sparse.jl")
     A = SparseMatrixCSR(A_CSC)
     n = A.m # Size of matrix
 
     display(A_CSC)
-
-### Needs to be executed on its own
-#   using UnicodePlots
-#   UnicodePlots.spy(A_CSC)
-
-### Needs to be executed on its own
-#   using Plots
-#   Plots.spy(A_CSC)
-
-### Darve and Wootters' code, does not work for me
-#   pyplot()
-#   n = L.m # Size of matrix
-#   plot(spy(A_CSC), xaxis=((0,n+1), 1:n), yaxis=((0,n+1), 1:n), 
-#       markersize = 5, clims = (1,2)) 
 
 ###############################################################################
 """Function that calculates the elimination tree given a CSR structure"""
@@ -129,6 +112,9 @@
                     j = jnext
                 end
             end
+            @show i
+            @show parent
+            @show ancestor
         end
         return parent
     end
@@ -166,7 +152,7 @@
 # http://www.graphviz.org/
 # Command line:
 # xdot, or
-# dot -Tpng etree.dot > etree.png
+# dot -Tpdf etree.dot > etree.pdf
 #
     n = A.m # Size of matrix
     open("etree.dot", "w") do f
@@ -188,7 +174,7 @@ n = A.m # Size of matrix
 # Select the index of the row subtree
 
 k = 10
-#k = 8
+k = 8
 @assert k>=1
 @assert k<=n
 
@@ -198,7 +184,7 @@ s = row_sparsity(A.rowptr, A.colval, parent_tree, k)
 # We write the row sub-tree to a DOT file.
 # Use Graphviz to see the graph of the row sub-tree.
 # Open the file "row_subtree.dot".
-# dot -Tpng row_subtree.dot > row_subtree.png
+# dot -Tpdf row_subtree.dot > row_subtree.pdf
 
 open("row_subtree.dot", "w") do f
     @printf f "digraph G {\n"

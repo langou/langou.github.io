@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lectureb/ReachSolve.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> SparseArrays
+    <span class="Statement">using</span> MatrixMarket
+    <span class="Statement">using</span> Printf
+
+<span class="Comment">#</span><span class="Comment">   Read the matrix data</span>
+    file_name <span class="Statement">=</span> <span class="Constant">&quot;</span><span class="Constant">reach_example.mtx</span><span class="Constant">&quot;</span>
+    L <span class="Statement">=</span> MatrixMarket.mmread(file_name)
+    display(L)
+    <span class="Statement">for</span> i<span class="Statement">=</span><span class="Constant">1</span><span class="Statement">:</span>size(L.nzval)[<span class="Constant">1</span>]
+        L.nzval[i] <span class="Statement">=</span> randn(<span class="Type">Float64</span>)
+    <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">#######################################################################</span>
+<span class="Constant">&quot;&quot;&quot;</span>
+<span class="Constant">dfs: depth-first search construction of the reach. The ordering</span>
+<span class="Constant">of the nodes is important for correctness of the lower triangular solve.</span>
+
+<span class="Constant">input j: index of node for which reach is computed</span>
+<span class="Constant">input/output xi: reach set of node</span>
+<span class="Constant">input/output top: pointer that locates where the data</span>
+<span class="Constant">                  is stored in xi.</span>
+<span class="Constant">input/output w: used to mark nodes already visited</span>
+<span class="Constant">input Lp: indexing array of L</span>
+<span class="Constant">input Li: row index array for L</span>
+<span class="Constant">&quot;&quot;&quot;</span>
+    <span class="Statement">function</span> <span class="Identifier">dfs</span>(j, xi, top, w, Lp, Li)
+<span class="Comment">#</span><span class="Comment">   Mark the current node</span>
+        w[j] <span class="Statement">=</span> <span class="Constant">true</span>
+
+<span class="Comment">#</span><span class="Comment">   Loop over non-zero entries in column j of L</span>
+        <span class="Statement">for</span> k<span class="Statement">=</span>Lp[j]<span class="Identifier">:Lp</span>[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            <span class="Statement">if</span> <span class="Statement">!</span>w[Li[k]] <span class="Comment">#</span><span class="Comment"> Skip node that was marked</span>
+                <span class="PreProc">@show</span> j, Li[k]
+                <span class="PreProc">@show</span> xi, top, w <span class="Statement">=</span> dfs(Li[k], xi, top, w, Lp, Li)
+<span class="Comment">#</span><span class="Comment">               xi, top, w = dfs(Li[k], xi, top, w, Lp, Li)</span>
+                <span class="Comment">#</span><span class="Comment"> Call dfs recursively for all nodes in column j</span>
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">       Insert j before all nodes inserted so far</span>
+        xi[top] <span class="Statement">=</span> j
+<span class="Comment">#</span><span class="Comment">       Move top one position up</span>
+        top <span class="Statement">=</span> top<span class="Statement">-</span><span class="Constant">1</span>
+
+        <span class="Statement">return</span> xi, top, w
+    <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">#####################################################################</span>
+
+    n <span class="Statement">=</span> L.m <span class="Comment">#</span><span class="Comment"> Size of matrix</span>
+
+<span class="Comment">#</span><span class="Comment">   Starting node</span>
+    node <span class="Statement">=</span> <span class="Constant">6</span>
+    <span class="PreProc">@assert</span> node<span class="Statement">&gt;=</span><span class="Constant">1</span>
+    <span class="PreProc">@assert</span> node<span class="Statement">&lt;=</span>n
+
+    top <span class="Statement">=</span> n
+
+    xi <span class="Statement">=</span> zeros(<span class="Type">Int64</span>,n)
+    w  <span class="Statement">=</span> fill(<span class="Constant">false</span>,n) <span class="Comment">#</span><span class="Comment"> Flag whether a node was visited or not</span>
+    xi, top, w <span class="Statement">=</span> dfs(node, xi, top, w, L.colptr, L.rowval)
+<span class="Comment">#</span><span class="Comment">   @show xi, top, w = dfs(node, xi, top, w, L.colptr, L.rowval)</span>
+    xi <span class="Statement">=</span> xi[top<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">end</span>] <span class="Comment">#</span><span class="Comment"> Keeping only the relevant data</span>
+
+    println(<span class="Constant">&quot;</span><span class="Constant">Reach of node </span><span class="Constant">&quot;</span>, node)
+    println(xi)
+
+<span class="Comment">#</span><span class="Comment">#####################################################################</span>
+
+    top <span class="Statement">=</span> n
+    xi <span class="Statement">=</span> zeros(<span class="Type">Int64</span>,n)
+    w  <span class="Statement">=</span> fill(<span class="Constant">false</span>,n) <span class="Comment">#</span><span class="Comment"> Flag whether a node was visited or not</span>
+    xi, top, w <span class="Statement">=</span> dfs(<span class="Constant">4</span>, xi, top, w, L.colptr, L.rowval)
+    xi, top, w <span class="Statement">=</span> dfs(<span class="Constant">6</span>, xi, top, w, L.colptr, L.rowval)
+    xi <span class="Statement">=</span> xi[top<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span><span class="Constant">end</span>] <span class="Comment">#</span><span class="Comment"> Keeping only the relevant data</span>
+    println(<span class="Constant">&quot;</span><span class="Constant">Reach of nodes 4 and 6</span><span class="Constant">&quot;</span>)
+    println(xi)
+
+<span class="Comment">#</span><span class="Comment">   Matrix-vector product using the CSR format</span>
+    b <span class="Statement">=</span> zeros(<span class="Type">Float64</span>, n, <span class="Constant">1</span>)
+    b[<span class="Constant">4</span>] <span class="Statement">=</span> randn(<span class="Type">Float64</span>)
+    b[<span class="Constant">6</span>] <span class="Statement">=</span> randn(<span class="Type">Float64</span>)
+
+    Lf <span class="Statement">=</span> <span class="Type">Matrix</span>(L)
+
+    x <span class="Statement">=</span> Lf <span class="Statement">\</span> b
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+    x <span class="Statement">.=</span> b
+    <span class="Statement">for</span> j <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>L.m
+        x[j] <span class="Statement">=</span> x[j] <span class="Statement">/</span> L.nzval[L.colptr[j]]
+        <span class="Statement">for</span> k<span class="Statement">=</span>L.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>L.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            x[L.rowval[k]] <span class="Statement">-=</span> L.nzval[k] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+    x <span class="Statement">.=</span> b
+    <span class="Statement">for</span> j <span class="Statement">=</span> xi
+        x[j] <span class="Statement">=</span> x[j] <span class="Statement">/</span> L.nzval[L.colptr[j]]
+        <span class="Statement">for</span> k<span class="Statement">=</span>L.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>L.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            x[L.rowval[k]] <span class="Statement">-=</span> L.nzval[k] <span class="Statement">*</span> x[j]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || b - Lf * x ||_1 / || L ||_1 / || x ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(b <span class="Statement">-</span> Lf <span class="Statement">*</span> x,<span class="Constant">1</span>) <span class="Statement">/</span> opnorm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(x,<span class="Constant">1</span>) )
+
+;
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

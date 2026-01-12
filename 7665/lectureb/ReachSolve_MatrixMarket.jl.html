@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/Documents/repositories/langou.github.io.git/7665/lectureb/ReachSolve_MatrixMarket.jl.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="julia">
+<meta name="settings" content="use_css,no_foldcolumn,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="morning">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #e4e4e4; }
+body { font-family: monospace; color: #000000; background-color: #e4e4e4; }
+* { font-size: 1em; }
+a { color: inherit; }
+.Constant { color: #ff00ff; background-color: #eeeeee; padding-bottom: 1px; }
+.Comment { color: #0000ff; }
+.PreProc { color: #6a0dad; }
+.Special { color: #6a5acd; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Identifier { color: #008787; }
+.Type { color: #2e8b57; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+
+    <span class="Statement">using</span> LinearAlgebra
+    <span class="Statement">using</span> SparseArrays
+    <span class="Statement">using</span> MatrixMarket
+    <span class="Statement">using</span> Printf
+    <span class="Statement">using</span> Random
+
+<span class="Comment">#</span><span class="Comment">   Read the matrix data</span>
+<span class="Comment">#</span><span class="Comment">   file_name = &quot;reach_example.mtx&quot;</span>
+<span class="Comment">#</span><span class="Comment">   L = MatrixMarket.mmread(file_name)</span>
+<span class="Comment">#</span><span class="Comment">   display(L)</span>
+<span class="Comment">#</span><span class="Comment">   for i=1:size(L.nzval)[1]</span>
+<span class="Comment">#</span><span class="Comment">       L.nzval[i] = randn(Float64)</span>
+<span class="Comment">#</span><span class="Comment">   end</span>
+
+<span class="Comment">#</span><span class="Comment">   file_name = &quot;MatrixMarket/bp__1000.mtx&quot;</span>
+<span class="Comment">#</span><span class="Comment">   L = MatrixMarket.mmread(file_name)</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.colptr[L.n+1]-1 L.nzval[i] = randn() end</span>
+<span class="Comment">#</span><span class="Comment">   L = tril(L)</span>
+<span class="Comment">#</span><span class="Comment">   Lf = Matrix(L)</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.n Lf[i,i] = L.n + randn() end</span>
+<span class="Comment">#</span><span class="Comment">   L = sparse(Lf)</span>
+<span class="Comment">#</span><span class="Comment">## BP 1000: Original Harwell sparse matrix test collection</span>
+<span class="Comment">#</span><span class="Comment">## Simplex method basis matrix</span>
+
+    n <span class="Statement">=</span> <span class="Constant">100</span>
+    d <span class="Statement">=</span> <span class="Constant">0.1</span>       <span class="Comment">#</span><span class="Comment"> Note: L will be about half as sparse since L will be the lower part</span>
+<span class="Comment">#</span><span class="Comment">   d = 5.0  / n  # Note: L will be about half as sparse since L will be the lower part</span>
+    L <span class="Statement">=</span> sparse( <span class="Type">Matrix</span>( tril(sprandn(<span class="Type">Float64</span>,n,n,d)) <span class="Statement">+</span> <span class="Type">Diagonal</span>(randn(<span class="Type">Float64</span>,n)<span class="Statement">+</span>sqrt(n)<span class="Statement">*</span>ones(<span class="Type">Float64</span>,n)) ) )
+
+<span class="Comment">#</span><span class="Comment">## Needs to be executed on its own</span>
+<span class="Comment">#</span><span class="Comment">   using UnicodePlots</span>
+<span class="Comment">#</span><span class="Comment">   UnicodePlots.spy(L)</span>
+
+<span class="Comment">#</span><span class="Comment">## Needs to be executed on its own</span>
+<span class="Comment">#</span><span class="Comment">   using Plots</span>
+<span class="Comment">#</span><span class="Comment">   Plots.spy(L)</span>
+
+<span class="Comment">#</span><span class="Comment">## Darve and Wootters' code, does not work for me</span>
+<span class="Comment">#</span><span class="Comment">   pyplot()</span>
+<span class="Comment">#</span><span class="Comment">   n = L.m # Size of matrix</span>
+<span class="Comment">#</span><span class="Comment">   plot(spy(L), xaxis=((0,n+1), 1:n), yaxis=((0,n+1), 1:n), </span>
+<span class="Comment">#</span><span class="Comment">       markersize = 5, clims = (1,2))</span>
+
+<span class="Comment">#</span><span class="Comment">#######################################################################</span>
+<span class="Constant">&quot;&quot;&quot;</span>
+<span class="Constant">dfs: depth-first search construction of the reach. The ordering</span>
+<span class="Constant">of the nodes is important for correctness of the lower triangular solve.</span>
+
+<span class="Constant">input j: index of node for which reach is computed</span>
+<span class="Constant">input/output xi: reach set of node</span>
+<span class="Constant">input/output top: pointer that locates where the data</span>
+<span class="Constant">                  is stored in xi.</span>
+<span class="Constant">input/output w: used to mark nodes already visited</span>
+<span class="Constant">input Lp: indexing array of L</span>
+<span class="Constant">input Li: row index array for L</span>
+<span class="Constant">&quot;&quot;&quot;</span>
+    <span class="Statement">function</span> <span class="Identifier">dfs</span>(j, xi, top, w, Lp, Li)
+<span class="Comment">#</span><span class="Comment">   Mark the current node</span>
+
+<span class="Comment">#</span><span class="Comment">## the if statement below is added to Darve and Wooters code and is critical</span>
+<span class="Comment">#</span><span class="Comment">## to make things work, otherwise, we can crash because too many tops, and we</span>
+<span class="Comment">#</span><span class="Comment">## can have duplicates, not good</span>
+        <span class="Statement">if</span> <span class="Statement">!</span>w[j] <span class="Comment">#</span><span class="Comment"> Skip node that was marked</span>
+        w[j] <span class="Statement">=</span> <span class="Constant">true</span>
+
+<span class="Comment">#</span><span class="Comment">   Loop over non-zero entries in column j of L</span>
+        <span class="Statement">for</span> k<span class="Statement">=</span>Lp[j]<span class="Identifier">:Lp</span>[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+            <span class="Statement">if</span> <span class="Statement">!</span>w[Li[k]] <span class="Comment">#</span><span class="Comment"> Skip node that was marked</span>
+<span class="Comment">#</span><span class="Comment">               @show j, Li[k]</span>
+<span class="Comment">#</span><span class="Comment">               @show xi, top, w = dfs(Li[k], xi, top, w, Lp, Li)</span>
+                xi, top, w <span class="Statement">=</span> dfs(Li[k], xi, top, w, Lp, Li)
+                <span class="Comment">#</span><span class="Comment"> Call dfs recursively for all nodes in column j</span>
+            <span class="Statement">end</span>
+        <span class="Statement">end</span>
+
+<span class="Comment">#</span><span class="Comment">       Insert j before all nodes inserted so far</span>
+        xi[top] <span class="Statement">=</span> j
+<span class="Comment">#</span><span class="Comment">       Move top one position up</span>
+        top <span class="Statement">=</span> top<span class="Statement">-</span><span class="Constant">1</span>
+        <span class="Statement">end</span>
+
+        <span class="Statement">return</span> xi, top, w
+    <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">#####################################################################</span>
+
+<span class="Comment">#</span><span class="Comment">   n = L.m # Size of matrix</span>
+
+<span class="Comment">#</span><span class="Comment">   Starting node</span>
+<span class="Comment">#</span><span class="Comment">   node = 6</span>
+<span class="Comment">#</span><span class="Comment">   @assert node&gt;=1</span>
+<span class="Comment">#</span><span class="Comment">   @assert node&lt;=n</span>
+
+<span class="Comment">#</span><span class="Comment">   top = n</span>
+
+<span class="Comment">#</span><span class="Comment">   xi = zeros(Int64,n)</span>
+<span class="Comment">#</span><span class="Comment">   w  = fill(false,n) # Flag whether a node was visited or not</span>
+<span class="Comment">#</span><span class="Comment">   xi, top, w = dfs(node, xi, top, w, L.colptr, L.rowval)</span>
+<span class="Comment">#</span><span class="Comment">   @show xi, top, w = dfs(node, xi, top, w, L.colptr, L.rowval)</span>
+<span class="Comment">#</span><span class="Comment">   xi = xi[top+1:end] # Keeping only the relevant data</span>
+
+<span class="Comment">#</span><span class="Comment">   println(&quot;Reach of node &quot;, node)</span>
+<span class="Comment">#</span><span class="Comment">   println(xi)</span>
+
+<span class="Comment">#</span><span class="Comment">#####################################################################</span>
+
+<span class="Comment">#</span><span class="Comment">   top = n</span>
+<span class="Comment">#</span><span class="Comment">   xi = zeros(Int64,n)</span>
+<span class="Comment">#</span><span class="Comment">   w  = fill(false,n) # Flag whether a node was visited or not</span>
+<span class="Comment">#</span><span class="Comment">   xi, top, w = dfs(4, xi, top, w, L.colptr, L.rowval)</span>
+<span class="Comment">#</span><span class="Comment">   xi, top, w = dfs(6, xi, top, w, L.colptr, L.rowval)</span>
+<span class="Comment">#</span><span class="Comment">   xi = xi[top+1:end] # Keeping only the relevant data</span>
+<span class="Comment">#</span><span class="Comment">   println(&quot;Reach of nodes 4 and 6&quot;)</span>
+<span class="Comment">#</span><span class="Comment">   println(xi)</span>
+
+<span class="Comment">#</span><span class="Comment">   bf = zeros(Float64, n, 1) </span>
+<span class="Comment">#</span><span class="Comment">   bf[4] = randn(Float64)</span>
+<span class="Comment">#</span><span class="Comment">   bf[6] = randn(Float64)</span>
+
+    b_nnz <span class="Statement">=</span> <span class="Constant">10</span>
+    <span class="Statement">if</span> b_nnz <span class="Statement">&gt;</span> n<span class="Statement">/</span><span class="Constant">2</span> b_nnz <span class="Statement">=</span> ceil(<span class="Type">Int</span>,n<span class="Statement">/</span><span class="Constant">2</span>) <span class="Statement">end</span>
+<span class="Comment">#</span><span class="Comment">   b_rowval = sort(Int[ rand(1:n) for _=1:b_nnz ])</span>
+    b_rowval <span class="Statement">=</span> randperm(n)[<span class="Constant">1</span><span class="Statement">:</span>b_nnz]
+    b <span class="Statement">=</span> randn(<span class="Type">Float64</span>,b_nnz)
+
+    bf <span class="Statement">=</span> zeros(<span class="Type">Float64</span>, n, <span class="Constant">1</span>)
+    <span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>b_nnz
+        bf[b_rowval[i]] <span class="Statement">=</span> b[i]
+    <span class="Statement">end</span>
+
+    Lf <span class="Statement">=</span> <span class="Type">Matrix</span>(L)
+
+    xf <span class="Statement">=</span> Lf <span class="Statement">\</span> bf
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || bf - Lf * xf ||_1 / || Lf ||_1 / || xf ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(bf <span class="Statement">-</span> Lf <span class="Statement">*</span> xf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(xf,<span class="Constant">1</span>) )
+
+    top <span class="Statement">=</span> n
+    xi <span class="Statement">=</span> zeros(<span class="Type">Int64</span>,n)
+    w  <span class="Statement">=</span> fill(<span class="Constant">false</span>,n)   <span class="Comment">#</span><span class="Comment"> flag whether a node was visited or not</span>
+    <span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>b_nnz
+        <span class="Statement">global</span> xi, top, w
+        xi, top, w <span class="Statement">=</span> dfs(b_rowval[i], xi, top, w, L.colptr, L.rowval)
+    <span class="Statement">end</span>
+    xi <span class="Statement">=</span> xi[top<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>L.n] <span class="Comment">#</span><span class="Comment"> Keeping only the relevant data</span>
+<span class="Comment">#</span><span class="Comment">   println(xi)</span>
+
+nb_passage <span class="Statement">=</span> <span class="Constant">0</span>
+    xf <span class="Statement">=</span> copy(bf)
+    <span class="Statement">for</span> j <span class="Statement">=</span> xi
+        xf[j] <span class="Statement">=</span> xf[j] <span class="Statement">/</span> L.nzval[L.colptr[j]]
+        <span class="Statement">for</span> k<span class="Statement">=</span>L.colptr[j]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>L.colptr[j<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+<span class="Statement">global</span> nb_passage
+            nb_passage <span class="Statement">+=</span> <span class="Constant">1</span>
+            xf[L.rowval[k]] <span class="Statement">-=</span> L.nzval[k] <span class="Statement">*</span> xf[j]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+    <span class="PreProc">@show</span> nb_passage
+
+<span class="Comment">#</span><span class="Comment">## Note: we have what we want: a loop in xi, and then we only have at most the density of a row of L</span>
+<span class="Comment">#</span><span class="Comment">## storage is O(n)</span>
+
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || bf - Lf * xf ||_1 / || Lf ||_1 / || xf ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(bf <span class="Statement">-</span> Lf <span class="Statement">*</span> xf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(xf,<span class="Constant">1</span>) )
+
+<span class="Comment">#</span><span class="Comment">   x = zeros(Float64,L.n-top)</span>
+<span class="Comment">#</span><span class="Comment">   w  = fill(false,n)   # flag whether a node was visited or not</span>
+<span class="Comment">#</span><span class="Comment">   j = 1</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.n-top</span>
+<span class="Comment">#</span><span class="Comment">       global j</span>
+<span class="Comment">#</span><span class="Comment">       if xi[i] == b_rowval[j]</span>
+<span class="Comment">#</span><span class="Comment">           x[i] = b[j]</span>
+<span class="Comment">#</span><span class="Comment">           j = j + 1</span>
+<span class="Comment">#</span><span class="Comment">       end</span>
+<span class="Comment">#</span><span class="Comment">   end</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">#### the issue in the next loop is that we need to work on x[L.rowval[k]]</span>
+<span class="Comment">#</span><span class="Comment">#### L.rowval[k] refers to the global indexes, so does not work for x</span>
+<span class="Comment">#</span>
+<span class="Comment">#</span><span class="Comment">   for i = 1:L.n-top</span>
+<span class="Comment">#</span><span class="Comment">       local j</span>
+<span class="Comment">#</span><span class="Comment">       j = xi[i]</span>
+<span class="Comment">#</span><span class="Comment">       x[i] = x[i] / L.nzval[L.colptr[j]]</span>
+<span class="Comment">#</span><span class="Comment">       for k=L.colptr[j]+1:L.colptr[j+1]-1</span>
+<span class="Comment">#</span><span class="Comment">           x[L.rowval[k]] -= L.nzval[k] * x[i]</span>
+<span class="Comment">#</span><span class="Comment">       end</span>
+<span class="Comment">#</span><span class="Comment">   end</span>
+
+<span class="Comment">#</span><span class="Comment">### une autre version qui marche (voir emails)</span>
+
+    xf <span class="Statement">=</span> copy(bf)
+
+nb_passage <span class="Statement">=</span> <span class="Constant">0</span>
+
+<span class="Statement">for</span> i <span class="Statement">=</span> <span class="Constant">1</span><span class="Statement">:</span>n
+    <span class="Statement">if</span> xf[i] <span class="Statement">!=</span> <span class="Constant">0</span>
+        xf[i] <span class="Statement">=</span> xf[i] <span class="Statement">/</span> L.nzval[L.colptr[i]]
+        <span class="Statement">for</span> j <span class="Statement">=</span> L.colptr[i]<span class="Statement">+</span><span class="Constant">1</span><span class="Statement">:</span>L.colptr[i<span class="Statement">+</span><span class="Constant">1</span>]<span class="Statement">-</span><span class="Constant">1</span>
+<span class="Statement">global</span> nb_passage
+            nb_passage <span class="Statement">+=</span> <span class="Constant">1</span>
+            xf[L.rowval[j]] <span class="Statement">-=</span> L.nzval[j] <span class="Statement">*</span> xf[i]
+        <span class="Statement">end</span>
+    <span class="Statement">end</span>
+<span class="Statement">end</span>
+    <span class="PreProc">@printf</span>(<span class="Constant">&quot;</span><span class="Constant">check          :: || bf - Lf * xf ||_1 / || Lf ||_1 / || xf ||_1  = </span><span class="Special">%6.2e</span><span class="Special">\n</span><span class="Constant">&quot;</span>, norm(bf <span class="Statement">-</span> Lf <span class="Statement">*</span> xf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(Lf,<span class="Constant">1</span>) <span class="Statement">/</span> norm(xf,<span class="Constant">1</span>) )
+    <span class="PreProc">@show</span> nb_passage
+
+
+
+
+;
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

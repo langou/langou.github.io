@@ -13,6 +13,13 @@ explain mutable struct vs struct
 
 https://math.nist.gov/MatrixMarket/
 
+Software for sparse direct factorization
+(*) SuperLU
+(*) MUMPS
+(*) UMFPack, CholMod
+(*) Pastix
+
+
 ⚙️  Sparse_Matrix_Demo.jl
 ⚙️  Sparse.jl
 
