@@ -1,0 +1,14 @@
+[ question 1 - sparse SYRK ]
+
+We are interested in computing   L * L^T → A
+Where alpha and beta are scalar, L is lower triangular sparse, A is symmetric sparse and we only store and compute the lower part of A. 
+(*) Prove or disprove that the sparsity of A is the sparsity of L.
+(*) Use CSR or CSC format and write an algorithm that perform the computation
+
+Now take any A and any L sparse. So L does not have to be lower triangular or symmetric. L is nonsymmetric sparse matrix. Precompute the sparsity of A. (Explain your algorithm.) And then perform L * L^T → A
+
+[ question 2 - invertible triangular matrices ]
+
+(*) Given a sparse triangular matrix, A, store in CSC or CSR format (either pick one, your choice), write a code that checks that A is invertible. The code needs to work for either upper or lower triangular matrix. (Maybe have a flag in the interface.)
+
+(*) Given a sparse triangular matrix, A, store in CSC or CSR format (either pick one, your choice), write a code that computes B, the inverse of A. Check that A * B = I. Do not try to write a sparse matrix-matrix product for the check. Just covert A and B to dense and perform A * B = I. (You can write a sophisticated check, but this is not part of the exercise.

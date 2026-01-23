@@ -1,0 +1,13 @@
+[ question 1 - 0 on the diagonal of the upper bidiagonal ]
+
+We are interested in upper bidiagonal with zero on the diagonal. (Anywhere on the diagonal.) Take such a upper bidiagonal matrix. Construct a U and a V with orthogonal columns such that A = U * B * V^T. 
+
+For such a case, implement page 206 of the book: “If a diagonal entry is 0, we can apply additional Givens rotations that lead to a decoupling, and reduce the calculation to sub-problems where all entries in the bidiagonal band are nonzero [92]”. Check that your transformed subproblem ( U1, B1, V1) conserves the relations A = U1 * B1 * V1^T, B1 is bidiagonal, U1 and V1 have orthogonal columns, and that B1 has a 0 on the super diagonal. You may look at reference [92]. What is the interest of doing so? Reference [92] refers to the Golub and Van Loan book from 2013 “Matrix Computations”. I attached page 512 to 516 where a few things are explained.
+
+Experiment with your code with the “zero” that is “1e-16”, or 1e-10 or 1e-6, etc. What do you observe? Comment.
+
+[ question 2 - 0 on the supdiagonal of the upper bidiagonal ]
+
+We are interested in upper bidiagonal with zero on the upper diagonal. Take such an upper bidiagonal matrix. Construct a U and a V with orthogonal columns such that A = U * B * V^T. For such a case, perform ten or more sweeps of Golub Kahan algorithm with Wilkinson shift. What do you observe? Do you observe cubic convergence? If not why? How can you fix this? Fix it. But only work on finding the lower right singular value. No need to write a full singular value solver. Demonstrate that you have restored cubic convergence (and moreover you are working on a smaller matrix). Try to maintain the relation A = U1 * B1 * V1^T. And check that the relation is maintained and that U1 and V1 have orthogonal columns and that B1 is bidiagonal.
+
+Experiment with your code with the “zero” that is not zero but “1e-16”, or 1e-10 or 1e-6, etc. What do you observe? Comment.
