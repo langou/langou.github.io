@@ -1,0 +1,11 @@
+one idea for project is that I would write my own code and try to compare in
+speed with the ones of the students. Often times students make "big" mistake, 
+are sloppy, etc but it is hard for them to measure the cost.
+
+Example of suboptimal coding for eigenvalue projects:
+(*) not deflating if convergence in the middle (NEP, SVD, SEP)
+(*) multiplying by dense matrices U * A (where U is I - v * tau * v^T ), etc.
+
+Example of suboptimal coding for sparse direct project:
+(*) using data structure constructing with push!() instead of allocating and writing at the good spot
+(*) using CSR and CSC format and converting back and forth
