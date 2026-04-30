@@ -63,7 +63,7 @@ unitary in ℂ
 
 orthonormal columns
 orthogonal columns
-QQᴴ is not QᴴQ
+QQᴴ is not GQᴴQ
 
 
 QR factorization
@@ -162,6 +162,35 @@ case k=m:
 
 LARFGP
 Parlett's trick
+
+The goal is to compute the Householder reflector v = x - ||x|| e1 so that H * x = + ||x|| e1
+where the important is the +. We do not want the +/- in front of ||x|| e1. We always want a +.
+There are some reasons for this. See paper of Demmel, Hoemmen, Hida and Riedy below to explain applications.
+
+When x1 is negative then there is no issue.
+
+The issue comes 
+when x1 is postive and very large compared to the other entries of x so that x1 "is about" less or equal || x ||.
+then the computation of the top entry of v = x - ||x|| e1, (Householder reflector up to scaling), 
+which is v1 = x1-||x||,  suffers from major cancellation errors.
+
+Parlett's trick consist in computing v1 using the last equation in the sequence of equalities below
+
+v1 = x1-||x|| 
+   = x1 - sqrt( x1^2 + x2^2 + ... + xn^2 )
+   = ( x1 - sqrt( x1^2 + x2^2 + ... + xn^2 ) ) * ( x1 + sqrt( x1^2 + x2^2 + ... + xn^2 ) ) / ( x1 + sqrt( x1^2 + x2^2 + ... + xn^2 ) )
+   = - ( x2^2 + ... + xn^2 ) / ( x1 + sqrt( x1^2 + x2^2 + ... + xn^2 ) )
+
+The key idea is that (1) the sum ( x2^2 + ... + xn^2 ) is only made of positive terms so can be computed to high relative accuracy, 
+and (2) and the sum ( x1 + sqrt( x1^2 + x2^2 + ... + xn^2 ) ) is also only made of positive terms so can be computed to high relative accuracy.
+Therefore v1 can be computed through the formula above without loss of accuracy.
+
+This was implemented in software and release in LAPACK 3.2.1.
+
+There are actually major issues with denorms and the method is really unstable. Jim, Mark, Yozo and Jason were not able to fix it.
+
+We let the routine hanging.
+
 
    📑 James W. Demmel, Mark Hoemmen, Yozo Hida, and E. Jason Riedy
       Nonnegative Diagonals and High Performance on Low-Profile Matrices from Householder QR
