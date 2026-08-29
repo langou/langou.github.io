@@ -1,0 +1,4 @@
+https://enccs.github.io/julia-for-hpc/motivation-hpc/
+https://github.com/enccs/Julia-for-HPC/
+
+ils utilisent sphinx

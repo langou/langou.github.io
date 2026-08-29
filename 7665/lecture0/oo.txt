@@ -1,0 +1,16 @@
+# see:
+# https://discourse.julialang.org/t/tips-on-how-to-use-let-blocks-to-shadow-local-variables-and-avoid-accidentally-modifying-the-original-variable/101467/4
+# A = begin 
+#   local Λ = diagm(0 => Float64[i for i=1:n])
+#   local X = rand(n,n)
+#   X * Λ / X
+# end
+
+# OR we can do
+  A = let Λ, X
+    Λ = diagm(0 => Float64[i for i=1:n])
+    X = rand(n,n)
+    X * Λ / X
+  end
+
+

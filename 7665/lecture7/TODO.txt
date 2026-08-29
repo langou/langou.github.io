@@ -1,0 +1,10 @@
+
+
+(*) print handouts for next class
+(*) look at whether we can do thin QR for HW5, and correct the O(n^2) in O(m^2)
+(*) look at all my notes from last year and upload in new notes!!!!
+(*) maybe do a rubrique for homework #1
+(*) give clearer direction in homework when something is tex or julia for #1 and #2
+
+
+

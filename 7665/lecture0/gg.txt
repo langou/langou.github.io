@@ -1,0 +1,22 @@
+
+A12 = A21'
+transpose ( A21 )
+difference between these types of things
+
+
+I made a list somewhere
+
+opnorm(A,1) vs norm(A,1)
+
+~~~ kind of sad that lu(A, NoPivot()) is slower that lu(A)
+mais a quoi ça sert lu!(A) ??? comment ça marche de toute façon???? On peut pas faiure le inplace non?
+
+(*) C = cholesky!(B)
+This does not make sense, right? So what allow it????
+
+Symmetric(A22) .-= A21 * A21’
+
+residual checking
+
+==> need to check that Hermitian(A) means A is Hermitian, it does not mean Conjugate(Transpose(A))
+Check Adjoint()???

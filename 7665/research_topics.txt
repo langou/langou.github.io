@@ -1,0 +1,20 @@
+(*) LU with IO cost for optimal NB but with the bounds of Suraj and Laura,
+I think that Lionel was working on this
+
+lecturex
+(*) refresh on Strassen
+(*) refresh on projections and reflections
+    A = I - U * ( V^T U ) ^(-1) * V^T
+
+issue with Julia
+(*) it would be nice that 
+        Symmetric(C) .+= A * A'
+    calls SYRK and that
+        Symmetric(C) .+= A * B
+        LowerTriangular(C) .+= A * B
+    calls GEMMTR
+
+issue with BLAS/LAPACK
+(*) Check how 
+        Symmetric(C) .+= A * B
+works for the diagonal of A and B
