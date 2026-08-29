@@ -1,0 +1,79 @@
+<pre>
+If you are interested to know more, please read Wikipedia:
+<a href="https://en.wikipedia.org/wiki/Addition_chain">https://en.wikipedia.org/wiki/Addition_chain</a>
+
+But, in short, we call ℓ(n) the minimum number of multiplication for the exponentiation to the power of  n.
+
+The binary exponentiation method is a good method, but is not always optimal.
+
+The practice quiz (1a) asked for x^77 and the binary exponentiation gives
+x_01 = x
+x_02 = x_01 * x_01
+x_04 = x_02 * x_02
+x_08 = x_04 * x_04
+x_16 = x_08 * x_08
+x_32 = x_16 * x_16
+x_64 = x_32 * x_32
+# x_77 = x_64 * x_08 * x04 * x_01
+x_05 = x_04 * x_01
+x_13 = x_08 * x_05
+x_77 = x_64 * x_13
+That's nine multiplications.
+And our addition chain is 1, 2, 4, 5, 8, 9, 13, 16, 32, 64, 77.
+
+A better algorithm is:
+x_02 = x_01 * x_01
+x_04 = x_02 * x_02
+x_08 = x_04 * x_04
+x_09 = x_08 * x_01
+x_17 = x_09 * x_08
+x_34 = x_17 * x_17
+x_43 = x_34 * x_09
+x_77 = x_43 * x_34
+That's eight multiplications.
+And our addition chain is 1, 2, 4, 8, 9, 17, 34, 43, 77.
+
+Is eight optimal? I.e. is ℓ(77) = 8?
+
+This link
+<a href="https://en.wikipedia.org/wiki/Addition_chain#Chain_length">https://en.wikipedia.org/wiki/Addition_chain#Chain_length</a>
+gives a lower bound on ℓ(n) from Schönhage which is good but complicated. Here we can simply use:
+log₂(77)  ≤ ℓ(77).
+So
+6.27  ≤ ℓ(77)
+And since ℓ(77) is integer we have
+7 ≤ ℓ(77).
+
+We know that ℓ(77) must have at least ceil( log2( 77 ) ) term so for us that’s 7. And then either with a ``smart'' search, or some reasoning (ask ChatGPT to explain), we can prove that ℓ(77) is not 7. So it must be 8.
+
+So we proved  ℓ(77) = 8.
+
+For a general n, how hard is it to find an optimal chain? This is a good question. We do not know of a polynomial algorithm to find an optimal chain. We do not know either is finding an optimal chain is NP-hard. If you want to do some research, this seems like a good topic! 
+
+Another good example of binary not being optimal is x^15. (15 is the smallest n for which binary is not optimal.)
+
+Binary would give 
+x_02 = x_01 * x_01
+x_04 = x_02 * x_02
+x_08 = x_04 * x_04
+# x_15 = x_08 * x04 * x_02 * x_01
+x_03 = x_02 * x_01
+x_07 = x_04 * x_03
+x_15 = x_08 * x_07
+That’s six multiplications.
+And our addition chain is 1, 2, 3, 4, 7, 8, 15.
+
+A better algorithm is:
+x_02 = x_01 * x_01
+x_03 = x_02 * x_01
+x_06 = x_03 * x_03
+x_12 = x_06 * x_06
+x_15 = x_12 * x_03
+That’s five multiplications.
+And our addition chain is 1, 2, 3, 6, 12, 15.
+
+If you use log₂(15)  ≤ ℓ(15), you get that 4  ≤ ℓ(15). So to prove that the 5-multiplication algorithm is an optimal algorithm, we need to prove that we cannot have 4  = ℓ(15). Please ask ChatGPT, the proof is not too hard and very nice. 
+
+So we proved  ℓ(15) = 5.
+
+</pre>
