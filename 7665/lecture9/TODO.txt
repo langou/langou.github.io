@@ -1,0 +1,23 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It would be good to write 
+  QR_algorithm__convergence__non_symmetric_case__double_shift__twice_on_same_rayleigh_quotient.jl
+with BigFloat 
+so as to see whether the convergence of a double shift is quartic or not
+In Float64, we kind of feel that it is more than quadratic, but it does not feel quartic
+Maybe it is cubic actually. I would have to think about it.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Question:
+there is an QR / RQ algorithm with no shift
+there is an QR / RQ algorithm with one shift
+      Q,R = qr(A - μ * I )
+      A = R*Q + μ * I
+can we do a QR / RQ algorithm with two shifts? how would that work?
+      Q,R = qr(A^2 - s * A + t * I ) 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+see question in "observation.jl"

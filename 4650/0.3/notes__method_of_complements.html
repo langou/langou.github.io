@@ -1,0 +1,66 @@
+<pre>
+two's complement
+
+two's complement is not used to store the exponent of a floating-point number
+the exponent is stored using a "bias", for example, for 64-bit, the bias is 1023, 
+for 32-bit, the bias is 127. This has nothing to do with two's complement
+
+two's complement is how integer are stored
+
+we start by looking at how uint32 works. This is simply the 32-bit of the integer in base 2.
+
+now int32 will essentially use uint32
+
+We want to perform a substraction.
+we assume that we know how to add very fast, but we do not know how to substract.
+this is not exactly true
+the only number we know how to substract is 111111111 (in base 2) or 9999999 (in base 10), this is becasue there is no carry.
+Also we note that substracting from 999999 can be done by a table
+and it is even easier in base 2. We just need to flip all the bits.
+So, for example, two's complement of 100101101 is 011010010 + 1, all the bits are flips plus one.
+Because 111111111 - 100101101 = 011010010.
+And so 1000000000 - 100101101 = 011010010 + 1 = 011010011
+This is not much harder for 999999.
+
+Example of the method
+
+17 - 11 = 17 + (-11)
+        = 17 + (-11) + 100 [ we can add 100 because we work mod 100, we only have two decimals, we will see that in practice, we do something else ]
+        = 17 + 89          [ 89 is ten's complement of 11 ]
+        = 106              [ remember: we can add 17 + 89 very fast ]
+        = 6                [ in practice: 106 is not "even" stored, so when we do 17 + 89, we get 06 right away ]
+
+So above we cheated: we did 100 - 11 = 89 and this is not necessarily easier than 17 - 11
+
+Here is the trick. To do 100 - 11, we will do 99 - 11 + 1 and so we get 88 + 1 = 89. The point is that 99 - 11 is easy to compute.
+
+So again:
+
+17 - 11 = 17 + (-11)
+        = 17 + (-11) + 100 [ we can add 100 because we work mod 100, we only have two decimals, we will see that in practice, we do something else ]
+        = 17 + (-11) + 99 + 1
+        = 17 + 88 + 1      [ 89 is ten's complement of 11 ]
+        = 106              [ remember: we can add 17 + 89 very fast ]
+        = 6            
+
+Instead of doing 17 - 11 = 6, we do 17 + 89 = 6
+
+
+Now in base 2 
+
+   10001 - 01011              [ this is 17 - 11 ]
+=  10001 - 01011 + 100000     [ we can add 32 because we are working mod 32 ]
+=  10001 - 01011 +  11111 + 1 [ we can add 32 because we are working mod 32 ]
+=  10001 + 10100 + 1          [ we see that 11111 - 01011 = 10100, just flip the bits ]
+=  10001 + 10101              [ 10101 is two's complement of 01011, so this because 10101 + 01011 = 100000 = 0 mod 32 ]
+                              [ (in base 10) 21 is is two's complement of 11, because 21 + 11 = 32 ]
+=  10001
+ + 10101
+---------
+= 100110                      [ (in base 10) 17 + 21 = 38 ]
+=  00110                      [ (mod 32) = 6 ]
+
+And so we find again that 17 - 11 = 6
+
+Instead of doing 10001 - 01011 = 00110, we do 10001 + 10101 = 00110
+</pre>

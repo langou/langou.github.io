@@ -1,0 +1,58 @@
+
+https://discourse.julialang.org/t/when-function-shouldnt-return-anything/4836/3
+
+I am guessing you are asking this because languages like C/C++ with a void return type do not return a value when the return statement is omitted.
+
+Julia seems to inherit from the Lisp programming languages when it comes to return values:
+→ It returns whatever value that results from the last statement in your function (in your case, that means it returns Yvals).
+
+I personally find it cleaner to return nothing in this case - but I do tend to forget to do so coming from a C/C++ background. I find that not returning nothing causes potential confusion for the function’s user.
+
+There are 3 (equally valid) ways I might use to do this. All 3 return nothing:
+
+Method 1
+function myfunc()
+    #do something
+    return
+end
+Method 2
+function myfunc()
+    #do something
+    return nothing
+end
+Method 3
+function myfunc()
+    #do something
+    nothing
+end
+
+
+
+
+****************************************************************************************************
+
+Je ne comprend pas pourquoi les facteur L et U 
+Ou le facteur R de QR 
+ne sont pas "typé" comme Unit Lower, etc.
+
+je dis ça parce que on ne voit pas le . a la place des 0 quand on les visualise
+****************************************************************************************************
+
+remplacer blas.gemmt! par blas.gemmtr!()
+
+****************************************************************************************************
+
+macerr = 1.0
+while 1.0 + macerr / 2.0 != 1.0
+    macerr /= 2.0
+end
+
+****************************************************************************************************
+
+https://discourse.julialang.org/t/when-to-use-tuples/18675
+
+****************************************************************************************************
+
+
+
+

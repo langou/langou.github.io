@@ -1,0 +1,17 @@
+gvim -s ../src/test.keys potrf.jl
+gvim -s ../src/test.keys trsm.jl
+gvim -s ../src/test.keys trsv.jl
+cd ../lecture1/
+gvim -s ../src/test.keys main_trsm.jl
+gvim -s ../src/test.keys main_trsm.py
+gvim -s ../src/test.keys main_trsm.c
+gvim -s ../src/test.keys main_trsv.jl
+cd ../lecture3/
+gvim -s ../src/test.keys plot_curve.jl
+cd ../lecture4/
+gvim -s ../src/test.keys main_potrf.jl
+cd ../lecture5/
+gvim -s ../src/test.keys main_geqrf_01.jl
+gvim -s ../src/test.keys main_geqrf_02.jl
+gvim -s ../src/test.keys main_geqrf_03.jl
+cd ../src/

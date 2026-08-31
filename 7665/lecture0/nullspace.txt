@@ -1,0 +1,1 @@
+il y a la commande nullspace en julia. Comment font ils?

@@ -1,0 +1,253 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage[margin=.5in]{geometry}
+
+\setlength{\parindent}{0pt}
+\begin{document}
+
+%\begin{center}
+%{\Large \bf Winter 24-25 :: CR 04 :: Project }\\
+%{due Tu. 01/21/25, by email, before class }
+%\end{center}
+
+\small
+
+{\bf Rubric for SEP}
+
+Pour SEP, on utilise le bon algo de LAPACK. Celui là divise les FLOPS par 2 et tiens en compte la symmétrie, 
+c'est pas évident à faire sinon en faisant un "Hessenberg symmétrique". Donc il est plus facile de faire 
+un "Hessenberg symmétrique" mais c'est pas bon.
+
+Shift are computed by hand.
+
+cleanup: For NEP, we reduced to standard form with "unitary" transformation.
+cleanup: For SVD, make sure the singlar values are nonnegative!!!!
+
+A good way to show the cubic/quadratic convergence and the deflation window that moves is simply to 
+print a small matrix for all the iterations.
+
+Les matrices orthogonales sont bien calculés et la representativité est conservé tout du long
+
+Il n'y a pas de extra n^3 en FLOPS pas de extra n^2 en storage, par exemple:
+        U1,B1,V1 = biDiag(M,n,m,f)
+        U2,D,V2 = biDiagToDiag(B1,it,epsilon,n,m,f)
+        U = U1 * U2
+Non!!!!
+
+
+
+le test est fait sur une matric D ou T qui est avec des zeros, ce n'est pas la matrice qui vient de itérations!!!!
+Les 1e-16 de la sous diagonal doivent être mis explicitement à zeros, et pas que les 1e-16, ...
+
+The construction of Q is done using a "reverse" algorithm and is not done on teh fly. That way we use less flops.
+
+
+
+( part 1 ) [ + 5 points ] \\
+A basic code is working. It is based on a reduction to condensed form, either
+Hessenberg form or symmetric tridiagonal form. Once a symmetric tridiagonal
+form is computed then a QR iteration algorithm (possibly without shift),
+possibly with $\mathcal{O}(n^3)$ iteration per step (as opposed to
+$\mathcal{O}(n)$ iteration per step) is performed until convergence to diagonal
+form. The checks work and are based on $\| A – Q D Q^T \|_1 / \| A \|_1$, and 
+$\| I – QQ^T \|$ and the fact that $D$ is a diagonal matrix. The code work on random
+symmetric small size matrices (e.g. $n = 20$).
+
+( part 2 ) [ + 2 points ] \\
+A shift is added. The shift enables cubic convergence on the eigenvalues in
+position $t_{n,n}$. The shift is computed using ``Wilkinson shift''. The
+iterations now look like $Q, R  = \textmd{qr} ( T – \mu I )$, and $T = RQ + \mu * I$. 
+
+( part 3 ) [ + 4 points ] Deflation is done, that is that when an eigenvalue is
+converged, then we need to work on a smaller window. Also, it is important to
+scan the subdiagonal for possible zeros, so that there is no ``near zero''
+numbers on the subdiagonal of the active matrix. The criteria to deflate or
+decide on reducibility is 
+$$| t_{i-1,i} | < \varepsilon ( | t_{i-1,i-1} | + | t_{i,i} | ).$$
+There is two parts: (1) one reducing from the bottom right, and (2) reducing from the top left.
+But then also come back to the unconverged block on the top left.
+
+( part 4 ) [ this is optional, and can bring + 3 points ] \\
+The two steps QR, RQ on symmetric tridiagonal matrices are optimized to only do
+$\mathcal{O}(n)$ iterations per step. (And $\mathcal{O}(n^2)$  if eigenvectors are
+required.) (As opposed to $\mathcal{O}(n^3)$.)
+
+( part 5 ) [ + 5 points, this is the good way to do it and if done correctly
+replace part 4, so you cannot have point for part 4 and part 5 at the same time
+] \\
+The QR iteration is performed using the implicit Q theorem and bulge chasing.
+
+( part 6 ) [ +1 point ] \\
+A flag is present to compute either ( eigenvalue only ) or ( eigenvalue and eigenvector )
+
+( part 7 ) [ + 3 points ] \\
+Experimental part. Some experiments are performed: (*) number of iterations per
+eigenvalues, (*) 
+
+( Holistic criteria ) [ +2 points ] \\
+software engineering is well done, (good interfaces, good data structure, etc.)
+code is readable, interview/one-on-one meeting was well done, student was able
+to answer questions and present their code
+
+
+the checks are done with respect to a cleaned up T or D, not the matrix A on which we iterate!
+
+
+
+
+Choose one of the three problems below. Do not do all three. You will only be
+graded on one problem. The one you want me to grade.
+
+Please ask me by email if directions below are not clear.
+
+Codes need to be in ``julia''.
+ 
+\section*{Logistic}
+
+Trois sujets au choix: NEP, nonsymmetric eigenvalue problem: matrice $n \times
+n$, calculer ``Schur decomposition''.  SEP, symmetric eigenvalue problem:
+matrice $n \times n$, calculer $Q D Q^T$.  SVD, singular value decomposition:
+matrix $m \times n$, calculer $U S V ^T$.  Prenez celui que vous préférez, plus
+d’indications sur les sujets en dessous. Pour SVD, le livre de Darve et Wooters
+est très bien fait (Section 5.4). Normalement vous suivez le livre et c’est
+bon. Pour le NEP, il y a déjà beaucoup de fait dans le ./src/gees.jl sur le
+GitHub de Eric Darve, évidement, il ne s’agit pas de simplement copié-collé les
+codes et me donner cela. Oui vous pouvez tout réutilisé. Et je vous encourage à
+bien tout regarder, mais il y a du boulot en plus à faire. Pour SEP, il faut
+"symmétriser NEP".  Pour SEP et SVD, les problèmes sont plus simples à la base,
+mais vous commencez à zero. Ce seraient mieux que, sur les 11 étudiants, on ait
+un peu de trois sujets, mais choisissez ce que vous plait.
+ 
+Les projets doivent être fait individuellement. Vous pouvez communiquer entre
+vous, mais pas de recopiage de code. Je n’ai pas eu de problème de triche pour
+les DM1, DM2 et DM3. Donc je ne suis pas inquiet pour les projet de fin de
+semestre. Continuez comme cela pour le travail.
+ 
+Dû: Le rapport écrit est simplement vos codes. Soit des .jl ou un .ipynb. (Ou
+un mix.) Tout est dû le mardi 21 janvier au matin avant le cour. Vous m’envoyez
+tout celà par email. Attention: le DM5 sera aussi dû ce jour là.  Les
+présentations seront de 15 minutes. Et vous expliquerez vos codes à la classe. (Moi
+inclus.) Des questions seront posées. Le mieux est de ne pas trop stresser pour
+la presentation, si vous avez écrit vos codes et les comprenez cela se passera
+bien.  Ordre de passage pour les presentations: a priori: tirage au sort mardi
+21 janvier au matin.
+
+La note sera une note ``holistique'' donc ce n’est 10\% pour l’oral, 40\% pour
+l’écrit, mais c’est une note pour le tout. Principalement au final ce qui
+compte ce sont les codes, mais si vous ne pouvez pas les expliquer clairement
+pendant l’oral, cela ne va pas aller.
+ 
+Le projet de fin de semestre est 50\% de votre note finale. (L’autre 50\% est
+fait des 5 DMS, 10\% chacun.)
+ 
+Si vous êtes bloqués ou avez des questions pendant les vacances, n’hésitez pas
+à m’envoyer un email. Je peux voir si j’ai le temps de répondre. Je pense que
+si vous ne travaillez pas pendant les vacances sur les projets, évidemment ce
+sera plus chargé à la rentrée mais c’est jouable.
+ 
+\section*{Project \#1: NEP, nonsymmetric eigenvalue problem}
+
+In input a nonsymmetric $n$-by-$n$ matrix $A$. In output the Schur form of $A$.
+( $A = Q T Q^T$. ) Only real arithmetic, no complex arithmetic. $T$ is quasi
+triangular so 1x1 block for real eigenvalues and 2x2 block for complex
+eigenvalues. Please have a look at gees.jl in ./src of GitHub of Eric Darve for
+a template. Algorithms needs to be the implicit Q QR iteration algorithm using
+Francis shift. Please reduce to Hessenberg form initially, then each iteration
+needs to be $\mathcal{O}(n^2)$ and so needs to take into account the structure of H.
+Three things not done in gees.jl that you need to do (1/3) Need flags for
+either 'D' compute the diagonal only, 'T' compute the Schur form only, or 'V'
+compute both $Q$ and $T$. (2/3) Need to fix the ``explicit shift strategy''.
+(3/3) Return the 2x2 block (whenever they exist on the diagonal) as ``standard''
+form. See DM3 question 3.
+
+Goal is that your code is able to work on a random matrix. Then you can try on
+matrix $A = VDV^{-1}$ when $V$ is ill conditioned. Also try with cluster of
+eigenvalues. A few other types of matrices are interesting.
+
+Analysis: (*) observe quadratic convergence for bottom right side of matrices,
+(*) return a metric such as ``number of QR iterations per eigenvalue'', (*) time
+your code for various $n$ and try to scale up to larger $n$.
+
+Rubrique: your code works for random matrices, is clearly written
+and the analysis (stability, convergence and timing) is done, the choice made
+in the design of the code are clearly explained in the comments of the code, you are able to clearly 
+explain the code and answer questions 
+during the oral presentation.
+
+% How to get more points:
+
+% (*) From the Schur form, write the computation for eigenvectors. Check that you
+% have $A = V D V^{-1}$ (if $A$ is diagonalizable ``enough'').
+
+% (*) Reorder the eigenvalues in the Schur form (and that associated Schur
+% vector) such that all eigenvalues with positive real parts are at the start of
+% the Schur form, and all the eigenvalues with negative real parts are at the
+% end. 
+
+% (*) Explore EAD: Early Aggressive Deflation
+
+\section*{Project \#2: SEP, symmetric eigenvalue problem}
+
+In input a symmetric $n$-by-$n$ matrix $A$. ($A=A^T$.) In output the
+eigendecomposition of $A$. ( $A = Q D Q^T$. ) $D$ is diagonal real and $Q$ is
+$n$-by-$n$ orthogonal: $Q^TQ = QQ^T = I$. Only real arithmetic, no complex
+arithmetic. (So do not take $A$ as complex Hermitian ($A=A^H$). Real symmetric
+is enough. First step is to take A and reduce to symmetric tridiagonal form.
+You can only use the lower part of $A$. (Or the upper, as you wish. But only
+one half. I recommend starting with gehrd! and then adapting for the symmetric
+case. But as you wish.) The nonsymmetric QR algorithm that is explained in Darve and Wootters 
+needs to be ``symmetrized''. 
+
+Need flags for
+either ('D') compute the diagonal only or 'V'
+compute both $Q$ and $D$. 
+The goal is to perform $\mathcal{O}(n)$ operations per QR step if eigenvalues only are requested,
+and $\mathcal{O}(n^2)$ operations per QR step if eigenvalues and eigenvectors are requested.
+
+Analysis: (*) observe cubic convergence for bottom right side of matrices,
+(*) return a metric such as ``number of QR iterations per eigenvalue'', (*) time
+your code for various $n$ and try to scale up to larger $n$.
+
+Rubrique: your code works for random matrices, is clearly written
+and the analysis (stability, convergence and timing) is done, the choice made
+in the design of the code are clearly explained in the comments of the code, you are able to clearly 
+explain the code and answer questions 
+during the oral presentation.
+
+% How to get more points:
+
+% (*) Write the code for complex Hermitian matrix $A$ in input. The code needs to reduce
+% $A$ (which is complex Hermitian) to a real symmetric tridiagonal matrix.
+% Then you can reuse your previous code for a real symmetric tridiagonal matrices.
+
+% (*) Explore EAD: Early Aggressive Deflation
+
+% (*) Explore Divide and Conquer method.
+
+\section*{Project \#3: SVD, singular value decomposition}
+
+In input an $m$-by-$n$ matrix $A$. (Please take $m\geq n$.) In output the thin SVD
+of $A$. ( $A = U S V^T$. ) Only real arithmetic, no complex arithmetic. Please
+read section 5.4 in Darve and Wooters. The algorithm is explained there.
+
+Analysis: (*) observe cubic convergence for bottom right side of matrices,
+(*) return a metric such as ``number of QR iterations per singular value'', (*) time
+your code in the square case for various $m=n$ and try to scale up to larger $m=n$.
+
+Rubrique: your code works for random matrices, is clearly written and the
+analysis (stability, convergence and timing) is done, the choice made in the
+design of the code are clearly explained in the comments of the code, you are able to clearly 
+explain the code and answer questions 
+during the oral presentation.
+
+% The code needs to work for $m>n$
+
+% How to get more points:
+
+% (*) Write the code for complex matrix $A$ in input. The code needs to reduce
+% to $A$ (which is complex ) to a real symmetric tridiagonal matrix.
+% Then you can reuse your previous code for areal symmetric tridiagonal matrices.
+
+% (*) Explore EAD: Early Aggressive Deflation
+
+\end{document}
