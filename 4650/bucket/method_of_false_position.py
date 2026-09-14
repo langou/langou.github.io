@@ -4,7 +4,7 @@ def method_of_false_position( f, a, b, numiter, r ):
   fb = f(b)
 
   for i in range(0,numiter):
-    c = ( b*f(a) - a*fb ) / ( fa - fb )
+    c = ( b*fa - a*fb ) / ( fa - fb )
     true_fwd_rel_error = abs( r - c ) / abs( r )
     print( f"{i+1:2d}", f"{c:.16f}", f"{true_fwd_rel_error:.2e}" )
     fc = f(c)
